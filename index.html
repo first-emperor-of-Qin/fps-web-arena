@@ -282,7 +282,7 @@
     #oxygen-text { color: #b2ebf2; font-size: 10px; font-weight: bold; min-width: 70px; text-align: right; font-variant-numeric: tabular-nums; }
 
     /* ====== 分数/金币面板（右上角） ====== */
-    #score-display { position: absolute; top: 16px; right: 16px; background: linear-gradient(135deg, rgba(8,12,20,0.88) 0%, rgba(14,20,32,0.82) 100%); padding: 8px 14px; border-radius: 8px; border: 1px solid rgba(255,215,64,0.12); box-shadow: 0 2px 12px rgba(0,0,0,0.4); backdrop-filter: blur(6px); display: flex; flex-direction: column; gap: 2px; min-width: 130px; }
+    #score-display { position: absolute; top: var(--hud-gap); right: var(--hud-gap); background: linear-gradient(135deg, rgba(8,12,20,0.88) 0%, rgba(14,20,32,0.82) 100%); padding: 8px 14px; border-radius: 8px; border: 1px solid rgba(255,215,64,0.12); box-shadow: 0 2px 12px rgba(0,0,0,0.4); backdrop-filter: blur(6px); display: flex; flex-direction: column; gap: 2px; min-width: 130px; }
     #score-display::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,215,64,0.3), transparent); border-radius: 8px 8px 0 0; }
     #score-display .label { font-size: 10px; color: #8b949e; letter-spacing: 1px; text-transform: uppercase; }
     #score-value { color: #ffd740; font-size: 22px; font-weight: bold; text-shadow: 0 0 8px rgba(255,215,64,0.3); font-variant-numeric: tabular-nums; letter-spacing: 1px; }
@@ -296,7 +296,7 @@
     .wave-progress { color: #4fc3f7; font-size: 11px; }
 
     /* ====== 弹药显示（右下角） ====== */
-    #ammo-display { position: absolute; bottom: 76px; right: 16px; background: linear-gradient(135deg, rgba(8,12,20,0.88) 0%, rgba(14,20,32,0.82) 100%); padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 2px 12px rgba(0,0,0,0.4); backdrop-filter: blur(6px); }
+    #ammo-display { position: absolute; bottom: 76px; right: var(--hud-gap); background: linear-gradient(135deg, rgba(8,12,20,0.88) 0%, rgba(14,20,32,0.82) 100%); padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 2px 12px rgba(0,0,0,0.4); backdrop-filter: blur(6px); }
     .ammo-count { color: #e6edf3; font-size: 26px; font-weight: bold; font-variant-numeric: tabular-nums; text-shadow: 0 1px 3px rgba(0,0,0,0.9); }
     .ammo-separator { color: #555; margin: 0 2px; font-size: 18px; }
     .ammo-reserve { color: #8b949e; font-size: 16px; }
@@ -330,21 +330,21 @@
     .skill-ready .skill-icon-box { animation: skillReadyPulse 1.5s ease-in-out infinite; }
     @keyframes skillReadyPulse { 0%,100%{ filter: brightness(1); } 50%{ filter: brightness(1.4); } }
 
-    #skill-e { bottom: 124px; left: 16px; display: none; }
+    #skill-e { bottom: 124px; left: var(--hud-gap); display: none; }
     #skill-e .skill-icon-box { background: rgba(0,100,255,0.25); border: 1.5px solid rgba(0,150,255,0.5); }
     #skill-e .skill-icon-box .skill-overlay { background: rgba(0,150,255,0.4); }
     #skill-e .skill-label { color: #4da6ff; text-shadow: 0 0 4px rgba(0,100,255,0.3); }
     #skill-e .skill-timer { color: #80d8ff; }
     .skill-ready#skill-e .skill-icon-box { border-color: #4da6ff; box-shadow: 0 0 8px rgba(0,150,255,0.3); }
 
-    #skill-x { bottom: 178px; left: 16px; display: none; }
+    #skill-x { bottom: 178px; left: var(--hud-gap); display: none; }
     #skill-x .skill-icon-box { background: rgba(156,39,176,0.25); border: 1.5px solid rgba(156,39,176,0.5); }
     #skill-x .skill-icon-box .skill-overlay { background: rgba(156,39,176,0.35); }
     #skill-x .skill-label { color: #ce93d8; text-shadow: 0 0 4px rgba(156,39,176,0.3); }
     #skill-x .skill-timer { color: #e1bee7; }
     .skill-ready#skill-x .skill-icon-box { border-color: #ce93d8; box-shadow: 0 0 8px rgba(156,39,176,0.3); }
 
-    #skill-storm { bottom: 70px; left: 16px; display: none; }
+    #skill-storm { bottom: 70px; left: var(--hud-gap); display: none; }
     #skill-storm .skill-icon-box { background: rgba(255,152,0,0.25); border: 1.5px solid rgba(255,152,0,0.5); }
     #skill-storm .skill-icon-box .skill-overlay { background: rgba(255,152,0,0.35); }
     #skill-storm .skill-label { color: #ff9800; text-shadow: 0 0 4px rgba(255,152,0,0.3); }
@@ -441,7 +441,7 @@
 
     /* ====== BOSS血条 - 主流PVE游戏风格重做 ====== */
     #boss-bar-container {
-        position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+        position: absolute; top: var(--hud-gap); left: 50%; transform: translateX(-50%);
         display: none; flex-direction: column; align-items: center; z-index: 91;
         width: 680px; max-width: 90vw;
     }
@@ -642,10 +642,7 @@
     #revival-btn:disabled { background: rgba(255,255,255,0.03); color: #8b949e; border-color: rgba(255,255,255,0.1); cursor: not-allowed; transform: none; box-shadow: none; }
     #revival-info { color: #ffd740; font-size: 14px; font-weight: bold; text-shadow: 0 0 6px rgba(255,215,64,0.4); }
     #death-btns { display: flex; gap: 12px; margin-top: 10px; }
-    #restart-btn { padding: 12px 35px; font-size: 16px; background: rgba(229,57,53,0.1); color: #ff6659; border: 1px solid rgba(229,57,53,0.4); border-radius: 8px; cursor: pointer; letter-spacing: 2px; transition: all 0.3s; pointer-events: auto; font-weight: bold; }
-    #restart-btn:hover { border-color: #e53935; box-shadow: 0 0 15px rgba(229,57,53,0.3); background: rgba(229,57,53,0.15); }
-    #death-home-btn { padding: 12px 35px; font-size: 16px; background: rgba(255,152,0,0.1); color: #ffab40; border: 1px solid rgba(255,152,0,0.4); border-radius: 8px; cursor: pointer; letter-spacing: 2px; transition: all 0.3s; pointer-events: auto; font-weight: bold; }
-    #death-home-btn:hover { border-color: #ff9800; box-shadow: 0 0 15px rgba(255,152,0,0.3); background: rgba(255,152,0,0.15); }
+    /* [Task 12.3] #restart-btn / #death-home-btn 已迁移至 .btn--danger / .btn--ghost，原 id 样式移除 */
     /* 无敌护盾闪烁效果 */
     #invincible-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: 4px solid rgba(255,215,0,0.5); background: radial-gradient(ellipse at center, transparent 70%, rgba(255,215,0,0.08) 100%); pointer-events: none; z-index: 85; opacity: 0; transition: opacity 0.3s; box-sizing: border-box; }
     #invincible-indicator { position: absolute; top: 100px; right: 16px; color: #ffd700; font-size: 13px; font-weight: bold; text-shadow: 0 0 8px rgba(255,215,0,0.7); display: none; animation: invPulse 0.5s ease-in-out infinite; background: rgba(8,12,20,0.6); padding: 3px 10px; border-radius: 5px; }
@@ -953,7 +950,61 @@
         --cy-font-display: 'Orbitron', 'Rajdhani', 'Microsoft YaHei', sans-serif;
         --cy-font-body: 'Rajdhani', 'Microsoft YaHei', sans-serif;
         --cy-font-mono: 'JetBrains Mono', 'Courier New', monospace;
+        /* [Task 10.1] 语义 token —— 归一散落的裸色值 */
+        --cy-gold: #ffd740;
+        --cy-gold-soft: rgba(255, 215, 64, 0.12);
+        --cy-red: #ff1744;
+        --cy-red-soft: rgba(255, 23, 68, 0.12);
+        --cy-green: #69f0ae;
+        --cy-green-soft: rgba(105, 240, 174, 0.12);
+        --cy-purple: #e040fb;
+        --cy-blue: #4fc3f7;
+        --cy-cyan-soft: rgba(0, 229, 255, 0.12);
+        --cy-bg-elev: rgba(13, 17, 23, 0.85);
+        --cy-border-soft: 1px solid rgba(255, 255, 255, 0.08);
+        --cy-radius: 10px;
+        --cy-radius-sm: 6px;
+        --cy-transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        --hud-gap: 16px;
     }
+
+    /* [Task 10.2/10.3] 通用按钮 & HUD 指示器基类（additive，不覆盖既有 class 体系） */
+    .btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        padding: 12px 28px; font-family: var(--cy-font-display); font-size: 15px; font-weight: 700;
+        letter-spacing: 3px; color: var(--cy-fg-primary);
+        background: var(--cy-bg-elev); border: 1px solid rgba(0, 229, 255, 0.25);
+        border-radius: var(--cy-radius-sm); cursor: pointer;
+        transition: var(--cy-transition); position: relative; overflow: hidden; text-align: center;
+        backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    }
+    .btn::before { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%;
+        background: linear-gradient(90deg, transparent, rgba(0,229,255,0.08), transparent); transition: left 0.5s; }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,229,255,0.18); border-color: var(--cy-accent-cyan); }
+    .btn:hover::before { left: 100%; }
+    .btn:active { transform: translateY(0) scale(0.98); }
+    .btn--primary { border-color: rgba(0,229,255,0.4); color: var(--cy-accent-cyan); }
+    .btn--gold { border-color: rgba(255,215,64,0.45); color: var(--cy-gold);
+        background: linear-gradient(135deg, rgba(255,215,64,0.12), rgba(255,170,0,0.06)); text-shadow: 0 0 12px rgba(255,215,64,0.4); }
+    .btn--gold:hover { box-shadow: 0 8px 28px rgba(255,215,64,0.3); border-color: var(--cy-gold); }
+    .btn--danger { border-color: rgba(255,23,68,0.45); color: var(--cy-red); background: rgba(255,23,68,0.08); }
+    .btn--danger:hover { box-shadow: 0 8px 24px rgba(255,23,68,0.25); border-color: var(--cy-red); }
+    .btn--ghost { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.12); color: var(--cy-fg-secondary); }
+    .btn--ghost:hover { color: var(--cy-fg-primary); border-color: rgba(255,255,255,0.3); }
+    .btn--sm { padding: 6px 14px; font-size: 12px; letter-spacing: 1px; }
+
+    .hud-indicator {
+        position: absolute; padding: 6px 12px; font-family: var(--cy-font-body); font-size: 12px;
+        font-weight: 600; letter-spacing: 1px; color: var(--cy-fg-primary);
+        background: var(--cy-bg-elev); border: 1px solid rgba(255,255,255,0.08);
+        border-radius: var(--cy-radius-sm); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.4); pointer-events: none; z-index: 10;
+    }
+
+    /* [Task 13.1] 血条状态 class（id 作用域，避免与 boss 血条 .hp-* 冲突） */
+    #health-bar-inner.hp-low { background: linear-gradient(180deg,#ff1744,#b71c1c); }
+    #health-bar-inner.hp-mid { background: linear-gradient(180deg,#ff9100,#e65100); }
+    #health-bar-inner.hp-high { background: linear-gradient(180deg,#ff6659,#d32f2f); }
 
     /* ----- Premium Font Loading (Orbitron for display) ----- */
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
@@ -1100,7 +1151,7 @@
     .modal-close {
         background: rgba(255, 23, 68, 0.1) !important;
         border: 1px solid rgba(255, 23, 68, 0.3) !important;
-        color: #ff5252 !important;
+        color: var(--cy-red) !important;
         transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
         text-shadow: 0 0 6px rgba(255, 23, 68, 0.5);
     }
@@ -1312,7 +1363,7 @@
         color: #ffb3bc !important;
     }
     #boss-bar-fill-inner {
-        background: linear-gradient(180deg, #ff5252 0%, #d50000 100%) !important;
+        background: linear-gradient(180deg, var(--cy-red) 0%, #d50000 100%) !important;
         box-shadow: 0 0 12px rgba(255, 23, 68, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
         position: relative; overflow: hidden;
     }
@@ -1404,6 +1455,7 @@
 
     /* ----- Difficulty Buttons Premium ----- */
     .diff-btn {
+        flex-direction: column;
         backdrop-filter: blur(8px) saturate(180%) !important;
         -webkit-backdrop-filter: blur(8px) saturate(180%) !important;
         font-family: var(--cy-font-display) !important;
@@ -1461,14 +1513,14 @@
         text-transform: uppercase;
     }
     #death-screen h2 {
-        background: linear-gradient(180deg, #ff5252 0%, #b71c1c 100%);
+        background: linear-gradient(180deg, var(--cy-red) 0%, #b71c1c 100%);
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
         filter: drop-shadow(0 0 30px rgba(255, 23, 68, 0.6));
     }
     #victory-screen h2 {
-        background: linear-gradient(180deg, #ffd740 0%, #ff6d00 100%);
+        background: linear-gradient(180deg, var(--cy-gold) 0%, #ff6d00 100%);
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -1530,7 +1582,7 @@
         text-transform: uppercase;
         background: linear-gradient(135deg, rgba(255, 215, 64, 0.2) 0%, rgba(255, 170, 0, 0.15) 100%) !important;
         border: 1px solid rgba(255, 215, 64, 0.5) !important;
-        color: #ffd740 !important;
+        color: var(--cy-gold) !important;
         text-shadow: 0 0 8px rgba(255, 215, 64, 0.5) !important;
         transition: all 0.25s !important;
     }
@@ -1731,16 +1783,16 @@
     <div class="start-subtitle">COMBAT STRIKE</div>
     <!-- Button grid -->
     <div class="start-btns">
-        <button class="start-btn" id="level-select-btn"><span class="btn-icon">🎮</span>关卡选择</button>
-        <button class="start-btn" id="endless-mode-btn"><span class="btn-icon">♾️</span>无尽模式<br><span style="font-size:11px;letter-spacing:1px;color:#00e5ff;font-weight:normal;" id="endless-mode-sub">挑战无尽头</span></button>
-        <button class="start-btn" id="boss-rush-btn"><span class="btn-icon">💀</span>Boss Rush<br><span style="font-size:11px;letter-spacing:1px;color:#ff5252;font-weight:normal;" id="boss-rush-sub">尚无记录</span></button>
-        <button class="start-btn" id="guide-btn"><span class="btn-icon">📖</span>游戏指南</button>
-        <button class="start-btn" id="monster-codex-btn"><span class="btn-icon">👾</span>怪物图鉴</button>
-        <button class="start-btn" id="homepage-shop-btn"><span class="btn-icon">🛒</span>商城</button>
-        <button class="start-btn" id="equip-codex-btn"><span class="btn-icon">🛡️</span>装备图鉴</button>
-        <button class="start-btn" id="homepage-panel-btn"><span class="btn-icon">👤</span>个人面板</button>
-        <button class="start-btn" id="homepage-activity-btn"><span class="btn-icon">🎁</span>活动</button>
-        <button class="start-btn" id="homepage-settings-btn"><span class="btn-icon">⚙️</span>设置</button>
+        <button class="start-btn btn btn--primary" id="level-select-btn"><span class="btn-icon">🎮</span>关卡选择</button>
+        <button class="start-btn btn btn--primary" id="endless-mode-btn"><span class="btn-icon">♾️</span><span style="display:block;">无尽模式<br><span style="font-size:11px;letter-spacing:1px;color:#00e5ff;font-weight:normal;" id="endless-mode-sub">挑战无尽头</span></span></button>
+        <button class="start-btn btn btn--primary" id="boss-rush-btn"><span class="btn-icon">💀</span><span style="display:block;">Boss Rush<br><span style="font-size:11px;letter-spacing:1px;color:#ff5252;font-weight:normal;" id="boss-rush-sub">尚无记录</span></span></button>
+        <button class="start-btn btn btn--primary" id="guide-btn"><span class="btn-icon">📖</span>游戏指南</button>
+        <button class="start-btn btn btn--primary" id="monster-codex-btn"><span class="btn-icon">👾</span>怪物图鉴</button>
+        <button class="start-btn btn btn--primary" id="homepage-shop-btn"><span class="btn-icon">🛒</span>商城</button>
+        <button class="start-btn btn btn--primary" id="equip-codex-btn"><span class="btn-icon">🛡️</span>装备图鉴</button>
+        <button class="start-btn btn btn--primary" id="homepage-panel-btn"><span class="btn-icon">👤</span>个人面板</button>
+        <button class="start-btn btn btn--primary" id="homepage-activity-btn"><span class="btn-icon">🎁</span>活动</button>
+        <button class="start-btn btn btn--primary" id="homepage-settings-btn"><span class="btn-icon">⚙️</span>设置</button>
     </div>
     <!-- Bottom bar -->
     <div class="start-bottom-bar">v5.0 <span>|</span> CYBERPUNK+ EDITION <span>|</span> &copy; 2025</div>
@@ -1783,8 +1835,8 @@
         <h3>确认支付</h3>
         <p id="recharge-pay-info" style="color:#e6edf3;margin-bottom:16px;font-size:14px;"></p>
         <div style="display:flex;gap:10px;margin-bottom:20px;">
-            <button id="recharge-wechat-btn" style="flex:1;padding:14px 0;border-radius:8px;border:2px solid #07c160;background:rgba(7,193,96,0.1);color:#07c160;font-size:15px;font-weight:bold;cursor:pointer;transition:all 0.2s;letter-spacing:1px;">微信支付</button>
-            <button id="recharge-alipay-btn" style="flex:1;padding:14px 0;border-radius:8px;border:2px solid #1677ff;background:rgba(22,119,255,0.1);color:#1677ff;font-size:15px;font-weight:bold;cursor:pointer;transition:all 0.2s;letter-spacing:1px;">支付宝</button>
+            <button id="recharge-wechat-btn" class="btn btn--sm" style="flex:1;color:#07c160;border-color:rgba(7,193,96,0.4);">微信支付</button>
+            <button id="recharge-alipay-btn" class="btn btn--sm" style="flex:1;color:#1677ff;border-color:rgba(22,119,255,0.4);">支付宝</button>
         </div>
         <div id="recharge-pay-processing" style="display:none;text-align:center;padding:20px 0;">
             <div style="color:#e6edf3;font-size:15px;margin-bottom:12px;">正在支付...</div>
@@ -1921,27 +1973,27 @@
         <h3 id="difficulty-level-title">选择难度</h3>
         <p style="color:#888;font-size:12px;margin-bottom:16px;">难度越高，敌方血量与伤害越高</p>
         <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px;">
-            <button class="diff-btn" data-diff="normal" style="padding:16px 8px;border-radius:10px;border:2px solid rgba(76,175,80,0.4);background:linear-gradient(135deg,rgba(76,175,80,0.08) 0%,rgba(76,175,80,0.02) 100%);color:#4caf50;cursor:pointer;transition:all 0.2s;text-align:center;">
+            <button class="diff-btn btn btn--primary" data-diff="normal" style="padding:16px 8px;border-radius:10px;border:2px solid rgba(76,175,80,0.4);background:linear-gradient(135deg,rgba(76,175,80,0.08) 0%,rgba(76,175,80,0.02) 100%);color:#4caf50;">
                 <div style="font-size:18px;font-weight:bold;margin-bottom:4px;">普通</div>
                 <div style="font-size:11px;color:#8b949e;">血量与伤害 x1</div>
             </button>
-            <button class="diff-btn" data-diff="hard" style="padding:16px 8px;border-radius:10px;border:2px solid rgba(255,152,0,0.4);background:linear-gradient(135deg,rgba(255,152,0,0.08) 0%,rgba(255,152,0,0.02) 100%);color:#ff9800;cursor:pointer;transition:all 0.2s;text-align:center;">
+            <button class="diff-btn btn btn--primary" data-diff="hard" style="padding:16px 8px;border-radius:10px;border:2px solid rgba(255,152,0,0.4);background:linear-gradient(135deg,rgba(255,152,0,0.08) 0%,rgba(255,152,0,0.02) 100%);color:#ff9800;">
                 <div style="font-size:18px;font-weight:bold;margin-bottom:4px;">困难</div>
                 <div style="font-size:11px;color:#8b949e;">血量与伤害 x10</div>
             </button>
-            <button class="diff-btn" data-diff="nightmare" style="padding:16px 8px;border-radius:10px;border:2px solid rgba(244,67,54,0.4);background:linear-gradient(135deg,rgba(244,67,54,0.08) 0%,rgba(244,67,54,0.02) 100%);color:#f44336;cursor:pointer;transition:all 0.2s;text-align:center;">
+            <button class="diff-btn btn btn--primary" data-diff="nightmare" style="padding:16px 8px;border-radius:10px;border:2px solid rgba(244,67,54,0.4);background:linear-gradient(135deg,rgba(244,67,54,0.08) 0%,rgba(244,67,54,0.02) 100%);color:#f44336;">
                 <div style="font-size:18px;font-weight:bold;margin-bottom:4px;">噩梦</div>
                 <div style="font-size:11px;color:#8b949e;">血量与伤害 x100</div>
             </button>
-            <button class="diff-btn" data-diff="hell" style="padding:16px 8px;border-radius:10px;border:2px solid rgba(156,39,176,0.4);background:linear-gradient(135deg,rgba(156,39,176,0.08) 0%,rgba(156,39,176,0.02) 100%);color:#9c27b0;cursor:pointer;transition:all 0.2s;text-align:center;">
+            <button class="diff-btn btn btn--primary" data-diff="hell" style="padding:16px 8px;border-radius:10px;border:2px solid rgba(156,39,176,0.4);background:linear-gradient(135deg,rgba(156,39,176,0.08) 0%,rgba(156,39,176,0.02) 100%);color:#9c27b0;">
                 <div style="font-size:18px;font-weight:bold;margin-bottom:4px;">地狱</div>
                 <div style="font-size:11px;color:#8b949e;">血量与伤害 x1000</div>
             </button>
-            <button class="diff-btn" data-diff="expert" style="padding:16px 8px;border-radius:10px;border:2px solid rgba(224,64,251,0.5);background:linear-gradient(135deg,rgba(224,64,251,0.1) 0%,rgba(224,64,251,0.02) 100%);color:#e040fb;cursor:pointer;transition:all 0.2s;text-align:center;">
+            <button class="diff-btn btn btn--primary" data-diff="expert" style="padding:16px 8px;border-radius:10px;border:2px solid rgba(224,64,251,0.5);background:linear-gradient(135deg,rgba(224,64,251,0.1) 0%,rgba(224,64,251,0.02) 100%);color:#e040fb;">
                 <div style="font-size:18px;font-weight:bold;margin-bottom:4px;">专家</div>
                 <div style="font-size:11px;color:#8b949e;">血量与伤害 x1万</div>
             </button>
-            <button class="diff-btn" data-diff="eternal" style="padding:16px 8px;border-radius:10px;border:2px solid rgba(255,215,0,0.6);background:linear-gradient(135deg,rgba(255,215,0,0.15) 0%,rgba(255,140,0,0.05) 100%);color:#ffd740;cursor:pointer;transition:all 0.2s;text-align:center;position:relative;overflow:hidden;">
+            <button class="diff-btn btn btn--primary" data-diff="eternal" style="padding:16px 8px;border-radius:10px;border:2px solid rgba(255,215,0,0.6);background:linear-gradient(135deg,rgba(255,215,0,0.15) 0%,rgba(255,140,0,0.05) 100%);color:#ffd740;">
                 <div style="font-size:18px;font-weight:bold;margin-bottom:4px;">永恒</div>
                 <div style="font-size:11px;color:#8b949e;">血量与伤害 x10万</div>
                 <div style="position:absolute;top:2px;right:4px;font-size:9px;color:#ffd740;background:rgba(255,215,0,0.2);padding:1px 4px;border-radius:3px;letter-spacing:1px;">NEW</div>
@@ -1972,13 +2024,13 @@
                 • 装备属性加成状态
             </p>
             <div style="display:flex;gap:10px;">
-                <button id="settings-save-now-btn" style="flex:1;padding:10px 16px;border-radius:6px;border:1px solid rgba(0,229,255,0.4);background:rgba(0,229,255,0.1);color:#00e5ff;font-size:13px;font-weight:bold;cursor:pointer;letter-spacing:1px;transition:all 0.2s;">💾 立即保存</button>
-                <button id="settings-reset-save-btn" style="flex:1;padding:10px 16px;border-radius:6px;border:1px solid rgba(255,23,68,0.4);background:rgba(255,23,68,0.1);color:#ff5252;font-size:13px;font-weight:bold;cursor:pointer;letter-spacing:1px;transition:all 0.2s;">🗑️ 清空存档</button>
+                <button id="settings-save-now-btn" class="btn btn--sm btn--primary" style="flex:1;">💾 立即保存</button>
+                <button id="settings-reset-save-btn" class="btn btn--sm btn--danger" style="flex:1;">🗑️ 清空存档</button>
             </div>
             <!-- [P3·Task20] 存档导出/导入 -->
             <div style="display:flex;gap:10px;margin-top:10px;">
-                <button id="settings-export-save-btn" style="flex:1;padding:10px 16px;border-radius:6px;border:1px solid rgba(76,175,80,0.4);background:rgba(76,175,80,0.1);color:#69f0ae;font-size:13px;font-weight:bold;cursor:pointer;letter-spacing:1px;transition:all 0.2s;">📤 导出存档</button>
-                <button id="settings-import-save-btn" style="flex:1;padding:10px 16px;border-radius:6px;border:1px solid rgba(255,193,7,0.4);background:rgba(255,193,7,0.1);color:#ffc107;font-size:13px;font-weight:bold;cursor:pointer;letter-spacing:1px;transition:all 0.2s;">📥 导入存档</button>
+                <button id="settings-export-save-btn" class="btn btn--sm btn--ghost" style="flex:1;">📤 导出存档</button>
+                <button id="settings-import-save-btn" class="btn btn--sm btn--ghost" style="flex:1;">📥 导入存档</button>
             </div>
             <div id="settings-save-status" style="margin-top:10px;font-size:12px;color:#69f0ae;text-align:center;display:none;"></div>
         </div>
@@ -1996,8 +2048,13 @@
                 <input type="checkbox" id="settings-sfx-mute" style="width:18px;height:18px;cursor:pointer;accent-color:#ff5252;">
             </div>
             <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;">
-                <span style="color:#e6edf3;font-size:13px;">音乐静音 <span style="color:#666;font-size:11px;">(当前版本无背景音乐，仅记录偏好)</span></span>
+                <span style="color:#e6edf3;font-size:13px;">音乐静音</span>
                 <input type="checkbox" id="settings-music-mute" style="width:18px;height:18px;cursor:pointer;accent-color:#ff5252;">
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;gap:12px;">
+                <span style="color:#e6edf3;font-size:13px;flex-shrink:0;">音乐音量</span>
+                <input type="range" id="settings-music-volume-slider" min="0" max="100" value="50" style="flex:1;accent-color:#ce93d8;cursor:pointer;">
+                <span id="settings-music-volume-value" style="color:#ce93d8;font-size:12px;font-weight:bold;min-width:38px;text-align:right;">50%</span>
             </div>
         </div>
 
@@ -2007,11 +2064,11 @@
             <p id="settings-io-hint" style="color:#8b949e;font-size:11px;line-height:1.6;margin-bottom:8px;">复制下方文本保存，或点击下载按钮存为文件。下次可粘贴到导入框恢复。</p>
             <textarea id="settings-io-text" style="width:100%;height:120px;background:rgba(0,0,0,0.3);border:1px solid rgba(33,150,243,0.3);border-radius:6px;color:#e6edf3;font-size:11px;font-family:monospace;padding:8px;resize:vertical;box-sizing:border-box;" readonly placeholder="存档JSON将显示在此处..."></textarea>
             <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
-                <button id="settings-io-copy-btn" style="padding:8px 14px;border-radius:5px;border:1px solid rgba(76,175,80,0.4);background:rgba(76,175,80,0.1);color:#69f0ae;font-size:12px;font-weight:bold;cursor:pointer;">📋 复制</button>
-                <button id="settings-io-download-btn" style="padding:8px 14px;border-radius:5px;border:1px solid rgba(33,150,243,0.4);background:rgba(33,150,243,0.1);color:#64b5f6;font-size:12px;font-weight:bold;cursor:pointer;">⬇️ 下载文件</button>
-                <button id="settings-io-confirm-btn" style="display:none;padding:8px 14px;border-radius:5px;border:1px solid rgba(255,193,7,0.4);background:rgba(255,193,7,0.1);color:#ffc107;font-size:12px;font-weight:bold;cursor:pointer;">✓ 确认导入</button>
-                <button id="settings-io-file-btn" style="display:none;padding:8px 14px;border-radius:5px;border:1px solid rgba(156,39,176,0.4);background:rgba(156,39,176,0.1);color:#ce93d8;font-size:12px;font-weight:bold;cursor:pointer;">📁 选择文件</button>
-                <button id="settings-io-close-btn" style="padding:8px 14px;border-radius:5px;border:1px solid rgba(139,148,158,0.4);background:rgba(139,148,158,0.1);color:#8b949e;font-size:12px;font-weight:bold;cursor:pointer;margin-left:auto;">✕ 关闭</button>
+                <button id="settings-io-copy-btn" class="btn btn--sm btn--ghost">📋 复制</button>
+                <button id="settings-io-download-btn" class="btn btn--sm btn--ghost">⬇️ 下载文件</button>
+                <button id="settings-io-confirm-btn" class="btn btn--sm btn--primary" style="display:none;">✓ 确认导入</button>
+                <button id="settings-io-file-btn" class="btn btn--sm btn--ghost" style="display:none;">📁 选择文件</button>
+                <button id="settings-io-close-btn" class="btn btn--sm btn--ghost" style="margin-left:auto;">✕ 关闭</button>
             </div>
             <input type="file" id="settings-io-file-input" accept="application/json,.json" style="display:none;">
             <div id="settings-io-status" style="margin-top:8px;font-size:12px;text-align:center;display:none;"></div>
@@ -2022,11 +2079,11 @@
             <div style="color:#ffd740;font-size:15px;font-weight:bold;margin-bottom:10px;letter-spacing:2px;">🖥️ 显示设置</div>
             <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;">
                 <span style="color:#e6edf3;font-size:13px;">动态画质（FPS自适应）</span>
-                <button id="settings-quality-toggle" style="padding:6px 14px;border-radius:5px;border:1px solid rgba(0,229,255,0.4);background:rgba(0,229,255,0.1);color:#00e5ff;font-size:12px;font-weight:bold;cursor:pointer;">已开启</button>
+                <button id="settings-quality-toggle" class="btn btn--sm btn--primary">已开启</button>
             </div>
             <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;">
                 <span style="color:#e6edf3;font-size:13px;">全屏模式</span>
-                <button id="settings-fullscreen-btn" style="padding:6px 14px;border-radius:5px;border:1px solid rgba(0,229,255,0.4);background:rgba(0,229,255,0.1);color:#00e5ff;font-size:12px;font-weight:bold;cursor:pointer;">切换全屏</button>
+                <button id="settings-fullscreen-btn" class="btn btn--sm btn--primary">切换全屏</button>
             </div>
         </div>
 
@@ -2034,7 +2091,7 @@
         <div style="margin-top:16px;padding:16px;background:rgba(0,150,136,0.05);border:1px solid rgba(0,150,136,0.2);border-radius:10px;">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
                 <div style="color:#4db6ac;font-size:15px;font-weight:bold;letter-spacing:2px;">⌨️ 按键设置</div>
-                <button id="settings-reset-keys-btn" style="padding:6px 14px;border-radius:5px;border:1px solid rgba(255,23,68,0.4);background:rgba(255,23,68,0.1);color:#ff5252;font-size:12px;font-weight:bold;cursor:pointer;letter-spacing:1px;">恢复默认</button>
+                <button id="settings-reset-keys-btn" class="btn btn--sm btn--danger">恢复默认</button>
             </div>
             <p style="color:#8b949e;font-size:11px;line-height:1.6;margin-bottom:10px;">点击「重新绑定」后按下想要设置的按键即可。鼠标左键/右键为射击操作，不可重绑。</p>
             <div id="settings-keybind-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:6px;font-size:12px;"></div>
@@ -2131,9 +2188,9 @@
             <div id="oxygen-text">100</div>
         </div>
     </div>
-    <div id="heat-warning" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);color:#ff4400;font-size:24px;font-weight:bold;text-shadow:0 0 10px #ff4400,0 0 20px #ff2200;z-index:100;pointer-events:none;">高温区域!</div>
-    <div id="time-effect-indicator" style="display:none;position:fixed;top:80px;left:50%;transform:translateX(-50%);color:#aaccff;font-size:18px;font-weight:bold;text-shadow:0 0 8px rgba(100,150,255,0.8);z-index:100;pointer-events:none;"></div>
-    <div id="time-shield-indicator" style="display:none;position:fixed;top:110px;left:50%;transform:translateX(-50%);color:#ffdd44;font-size:16px;font-weight:bold;text-shadow:0 0 8px rgba(255,220,60,0.8);z-index:100;pointer-events:none;">⏳ 时间庇护</div>
+    <div id="heat-warning" class="hud-indicator" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);color:#ff4400;font-size:24px;font-weight:bold;text-shadow:0 0 10px #ff4400,0 0 20px #ff2200;z-index:100;pointer-events:none;">高温区域!</div>
+    <div id="time-effect-indicator" class="hud-indicator" style="display:none;position:fixed;top:80px;left:50%;transform:translateX(-50%);color:#aaccff;font-size:18px;font-weight:bold;text-shadow:0 0 8px rgba(100,150,255,0.8);z-index:100;pointer-events:none;"></div>
+    <div id="time-shield-indicator" class="hud-indicator" style="display:none;position:fixed;top:110px;left:50%;transform:translateX(-50%);color:#ffdd44;font-size:16px;font-weight:bold;text-shadow:0 0 8px rgba(255,220,60,0.8);z-index:100;pointer-events:none;">⏳ 时间庇护</div>
     <div class="weapon-slot-container">
         <div class="weapon-slot active" id="weapon-slot-1"><span class="weapon-icon">—</span><span class="weapon-key">1</span><span class="weapon-ammo">空</span></div>
         <div class="weapon-slot" id="weapon-slot-2"><span class="weapon-icon">—</span><span class="weapon-key">2</span><span class="weapon-ammo">空</span></div>
@@ -2142,8 +2199,8 @@
         <div class="weapon-slot" id="weapon-slot-5"><span class="weapon-icon">—</span><span class="weapon-key">5</span><span class="weapon-ammo">空</span></div>
     </div>
     <div id="third-person-indicator">第三人称视角 [O]</div>
-    <div id="cube-amplify-indicator" style="position:absolute;top:120px;left:16px;color:#00e5ff;font-size:13px;font-weight:bold;text-shadow:0 0 8px rgba(0,229,255,0.6);display:none;animation:cubePulse 1s ease-in-out infinite;background:rgba(8,12,20,0.6);padding:3px 10px;border-radius:5px;">🧊 魔方增幅 0%</div>
-    <div id="damage-stat-panel" style="position:absolute;top:148px;left:16px;color:#ff6659;font-size:13px;font-weight:bold;text-shadow:0 0 8px rgba(255,102,89,0.6);background:rgba(8,12,20,0.6);padding:3px 10px;border-radius:5px;">⚔ 累计伤害 <span id="damage-stat-value">0.0</span></div>
+    <div id="cube-amplify-indicator" class="hud-indicator" style="position:absolute;top:120px;left:16px;color:#00e5ff;font-size:13px;font-weight:bold;text-shadow:0 0 8px rgba(0,229,255,0.6);display:none;animation:cubePulse 1s ease-in-out infinite;">🧊 魔方增幅 0%</div>
+    <div id="damage-stat-panel" class="hud-indicator" style="position:absolute;top:148px;left:16px;color:#ff6659;font-size:13px;font-weight:bold;text-shadow:0 0 8px rgba(255,102,89,0.6);">⚔ 累计伤害 <span id="damage-stat-value">0.0</span></div>
     <!-- [Patch] cubePulse keyframes moved to head -->
     <div id="boss-bar-container">
         <div id="boss-bar-header">
@@ -2190,12 +2247,12 @@
     </div>
     <div id="ammo-pack-hint">进入补给区补充弹药!</div>
     <!-- 皓月超速箭充能条 -->
-    <div id="moonbow-charge-bar" style="display:none;position:absolute;bottom:120px;right:16px;width:160px;height:22px;background:rgba(8,12,20,0.85);border:1px solid rgba(79,195,247,0.4);border-radius:6px;overflow:hidden;z-index:10;box-shadow:0 0 12px rgba(79,195,247,0.15);">
+    <div id="moonbow-charge-bar" class="hud-indicator" style="display:none;position:absolute;bottom:120px;right:16px;width:160px;height:22px;padding:0;background:rgba(8,12,20,0.85);border:1px solid rgba(79,195,247,0.4);border-radius:6px;overflow:hidden;z-index:10;box-shadow:0 0 12px rgba(79,195,247,0.15);">
         <div id="moonbow-charge-fill" style="width:0%;height:100%;background:linear-gradient(90deg,#4fc3f7,#e040fb);border-radius:5px;transition:width 0.08s linear;"></div>
         <span id="moonbow-charge-text" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:11px;font-weight:bold;text-shadow:0 1px 3px rgba(0,0,0,0.9);white-space:nowrap;">1 发/秒</span>
     </div>
-    <div id="dawnlight-power" style="display:none;position:absolute;bottom:120px;left:50%;transform:translateX(-50%);color:#00ffff;font-size:13px;font-weight:bold;text-shadow:0 0 8px #00ffff;padding:3px 10px;background:rgba(8,12,20,0.6);border-radius:5px;z-index:10;">黎明之力: +0%</div>
-    <div id="parasite-cannon-indicator" style="display:none;position:absolute;bottom:140px;left:50%;transform:translateX(-50%);color:#ffd700;font-size:13px;font-weight:bold;text-shadow:0 0 8px #ffd700;padding:3px 10px;background:rgba(8,12,20,0.6);border-radius:5px;z-index:10;">炮狙模式</div>
+    <div id="dawnlight-power" class="hud-indicator" style="display:none;position:absolute;bottom:120px;left:50%;transform:translateX(-50%);color:#00ffff;font-size:13px;font-weight:bold;text-shadow:0 0 8px #00ffff;z-index:10;">黎明之力: +0%</div>
+    <div id="parasite-cannon-indicator" class="hud-indicator" style="display:none;position:absolute;bottom:140px;left:50%;transform:translateX(-50%);color:#ffd700;font-size:13px;font-weight:bold;text-shadow:0 0 8px #ffd700;z-index:10;">炮狙模式</div>
     <div id="skill-e" class="skill-slot">
         <div class="skill-icon-box"><div class="skill-overlay" id="skill-e-overlay"></div><div class="skill-text">&#9889;</div></div>
         <div class="skill-info"><div class="skill-label">闪电链 [E]</div><div class="skill-timer" id="skill-e-timer">就绪</div></div>
@@ -2210,7 +2267,7 @@
     </div>
     <div id="debuff-bar" style="position:absolute;bottom:70px;left:70px;display:flex;gap:6px;pointer-events:none;z-index:95;"></div>
     <div id="weapon-skills-panel"></div>
-    <div id="current-weapon-name" style="position:absolute;bottom:155px;right:16px;color:#e6edf3;font-size:14px;font-weight:bold;text-shadow:0 0 8px rgba(0,229,255,0.4);background:rgba(8,12,20,0.7);padding:5px 14px;border-radius:6px;border:1px solid rgba(0,229,255,0.15);display:none;pointer-events:none;letter-spacing:1px;z-index:95;"></div>
+    <div id="current-weapon-name" class="hud-indicator" style="position:absolute;bottom:155px;right:16px;color:#e6edf3;font-size:14px;font-weight:bold;text-shadow:0 0 8px rgba(0,229,255,0.4);display:none;pointer-events:none;letter-spacing:1px;z-index:95;"></div>
     <div id="lock-storm-indicator">锁敌风暴 激活中</div>
     <div id="kill-feed"></div>
     <div id="streak-counter">
@@ -2240,7 +2297,7 @@
 <div id="acid-overlay"></div>
 <div id="invincible-overlay"></div>
 <div id="invincible-indicator">🛡️ 无敌护盾</div>
-<div id="tumo-shield-indicator" style="position:absolute;top:80px;right:25px;color:#ff1744;font-size:14px;font-weight:bold;text-shadow:0 0 10px rgba(255,23,68,0.8);display:none;animation:tumoShieldPulse 1s ease-in-out infinite;">⚔ 屠魔护体 ·90%减伤</div>
+<div id="tumo-shield-indicator" class="hud-indicator" style="position:absolute;top:80px;right:25px;color:#ff1744;font-size:14px;font-weight:bold;text-shadow:0 0 10px rgba(255,23,68,0.8);display:none;animation:tumoShieldPulse 1s ease-in-out infinite;">⚔ 屠魔护体 ·90%减伤</div>
 <!-- [Patch] tumoShieldPulse keyframes moved to head -->
 <div id="invincible-bar-container"><span id="invincible-bar-label">无敌</span><div id="invincible-bar-outer"><div id="invincible-bar-inner"></div></div></div>
 <div id="pocket-dim-overlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse at center,rgba(0,80,0,0.4),rgba(0,20,0,0.8));display:none;z-index:86;pointer-events:none;"></div>
@@ -2282,8 +2339,8 @@
         <div id="revival-info">剩余次数：<span id="revival-remaining">3</span>/3</div>
     </div>
     <div id="death-btns">
-        <button id="restart-btn">重新挑战</button>
-        <button id="death-home-btn">返回首页</button>
+        <button class="btn btn--danger" id="restart-btn">重新挑战</button>
+        <button class="btn btn--ghost" id="death-home-btn">返回首页</button>
     </div>
 </div>
 
@@ -2294,9 +2351,9 @@
     <div id="auto-next-countdown" style="display:none;"><span class="countdown-number" id="countdown-number">5</span> 秒后自动进入下一关</div>
     <button id="cancel-auto-next" style="display:none;">取消自动进入</button>
     <div style="display:flex; flex-direction:column; gap:12px; align-items:center;">
-        <button class="victory-btn" id="victory-restart-btn" style="background:rgba(76,175,80,0.1);color:#69f0ae;border:1px solid rgba(76,175,80,0.4);padding:12px 45px;font-size:16px;border-radius:8px;cursor:pointer;letter-spacing:3px;font-weight:bold;transition:all 0.3s;pointer-events:auto;min-width:200px;">重新开始</button>
-        <button class="victory-btn" id="victory-home-btn" style="background:rgba(255,152,0,0.1);color:#ffab40;border:1px solid rgba(255,152,0,0.4);padding:12px 45px;font-size:16px;border-radius:8px;cursor:pointer;letter-spacing:3px;font-weight:bold;transition:all 0.3s;pointer-events:auto;min-width:200px;">返回主页</button>
-        <button class="victory-btn" id="victory-next-btn" style="background:rgba(255,215,0,0.1);color:#ffd700;border:1px solid rgba(255,215,0,0.4);padding:12px 45px;font-size:16px;border-radius:8px;cursor:pointer;letter-spacing:3px;font-weight:bold;transition:all 0.3s;pointer-events:auto;min-width:200px;display:none;">进入下一关</button>
+        <button class="btn btn--ghost" id="victory-restart-btn" style="min-width:200px;pointer-events:auto;">重新开始</button>
+        <button class="btn btn--primary" id="victory-home-btn" style="min-width:200px;pointer-events:auto;">返回主页</button>
+        <button class="btn btn--gold" id="victory-next-btn" style="display:none;min-width:200px;pointer-events:auto;">进入下一关</button>
     </div>
 </div>
 
@@ -2307,7 +2364,7 @@
         <div id="panel-header">
             <div style="display:flex;align-items:center;gap:12px;">
                 <h2>个人面板</h2>
-                <button id="open-shop-btn" style="padding:6px 14px;border-radius:6px;border:1px solid rgba(255,215,0,0.3);background:rgba(255,215,0,0.08);color:#ffd700;font-size:12px;font-weight:bold;cursor:pointer;letter-spacing:1px;transition:all 0.2s;">商城</button>
+                <button id="open-shop-btn" style="padding:6px 14px;border-radius:6px;border:1px solid rgba(255,215,0,0.3);background:rgba(255,215,0,0.08);color:var(--cy-gold);font-size:12px;font-weight:bold;cursor:pointer;letter-spacing:1px;transition:all 0.2s;">商城</button>
             </div>
             <button id="panel-close">&times;</button>
         </div>
@@ -2341,11 +2398,11 @@
             <div id="panel-right">
                 <!-- 仓库切换标签 -->
                 <div style="display:flex;align-items:center;margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:10px;gap:4px;flex-wrap:wrap;">
-                    <button class="warehouse-tab-btn active" data-tab="weapon" style="padding:4px 14px;border-radius:4px;border:1px solid rgba(0,229,255,0.3);background:rgba(0,229,255,0.15);color:#00e5ff;font-size:12px;font-weight:bold;cursor:pointer;transition:all 0.2s;letter-spacing:1px;">武器仓库</button>
-                    <button class="warehouse-tab-btn" data-tab="material" style="padding:4px 14px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:12px;font-weight:bold;cursor:pointer;transition:all 0.2s;letter-spacing:1px;">材料仓库</button>
-                    <button class="warehouse-tab-btn" data-tab="talent" style="padding:4px 14px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:12px;font-weight:bold;cursor:pointer;transition:all 0.2s;letter-spacing:1px;">天赋</button>
-                    <button class="warehouse-tab-btn" data-tab="achievement" style="padding:4px 14px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:12px;font-weight:bold;cursor:pointer;transition:all 0.2s;letter-spacing:1px;">成就</button>
-                    <button class="warehouse-tab-btn" data-tab="stats" style="padding:4px 14px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:12px;font-weight:bold;cursor:pointer;transition:all 0.2s;letter-spacing:1px;">统计</button>
+                    <button class="warehouse-tab-btn active btn btn--sm btn--ghost" data-tab="weapon" style="padding:4px 14px;border-radius:4px;border:1px solid rgba(0,229,255,0.3);background:rgba(0,229,255,0.15);color:#00e5ff;font-size:12px;font-weight:bold;cursor:pointer;transition:all 0.2s;letter-spacing:1px;">武器仓库</button>
+                    <button class="warehouse-tab-btn btn btn--sm btn--ghost" data-tab="material" style="padding:4px 14px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:12px;font-weight:bold;cursor:pointer;transition:all 0.2s;letter-spacing:1px;">材料仓库</button>
+                    <button class="warehouse-tab-btn btn btn--sm btn--ghost" data-tab="talent" style="padding:4px 14px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:12px;font-weight:bold;cursor:pointer;transition:all 0.2s;letter-spacing:1px;">天赋</button>
+                    <button class="warehouse-tab-btn btn btn--sm btn--ghost" data-tab="achievement" style="padding:4px 14px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:12px;font-weight:bold;cursor:pointer;transition:all 0.2s;letter-spacing:1px;">成就</button>
+                    <button class="warehouse-tab-btn btn btn--sm btn--ghost" data-tab="stats" style="padding:4px 14px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:12px;font-weight:bold;cursor:pointer;transition:all 0.2s;letter-spacing:1px;">统计</button>
                 </div>
                 <!-- 武器仓库内容 -->
                 <div id="tab-weapon-content">
@@ -2422,8 +2479,8 @@
 </div>
 
 <!-- ====== 商城弹窗 ====== -->
-<div id="shop-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:1200;align-items:center;justify-content:center;">
-    <div style="width:100%;max-width:100%;max-height:100vh;height:100%;background:linear-gradient(135deg, #0d1117 0%, #161b22 50%, #0d1117 100%);border:none;border-radius:0;overflow:hidden;box-shadow:none;display:flex;flex-direction:column;">
+<div id="shop-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-box" style="width:min(960px,92vw);max-height:88vh;display:flex;flex-direction:column;border-radius:var(--cy-radius);overflow:hidden;padding:0;">
         <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 22px;background:rgba(0,229,255,0.04);border-bottom:1px solid rgba(0,229,255,0.1);">
             <div style="display:flex;align-items:center;gap:12px;">
                 <h2 style="color:#ffd700;font-size:18px;letter-spacing:3px;font-weight:600;margin:0;">商城</h2>
@@ -2446,309 +2503,7 @@
                         <button class="shop-filter-btn" data-filter="tactical" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:11px;cursor:pointer;transition:all 0.2s;">战术武器</button>
                         <button class="shop-filter-btn" data-filter="material" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:11px;cursor:pointer;transition:all 0.2s;">材料</button>
                     </div>
-                    <!-- 武器分区 -->
-                    <div class="shop-category">
-                        <div class="shop-category-header">
-                            <span class="shop-category-icon">&#9876;</span>
-                            <span class="shop-category-title">武器</span>
-                            <span class="shop-category-count">12件商品</span>
-                        </div>
-                        <!-- 神级 -->
-                        <div class="shop-item" id="shop-phasewalker" data-category="primary">
-                            <div class="shop-header">
-                                <span class="shop-icon">&#9734;</span>
-                                <div>
-                                    <div class="shop-name" style="color:#ff1744">相位行者 <span class="hero-tag" style="color:#ff1744;border-color:#ff1744;background:rgba(255,23,68,0.08);">神级</span></div>
-                                    <div class="shop-price">&#11044; 100000 金币</div>
-                                </div>
-                            </div>
-                            <div class="shop-desc">神级相位步枪 — 相位制导，精准追踪</div>
-                            <ul class="shop-feature">
-                                <li>类型：<b style="color:#ff1744">主武器（相位步枪）</b></li>
-                                <li>无限弹匣 | 射速20发/秒 | 基础伤害<b style="color:#ff6659">7500</b></li>
-                                <li>装备加成：生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3</li>
-                                <li>主动·相位制导<b style="color:#ff1744">[E]</b>：按E键开启/关闭，无冷却。每秒消耗1%能量上限，能量<10%无法开启。命中目标附加信标整体标记（不区分部位），标记目标受到的伤害必定为爆头伤害；未命中子弹自动追踪并命中标记目标头部；击杀标记目标触发300%武器伤害范围爆炸；距离标记目标越近伤害越高（上限+100%，超过100米无加成）；击杀后信标传染至附近血量最低目标（传染目标同样始终被爆头）；关闭技能后信标清除，重新开启可重新标记；信标3s/5s/10s易伤+100%/+200%/+300%；技能期间移速+30%</li>
-                                <li>被动·相位打击：敌方存在信标时，每发1%概率造成目标1%生命上限真实伤害</li>
-                                <li>被动·相位怒火：目标血量<75%/50%/25%时对该目标伤害+100%/+200%/+300%</li>
-                            </ul>
-                            <button class="shop-buy-btn" id="buy-phasewalker-btn">购买 100000 金币</button>
-                        </div>
-                        <div class="shop-item" id="shop-zeushand" data-category="primary">
-                            <div class="shop-header">
-                                <span class="shop-icon">&#9889;</span>
-                                <div>
-                                    <div class="shop-name" style="color:#ff1744">宙斯之手 <span class="hero-tag" style="color:#ff1744;border-color:#ff1744;background:rgba(255,23,68,0.08);">神级</span></div>
-                                    <div class="shop-price">&#11044; 30000 金币</div>
-                                </div>
-                            </div>
-                            <div class="shop-desc">神级能量枪 — 雷霆万钧，宙斯降临</div>
-                            <ul class="shop-feature">
-                                <li>类型：<b style="color:#ff1744">主武器（能量枪）</b></li>
-                                <li>无限弹匣 | 射速6发/秒 | 基础伤害<b style="color:#ff6659">70000</b></li>
-                                <li>装备加成：生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3</li>
-                                <li>主动·宙斯降临<b style="color:#ff1744">[E]</b>：在当前位置召唤宙斯幻影，自动攻击大范围敌人，继承本体普攻。最多5个幻影，每个消耗30能量，无冷却。幻影不会自动消失，无生命值，无持续时间限制</li>
-                                <li>被动·雷霆能量：雷球命中充能，充满后释放闪电链，跳跃10次，每次50%武器基础伤害</li>
-                                <li>被动·感电：闪电链击中目标施加15秒感电，受宙斯之手伤害+100%，击中感电目标回复1%能量</li>
-                            </ul>
-                            <button class="shop-buy-btn" id="buy-zeushand-btn">购买 30000 金币</button>
-                        </div>
-                        <div class="shop-item" id="shop-parasite" data-category="primary">
-                            <div class="shop-header">
-                                <span class="shop-icon">&#128128;</span>
-                                <div>
-                                    <div class="shop-name" style="color:#ff1744">寄生者 <span class="hero-tag" style="color:#ff1744;border-color:#ff1744;background:rgba(255,23,68,0.08);">神级</span></div>
-                                    <div class="shop-price">&#11044; 20000 金币</div>
-                                </div>
-                            </div>
-                            <div class="shop-desc">神级狙击枪 — 寄生于死，噬魂而生</div>
-                            <ul class="shop-feature">
-                                <li>类型：<b style="color:#ff1744">主武器（狙击枪）</b></li>
-                                <li>无限弹匣 | 射速5发/秒 | 基础伤害<b style="color:#ff6659">1亿</b></li>
-                                <li>装备加成：生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3</li>
-                                <li>主动·炮狙模式<b style="color:#ff1744">[右键]</b>：需能量>10%，开关型。开启后左键发射巨炮冲击波，消耗1%能量，造成200%武器基础范围伤害，吸入附近目标。再次按右键关闭</li>
-                                <li>被动·内脏暴击：炮狙模式下命中目标施加递增层数标记（1层300%、2层600%、3层900%、4层1200%、5层1500%范围伤害），最高5层后50%维持/50%重置。范围伤害可同时为多目标叠加</li>
-                            </ul>
-                            <button class="shop-buy-btn" id="buy-parasite-btn">购买 20000 金币</button>
-                        </div>
-                        <!-- 传说级 -->
-                        <div class="shop-item" id="shop-tumo" data-category="primary">
-                            <div class="shop-header">
-                                <span class="shop-icon">&#127919;</span>
-                                <div>
-                                    <div class="shop-name" style="color:#ff1744">屠魔 <span class="hero-tag" style="color:#ff1744;border-color:#ff1744;background:rgba(255,23,68,0.08);">神级</span></div>
-                                    <div class="shop-price">&#11044; 10000 金币</div>
-                                </div>
-                            </div>
-                            <div class="shop-desc">神级狙击枪 — 屠魔弑神之枪</div>
-                            <ul class="shop-feature">
-                                <li>基础伤害：<b style="color:#ff6659">1亿/发</b>（狙击级毁灭伤害） | 射速10发/秒</li>
-                                <li>无限弹匣 | 100%穿透（穿透建筑物和敌人）</li>
-                                <li>装备加成：生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3</li>
-                                <li>被动·割裂箭头：命中施加10秒割裂，移动时每帧受基础伤害100%</li>
-                                <li>被动·巨力一击：命中击退3米，子弹100%穿透前方所有敌人与建筑物</li>
-                                <li>主动·屠魔护体[E]：开关型，无冷却，90%减伤，每秒消耗2%最大能量</li>
-                            </ul>
-                            <button class="shop-buy-btn" id="buy-tumo-btn">购买 10000 金币</button>
-                        </div>
-                        <div class="shop-item" id="shop-dragonlyknight" data-category="primary">
-                            <div class="shop-header">
-                                <span class="shop-icon">&#128009;</span>
-                                <div>
-                                    <div class="shop-name" style="color:#e040fb">魔龙骑士 <span class="hero-tag" style="color:#e040fb;border-color:#e040fb;background:rgba(224,64,251,0.08);">传说级</span></div>
-                                    <div class="shop-price">&#11044; 10000 金币</div>
-                                </div>
-                            </div>
-                            <div class="shop-desc">传说级AK47步枪 — 魔龙化身，战场主宰</div>
-                            <ul class="shop-feature">
-                                <li>类型：<b style="color:#e040fb">主武器（AK47步枪）</b></li>
-                                <li>弹匣50发，备弹1000发，射速15发/秒，基础伤害<b style="color:#ff6659">1500/发</b></li>
-                                <li>装备加成：生命+20000 | 护盾+20000 | 魂力+5000 | 移速+2 | 能量+40 | 暴击+3% | 每秒回复生命+500 | 每秒回复护盾+500 | 每秒回复能量+2</li>
-                                <li>主动·龙威[E]：开关型，移速+50%，伤害+100%，开枪不消耗子弹，每秒消耗1%最大能量，能量低于10%自动关闭，无冷却</li>
-                                <li>被动·血怒：每损失1%生命值，伤害提升1%</li>
-                                <li>被动·龙鳞守护：受到致命伤害时触发，无敌3秒并恢复护盾至上限，冷却60秒</li>
-                            </ul>
-                            <button class="shop-buy-btn" id="buy-dragonlyknight-btn">购买 10000 金币</button>
-                        </div>
-                        <div class="shop-item" id="shop-dawnlight" data-category="primary">
-                            <div class="shop-header">
-                                <span class="shop-icon">&#9788;</span>
-                                <div>
-                                    <div class="shop-name" style="color:#e040fb">黎明之光 <span class="hero-tag" style="color:#e040fb;border-color:#e040fb;background:rgba(224,64,251,0.08);">传说级</span></div>
-                                    <div class="shop-price">&#11044; 10000 金币</div>
-                                </div>
-                            </div>
-                            <div class="shop-desc">传说级激光枪 — 破晓之光，净化黑暗</div>
-                            <ul class="shop-feature">
-                                <li>类型：<b style="color:#e040fb">主武器（激光枪）</b></li>
-                                <li>无限弹匣 | 射速10次/秒 | 基础伤害<b style="color:#ff6659">1200/次</b> | 减速效果</li>
-                                <li>按住左键持续发射激光，对范围内目标造成伤害并减速</li>
-                                <li>装备加成：生命+20000 | 护盾+20000 | 魂力+5000 | 移速+2 | 能量+40 | 暴击+3% | 每秒回复生命+500 | 每秒回复护盾+500 | 每秒回复能量+2</li>
-                                <li>主动·黎明解放[右键]：长按右键释放，松开右键关闭，每秒消耗1%能量上限，范围大幅扩大，伤害+100%，激光穿透障碍物</li>
-                                <li>被动·黎明之力：持续射击时每秒+30%伤害，最高+300%，中断归零</li>
-                            </ul>
-                            <button class="shop-buy-btn" id="buy-dawnlight-btn">购买 10000 金币</button>
-                        </div>
-                        <div class="shop-item" id="shop-whitenight" data-category="secondary">
-                            <div class="shop-header">
-                                <span class="shop-icon">&#9876;</span>
-                                <div>
-                                    <div class="shop-name" style="color:#e040fb">白夜铳刃 <span class="hero-tag" style="color:#e040fb;border-color:#e040fb;background:rgba(224,64,251,0.08);">传说级</span></div>
-                                    <div class="shop-price">&#11044; 10000 金币</div>
-                                </div>
-                            </div>
-                            <div class="shop-desc">传说级铳刃手枪 — 白夜降临，万物肃杀</div>
-                            <ul class="shop-feature">
-                                <li>类型：<b style="color:#e040fb">副武器（铳刃手枪）</b></li>
-                                <li>弹匣25发，备弹500发，射速5发/秒，基础伤害<b style="color:#ff6659">900/发</b></li>
-                                <li>装备加成：生命+20000 | 护盾+20000 | 魂力+5000 | 移速+2 | 能量+40 | 暴击+3% | 每秒回复生命+500 | 每秒回复护盾+500 | 每秒回复能量+2</li>
-                                <li>主动·白夜领域<b style="color:#88ccff">[右键]</b>：对目标区域持续造成高频范围伤害，持续20秒，消耗10能量，冷却5秒</li>
-                                <li>被动·领域牵引：技能激活期间，左键命中敌人可将范围中心转移至该敌人并跟随移动</li>
-                            </ul>
-                            <button class="shop-buy-btn" id="buy-whitenight-btn">购买 10000 金币</button>
-                        </div>
-                        <div class="shop-item" id="shop-moonbow" data-category="secondary">
-                            <div class="shop-header">
-                                <span class="shop-icon">&#127993;</span>
-                                <div>
-                                    <div class="shop-name" style="color:#ff1744">皓月神弓 <span class="hero-tag" style="color:#ff1744;border-color:#ff1744;background:rgba(255,23,68,0.08);">神级</span></div>
-                                    <div class="shop-price">&#11044; 30000 金币</div>
-                                </div>
-                            </div>
-                            <div class="shop-desc">神级副武器 — 皓月当空，冰霜降临</div>
-                            <ul class="shop-feature">
-                                <li>类型：<b style="color:#ff1744">副武器（神弓）</b></li>
-                                <li>无限弹匣 | 射速10发/秒 | 基础伤害<b style="color:#ff6659">80000/发</b></li>
-                                <li>装备加成：生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3</li>
-                                <li>被动·冰霜箭：命中施加50%减速3秒 | 命中10%概率触发冰冻1秒（1秒内置冷却，不叠加）</li>
-
-                                <li>主动·万箭齐发<b style="color:#ff1744">[E]</b>：选定区域降下箭雨，每秒30次，每次<b style="color:#ff6659">300%</b>基础伤害，持续30秒，消耗50能量，冷却5秒</li>
-                            </ul>
-                            <button class="shop-buy-btn" id="buy-moonbow-btn">购买 30000 金币</button>
-                        </div>
-                        <!-- 英雄级 -->
-                        <div class="shop-item" id="shop-deathlight" data-category="grenade">
-                            <div class="shop-header">
-                                <span class="shop-icon">&#9762;</span>
-                                <div>
-                                    <div class="shop-name" style="color:#ffd700">死神之光 <span class="hero-tag">英雄级</span></div>
-                                    <div class="shop-price">&#11044; 3000 金币</div>
-                                </div>
-                            </div>
-                            <div class="shop-desc">英雄级手雷 — 毁灭性光能爆破装置</div>
-                            <ul class="shop-feature">
-                                <li>基础伤害：<b style="color:#ff6659">600</b>（远超普通手雷）</li>
-                                <li>爆炸范围内非BOSS敌人眩晕 <b style="color:#69f0ae">3秒</b></li>
-                                <li>爆炸后释放 <b style="color:#ffd740">10枚跟踪火箭弹</b></li>
-                                <li>每枚火箭基础伤害<b style="color:#ff6659">60</b> + 小范围爆炸</li>
-                                <li>自动锁定制导最近目标</li>
-                                <li>被动：<b style="color:#69f0ae">25%概率</b>返还一枚死神之光</li>
-                            </ul>
-                            <button class="shop-buy-btn" id="buy-deathlight-btn">购买 3000 金币</button>
-                        </div>
-                        <div class="shop-item" id="shop-metalstorm" data-category="secondary">
-                            <div class="shop-header">
-                                <span class="shop-icon">&#128299;</span>
-                                <div>
-                                    <div class="shop-name" style="color:#ffd700">金属风暴 <span class="hero-tag">英雄级</span></div>
-                                    <div class="shop-price">&#11044; 5000 金币</div>
-                                </div>
-                            </div>
-                            <div class="shop-desc">英雄级双持手枪 — 毁灭性弹幕压制装置</div>
-                            <ul class="shop-feature">
-                                <li>基础伤害：<b style="color:#ff6659">500/发</b>（双枪交替射击）</li>
-                                <li>射速：<b style="color:#69f0ae">16.7发/秒</b>（极速压制）</li>
-                                <li>弹匣：<b style="color:#ffd740">60/360</b></li>
-                                <li>专属技能 <b style="color:#ff9800">锁敌风暴[E]</b></li>
-                                <li>自动锁定最近敌人，第三人称视角双弹道射击</li>
-                                <li>每发基础伤害50，不消耗弹药，每秒消耗2能量</li>
-                                <li>无冷却，能量>20%即可激活</li>
-                            </ul>
-                            <button class="shop-buy-btn" id="buy-metalstorm-btn">购买 5000 金币</button>
-                        </div>
-                        <div class="shop-item" id="shop-froststar" data-category="grenade">
-                            <div class="shop-header">
-                                <span class="shop-icon">&#10052;</span>
-                                <div>
-                                    <div class="shop-name" style="color:#ffd700">急冻霜星 <span class="hero-tag">英雄级</span></div>
-                                    <div class="shop-price">&#11044; 3000 金币</div>
-                                </div>
-                            </div>
-                            <div class="shop-desc">英雄级手雷 — 二段式冰霜毁灭装置</div>
-                            <ul class="shop-feature">
-                                <li>首次爆炸：<b style="color:#4fc3f7">基础伤害700</b> + <b style="color:#69f0ae">3秒冰冻</b></li>
-                                <li>冰冻期间目标完全无法移动与攻击</li>
-                                <li>冰冻解除时触发二段爆炸：<b style="color:#ff6659">基础伤害700</b></li>
-                                <li>冰冻期间目标呈现冰块封冻视觉效果</li>
-                                <li>前置携带：<b style="color:#ffd740">3枚</b></li>
-                            </ul>
-                            <button class="shop-buy-btn" id="buy-froststar-btn">购买 3000 金币</button>
-                        </div>
-                        <div class="shop-item" id="shop-hellscythe" data-category="melee">
-                            <div class="shop-header">
-                                <span class="shop-icon">&#127987;</span>
-                                <div>
-                                    <div class="shop-name" style="color:#ffd700">地狱魔镰 <span class="hero-tag">英雄级</span></div>
-                                    <div class="shop-price">&#11044; 5000 金币</div>
-                                </div>
-                            </div>
-                            <div class="shop-desc">英雄级近战武器 — 地狱锻造的魔镰</div>
-                            <ul class="shop-feature">
-                                <li>轻击：保留原雷霆战刃轻击伤害</li>
-                                <li>主动·普通狂风[右键]：释放一道狂风侵袭，可对多目标各造成<b style="color:#ff6659">10次 x 基础伤害800/次</b>，无冷却，消耗1能量</li>
-                                <li>主动·地狱狂风[E]：释放<b style="color:#ffd740">三道狂风</b>，每道对多目标各造成<b style="color:#ff6659">10次 x 基础伤害800/次</b>，冷却15秒，消耗30能量</li>
-                                <li>狂风可<b style="color:#69f0ae">卷起敌人</b>（击退+短暂浮空硬直）</li>
-                            </ul>
-                            <button class="shop-buy-btn" id="buy-hellscythe-btn">购买 5000 金币</button>
-                        </div>
-                        <div class="shop-item" id="shop-thousandumbrella" data-category="melee">
-                            <div class="shop-header">
-                                <span class="shop-icon">&#127746;</span>
-                                <div>
-                                    <div class="shop-name" style="color:#ff1744">千机伞 <span class="hero-tag" style="color:#ff1744;border-color:#ff1744;background:rgba(255,23,68,0.08);">神级</span></div>
-                                    <div class="shop-price">&#11044; 30000 金币</div>
-                                </div>
-                            </div>
-                            <div class="shop-desc">神级近战武器 — 千机百变，三形态机关伞刃</div>
-                            <ul class="shop-feature">
-                                <li>基础伤害<b style="color:#ff6659">6000</b>/击 | 攻速2击/秒 | 按<b style="color:#00e5ff">X</b>切换三形态</li>
-                                <li>被动·千机百变：<b style="color:#00e5ff">刃形态</b>扇形范围斩击200%伤害 | <b style="color:#ffd700">盾形态</b>减免90%伤害+反弹50%近战 | <b style="color:#ff1744">羽形态</b>飞行+移速+100%+3道风刃150%伤害</li>
-                                <li>被动·形态切换：切换瞬间0.5秒无敌，3秒内下次攻击伤害+100%</li>
-                                <li>主动·天罗伞阵<b style="color:#ff1744">[E]</b>：跃空投射巨型伞阵(直径20米)，持续10秒，每秒108道伞刃(300%伤害+0.5秒禁锢)，结束万伞归一爆炸(1200%伤害+5米击飞)，期间闪避+80%，消耗80能量冷却15秒</li>
-                                <li>主动·伞舞龙卷<b style="color:#00e5ff">[右键]</b>：解体360片飞刃形成龙卷(5米)，持续5秒，每秒400%伤害+吸附，重组冲击波800%伤害，飞行状态范围10米×2吸附，消耗35能量冷却8秒</li>
-                                <li>装备加成：生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3</li>
-                            </ul>
-                            <button class="shop-buy-btn" id="buy-thousandumbrella-btn">购买 30000 金币</button>
-                        </div>
-                        <!-- 神级手雷 -->
-                        <div class="shop-item" id="shop-tanglotus" data-category="grenade">
-                            <div class="shop-header">
-                                <span class="shop-icon">&#127802;</span>
-                                <div>
-                                    <div class="shop-name" style="color:#ff1744">佛怒唐莲 <span class="hero-tag" style="color:#ff1744;border-color:#ff1744;background:rgba(255,23,68,0.08);">神级</span></div>
-                                    <div class="shop-price">&#11044; 200000 金币</div>
-                                </div>
-                            </div>
-                            <div class="shop-desc">神级手雷 — 金红龙卷，万瓣追魂</div>
-                            <ul class="shop-feature">
-                                <li>类型：<b style="color:#ff1744">手雷（佛怒唐莲）</b></li>
-                                <li>爆炸基础伤害：<b style="color:#ff6659">10000</b> | 携带<b style="color:#ffd740">5枚</b></li>
-                                <li>引爆时发出清脆"叮"声，如同金玉碰撞</li>
-                                <li>爆炸后生成金红色龙卷，持续<b style="color:#ff6659">10秒</b></li>
-                                <li>龙卷以360度无死角极速释放金属花瓣，每秒<b style="color:#ff6659">100朵</b>，总计<b style="color:#ff6659">1000朵</b></li>
-                                <li>每朵花瓣造成<b style="color:#ff6659">100%武器伤害</b>，自动追踪全部敌人，必定命中</li>
-                                <li>花瓣均匀分配：每秒100朵按场上存活敌人数量<b style="color:#ff6659">平均分配</b>，余数优先攻击距爆炸源最近的敌人</li>
-                                <li>每秒实时刷新分配：根据最新存活敌人重新计算，确保一视同仁</li>
-                                <li>特殊效果（每朵独立判定）：对小怪<b style="color:#69f0ae">1%概率秒杀</b> | 对BOSS<b style="color:#69f0ae">1%概率造成1%最大生命真伤</b></li>
-                                <li>装备加成：生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3</li>
-                            </ul>
-                            <button class="shop-buy-btn" id="buy-tanglotus-btn">购买 200000 金币</button>
-                        </div>
-                    </div>
-                    <!-- 战术武器分区 -->
-                    <div class="shop-category">
-                        <div class="shop-category-header">
-                            <span class="shop-category-icon">&#129532;</span>
-                            <span class="shop-category-title">战术武器</span>
-                            <span class="shop-category-count">1件商品</span>
-                        </div>
-                        <div class="shop-item" id="shop-datacube" data-category="tactical">
-                            <div class="shop-header">
-                                <span class="shop-icon">&#129532;</span>
-                                <div>
-                                    <div class="shop-name" style="color:#ffd700">数据魔方 <span class="hero-tag">英雄级</span></div>
-                                    <div class="shop-price">&#11044; 8000 金币</div>
-                                </div>
-                            </div>
-                            <div class="shop-desc">英雄级战术武器 — 辅助增益型数据魔方装置</div>
-                            <ul class="shop-feature">
-                                <li>类型：<b style="color:#00e5ff">战术武器</b>（按5键切换，无准星显示）</li>
-                                <li>被动·魔方增幅：伤害加成初始为 <b style="color:#ff6659">0%</b>，每秒自动累加 <b style="color:#ff6659">+1%</b>，100秒达到 <b style="color:#ff6659">100%上限</b></li>
-                                <li>死亡后伤害加成立即重置为0%，复活后重新从0%开始累加</li>
-                                <li>装备加成：生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1</li>
-                            </ul>
-                            <button class="shop-buy-btn" id="buy-datacube-btn">购买 8000 金币</button>
-                        </div>
-                    </div>
+                    <div id="shop-items-container"></div>
                     <!-- 材料分区已移除 -->
         </div>
     </div>
@@ -3205,181 +2960,136 @@ function buildMonsterCodex() {
 function buildEquipCodex() {
     const el = document.getElementById('equip-codex-content');
     if (!el) return;
-    const weapons = [
-{
-            name:'相位行者', quality:'神级', type:'主武器（相位步枪）',
-            stats:'基础伤害50000/发 | 射速20发/秒 | 无限弹匣 | 暴击率+30%',
-            bonus:'生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3',
-            passives:'相位打击 — 敌方存在信标时，每发1%概率造成1%生命上限真实伤害 | 相位怒火 — 目标血量<75%/50%/25%时对该目标伤害+100%/+200%/+300%',
-            actives:'相位制导[E] — 按E开关，无冷却，每秒1%能量，能量<10%不可开启。命中附加信标整体标记(不区分部位，标记目标必定爆头)；未命中自动追踪头部；击杀标记目标300%范围爆炸；距离加成(上限+100%)；信标传染(最低血量，传染目标同样始终被爆头)；关闭技能信标清除，重新开启可重新标记；3s/5s/10s易伤+100%/+200%/+300%；移速+30%',
-            price:'100,000 金币'
-        },
-{
-            name:'宙斯之手', quality:'神级', type:'主武器（能量枪）',
-            stats:'基础伤害70000/发 | 射速6发/秒 | 无限弹匣 | 暴击率+30%',
-            bonus:'生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3',
-            passives:'雷霆能量 — 雷球命中敌人后为武器充能，充能完毕自动释放闪电链，跳跃10次，每次50%武器基础伤害 | 感电 — 闪电链击中目标施加15秒感电，受宙斯之手伤害+100%，击中感电目标回复1%能量',
-            actives:'宙斯降临[E] — 召唤无法移动的宙斯幻影，自动攻击大范围敌人，继承本体普攻。最多5个幻影，每个消耗30能量，无冷却。幻影不会自动消失，无生命值，无持续时间限制',
-            price:'30,000 金币'
-        },
-{
-            name:'皓月神弓', quality:'神级', type:'副武器（神弓）',
-            stats:'基础伤害80000/发 | 射速10发/秒 | 无限弹匣 | 暴击率+25%',
-            bonus:'生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3',
-            passives:'冰霜箭 — 命中施加50%减速3秒 | 命中10%概率触发冰冻1秒(1秒内置冷却,不叠加)',
-            actives:'万箭齐发[E] — 选定区域降下箭雨，每秒30次，每次300%基础伤害，持续30秒，消耗50能量，冷却5秒',
-            price:'30,000 金币'
-        },
-{
-            name:'千机伞', quality:'神级', type:'近战武器（伞刃）',
-            stats:'基础伤害6000/击 | 攻速2击/秒 | 千机百变三形态[刃/盾/羽]按X切换',
-            bonus:'生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3',
-            passives:'千机百变 — 三形态[刃/盾/羽]按X无冷却切换。刃形态：扇形范围斩击200%伤害；盾形态：展开伞面减免90%伤害并反弹50%近战伤害；羽形态：展开机械伞翼飞行，移速+100%，空中攻击释放3道幻影风刃各150%伤害 | 形态切换 — 切换瞬间0.5秒无敌，3秒内下次攻击伤害+100%',
-            actives:'天罗伞阵[E] — 跃入高空投射巨型伞阵(20米)，持续10秒，每秒108道伞刃幻影(300%伤害+0.5秒禁锢)，结束万伞归一爆炸(1200%伤害+5米击飞)，期间闪避率+80%可自由飞行攻击，消耗80能量冷却15秒 | 伞舞龙卷[右键] — 解体为360片飞刃形成龙卷(5米)，持续5秒，每秒400%伤害吸附敌人，重组冲击波800%伤害，飞行状态范围10米吸附翻倍，消耗35能量冷却8秒',
-            price:'30,000 金币'
-        },
-{
-            name:'寄生者', quality:'神级', type:'主武器（狙击枪）',
-            stats:'基础伤害1亿/发 | 射速5发/秒 | 无限弹匣 | 暴击率+30%',
-            bonus:'生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3',
-            passives:'内脏暴击 — 仅炮狙模式生效。命中目标施加内脏暴击层数标记，伤害递增：1层300%、2层600%、3层900%、4层1200%、5层1500%武器基础范围伤害。最高5层，到达5层后50%概率维持、50%概率重置回1层。范围伤害可同时为多个目标分别叠加层数',
-            actives:'炮狙模式[右键] — 开关型，需能量>10%。开启后左键发射巨炮冲击波，消耗1%能量，造成200%武器基础范围伤害，并将附近目标吸入爆炸中心。再次按右键关闭',
-            price:'20,000 金币'
-        },
-{
-            name:'屠魔', quality:'神级', type:'主武器（狙击枪）',
-            stats:'基础伤害1亿/发 | 暴击率+5% | 射速10发/秒 | 无限弹匣 | 100%穿透（穿透建筑物和敌人）',
-            bonus:'生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3',
-            passives:'割裂箭头 — 命中敌人施加10秒割裂效果，移动时每帧受基础伤害100% | 巨力一击 — 命中敌人击退3米，子弹100%穿透前方所有敌人与建筑物',
-            actives:'屠魔护体[E] — 开关型，无冷却。开启后90%减伤，每秒消耗2%最大能量，再次按E关闭或能量低于20%自动关闭',
-            price:'10,000 金币'
-        },
-{
-            name:'黎明之光', quality:'传说级', type:'主武器（激光枪）',
-            stats:'基础伤害1200/次 | 射速10次/秒 | 无限弹匣 | 减速效果 | 按住左键持续发射激光',
-            bonus:'生命+20000 | 护盾+20000 | 魂力+5000 | 移速+2 | 能量+40 | 暴击+3% | 每秒回复生命+500 | 每秒回复护盾+500 | 每秒回复能量+2',
-            passives:'黎明之力 — 激光持续发射且未中断时，每秒提升30%伤害，最多叠加至300%。一旦中断射击，加成即刻归零',
-            actives:'黎明解放[右键] — 长按右键释放，松开右键关闭。开启后，每秒额外消耗1%能量上限，激光影响范围大幅扩大，伤害提升100%，且激光可穿透场景中的障碍物',
-            price:'10,000 金币'
-        },
-{
-            name:'白夜铳刃', quality:'传说级', type:'副武器（铳刃手枪）',
-            stats:'基础伤害900/发 | 射速5发/秒 | 弹匣25/500 | 暴击率+15%',
-            bonus:'生命+20000 | 护盾+20000 | 魂力+5000 | 移速+2 | 能量+40 | 暴击+3% | 每秒回复生命+500 | 每秒回复护盾+500 | 每秒回复能量+2',
-            passives:'领域牵引 — 白夜领域激活期间，左键命中敌人可将范围中心转移至该敌人并跟随移动',
-            actives:'白夜领域[右键] — 对准星指向区域持续20秒高频范围伤害，每秒20次，基础伤害90/次，范围15米，消耗10能量，冷却5秒',
-            price:'10,000 金币'
-        },
-{
-            name:'魔龙骑士', quality:'传说级', type:'主武器（AK47步枪）',
-            stats:'基础伤害1500/发 | 暴击率+15% | 射速15发/秒 | 弹匣50/1000 | 龙威[E]',
-            bonus:'生命+20000 | 护盾+20000 | 魂力+5000 | 移速+2 | 能量+40 | 暴击+3% | 每秒回复生命+500 | 每秒回复护盾+500 | 每秒回复能量+2',
-            passives:'血怒 — 每损失1%生命值，伤害提升1% | 龙鳞守护 — 受到致命伤害时无敌3秒并恢复护盾至上限，冷却60秒',
-            actives:'龙威[E] — 开关型，移速+50%，伤害+100%，不消耗子弹，每秒消耗1%最大能量，能量低于10%自动关闭，无冷却',
-            price:'10,000 金币'
-        },
-{
-            name:'金属风暴', quality:'英雄级', type:'副武器（双持手枪）',
-            stats:'基础伤害500/发 | 射速16.7发/秒 | 弹匣60/360',
-            bonus:'生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1',
-            passives:'极速射速 — 双持高射速手枪',
-            actives:'锁敌风暴[E] — 每秒消耗2能量，自动锁定范围内敌人射击，基础伤害50/发，无冷却，能量>20%可激活',
-            price:'5,000 金币'
-        },
-{
-            name:'地狱魔镰', quality:'英雄级', type:'近战武器',
-            stats:'普通狂风1道x10次 基础伤害800/次 | 地狱狂风3道x10次 基础伤害800/次 | 狂风可卷起敌人',
-            bonus:'生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1',
-            passives:'狂风投射物可卷起敌人击退',
-            actives:'普通狂风[右键] — 1道x10次，基础伤害800/次，无冷却，1能量 | 地狱狂风[E] — 3道x10次，基础伤害800/次，冷却15秒，30能量',
-            price:'5,000 金币'
-        },
-{
-            name:'死神之光', quality:'英雄级', type:'手雷',
-            stats:'爆炸基础伤害600 + 10枚跟踪火箭弹(每枚基础伤害60) + 非BOSS敌人眩晕3秒 | 携带x5 | 25%概率返还',
-            bonus:'生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1',
-            passives:'25%概率使用后返还一枚手雷',
-            actives:'投掷[左键/右键]',
-            price:'3,000 金币'
-        },
-{
-            name:'急冻霜星', quality:'英雄级', type:'手雷',
-            stats:'首爆基础伤害700 + 范围冰冻3秒 | 冰冻解除二段爆炸基础伤害700 | 携带x3',
-            bonus:'生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1',
-            passives:'二段爆炸 — 冰冻解除时自动触发二段冰霜爆炸',
-            actives:'投掷[左键/右键]',
-            price:'3,000 金币'
-        },
-{
-            name:'佛怒唐莲', quality:'神级', type:'手雷',
-            stats:'爆炸基础伤害10000 | 金红龙卷持续10秒 | 每秒释放100朵花瓣(100%武器伤害) | 总计1000朵 | 花瓣自动追踪全部敌人必定命中 | 1%概率秒杀小怪/1%概率对BOSS造成1%最大生命真伤 | 携带x6',
-            bonus:'生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3',
-            passives:'花瓣追踪 — 所有花瓣自动追踪地图范围内全部敌人，必定命中，不会落空 | 若仅剩一个敌人，该目标承受每秒100朵全部伤害 | 每朵花瓣独立判定：1%秒杀小怪，1%对BOSS造成1%最大生命真伤(秒杀对BOSS无效)',
-            actives:'投掷[左键/右键] — 引爆后生成金红龙卷，持续释放追踪花瓣',
-            price:'200,000 金币'
-        },
-{
-            name:'数据魔方', quality:'英雄级', type:'战术武器',
-            stats:'辅助增益型战术武器 | 按数字键5切换 | 切换后不显示准星',
-            bonus:'生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1',
-            passives:'魔方增幅 — 伤害加成初始为0%，每秒自动累加1%，100秒达到100%上限。死亡后伤害加成立即重置为0%，复活后重新从0%开始累加',
-            actives:'无主动技能（纯被动辅助增益武器）',
-            price:'8,000 金币'
-        },
-{
-            name:'雷霆之怒', quality:'英雄级', type:'主武器（突击步枪）',
-            stats:'基础伤害9/发 | 射速10发/秒 | 弹匣150/1500 | 爆头x2',
-            bonus:'生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1',
-            passives:'无',
-            actives:'无',
-            price:'初始装备'
-        },
-{
-            name:'幽影双枪', quality:'英雄级', type:'副武器（双持手枪）',
-            stats:'基础伤害8/发 | 射速12.5发/秒 | 弹匣30/180',
-            bonus:'生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1',
-            passives:'无',
-            actives:'扇火[右键] — 扇形快速连射6发，每发基础伤害8',
-            price:'初始装备'
-        },
-{
-            name:'雷霆战刃', quality:'英雄级', type:'近战武器',
-            stats:'轻击基础伤害43 | 重击基础伤害130 | 重击眩晕1.5秒 | 重击电场持续伤害',
-            bonus:'生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1',
-            passives:'重击命中产生电场范围持续伤害',
-            actives:'轻击[左键] — 快速近战 | 重击[右键] — 蓄力重击+眩晕+电场',
-            price:'初始装备'
-        },
-{
-            name:'爆炎手雷', quality:'英雄级', type:'手雷',
-            stats:'爆炸基础伤害240 | 范围灼烧基础DPS 24/3秒 | 携带x3',
-            bonus:'生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1',
-            passives:'灼烧区域持续3秒伤害',
-            actives:'投掷[左键/右键] | 蓄力投[左键长按]',
-            price:'初始装备'
-        }
-    ]
+    // 数据单一化：所有展示数据从 WEAPON_DISPLAY_DATA + WEAPON_FULL_DESC + getWeaponBaseDmg 动态读取
+    // 通过 window 访问（数据源在 initAll 内部定义并暴露到 window）
+    const WD = window.WEAPON_DISPLAY_DATA;
+    const WF = window.WEAPON_FULL_DESC;
+    const gwd = window.getWeaponBaseDmg;
+    if (!WD) return;
     const qualityColors = {'神级':'#ff1744','传说级':'#e040fb','英雄级':'#ffd700'};
     const qualityBorders = {'神级':'#ff1744','传说级':'#e040fb','英雄级':'#ffd700'};
+    // 渲染顺序：神级 → 传说级 → 英雄级
+    const qualityOrder = ['神级', '传说级', '英雄级'];
+    const orderedKeys = Object.keys(WD).sort((a, b) => {
+        return qualityOrder.indexOf(WD[a].qualityLabel) - qualityOrder.indexOf(WD[b].qualityLabel);
+    });
     let html = '';
-    weapons.forEach(w => {
-        const qColor = qualityColors[w.quality] || '#e6edf3';
-        const qBorder = qualityBorders[w.quality] || 'rgba(255,255,255,0.08)';
+    for (const key of orderedKeys) {
+        const d = WD[key];
+        const desc = (WF && WF[key]) || { tagline:'', typeLabel:d.category, bonus:'无', passives:['无'], actives:['无'], price:0 };
+        const qColor = qualityColors[d.qualityLabel] || '#e6edf3';
+        const qBorder = qualityBorders[d.qualityLabel] || 'rgba(255,255,255,0.08)';
+        // 基础伤害从 getWeaponBaseDmg() 读取（消除硬编码虚高数值）
+        const baseDmgDisplay = (typeof gwd === 'function') ? gwd(key) : d.baseDmg;
+        const fireRateDisplay = d.fireRate || '无';
+        const magazineDisplay = d.magazine || '无';
+        // 价格显示
+        const priceDisplay = desc.isDefault ? '初始装备' : (desc.price.toLocaleString() + ' 金币');
         html += '<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-left:3px solid '+qBorder+';border-radius:6px;padding:10px;margin-bottom:8px;">';
         html += '<div style="display:flex;justify-content:space-between;align-items:center;">';
-        html += '<span style="color:'+qColor+';font-weight:bold;font-size:13px;">'+w.name+' <span style="font-size:10px;">'+w.quality+'</span></span>';
-        html += '<span style="color:#8b949e;font-size:11px;">'+w.type+'</span>';
+        html += '<span style="color:'+qColor+';font-weight:bold;font-size:13px;">'+d.name+' <span style="font-size:10px;">'+d.qualityLabel+'</span></span>';
+        html += '<span style="color:#8b949e;font-size:11px;">'+desc.typeLabel+'</span>';
         html += '</div>';
-        html += '<div style="color:#8b949e;font-size:11px;margin-top:5px;"><b style="color:#00e5ff;">基础属性：</b>'+w.stats+'</div>';
-        html += '<div style="color:#8b949e;font-size:11px;margin-top:3px;"><b style="color:#69f0ae;">装备加成：</b>'+w.bonus+'</div>';
-        if (w.passives !== '无') {
-            html += '<div style="color:#ffd740;font-size:11px;margin-top:3px;"><b>被动技能：</b>'+w.passives+'</div>';
+        html += '<div style="color:#8b949e;font-size:11px;margin-top:5px;"><b style="color:#00e5ff;">基础属性：</b>基础伤害'+baseDmgDisplay+' | 射速'+fireRateDisplay+' | 弹匣'+magazineDisplay+'</div>';
+        html += '<div style="color:#8b949e;font-size:11px;margin-top:3px;"><b style="color:#69f0ae;">装备加成：</b>'+desc.bonus+'</div>';
+        // 被动技能
+        const passives = Array.isArray(desc.passives) ? desc.passives : [desc.passives];
+        if (!(passives.length === 1 && passives[0] === '无')) {
+            html += '<div style="color:#ffd740;font-size:11px;margin-top:3px;"><b>被动技能：</b>'+passives.join(' | ')+'</div>';
         }
-        html += '<div style="color:#ff8a65;font-size:11px;margin-top:3px;"><b>主动技能：</b>'+w.actives+'</div>';
-        html += '<div style="color:#8b949e;font-size:10px;margin-top:3px;text-align:right;">'+w.price+'</div>';
+        // 主动技能
+        const actives = Array.isArray(desc.actives) ? desc.actives : [desc.actives];
+        if (!(actives.length === 1 && actives[0] === '无')) {
+            html += '<div style="color:#ff8a65;font-size:11px;margin-top:3px;"><b>主动技能：</b>'+actives.join(' | ')+'</div>';
+        }
+        html += '<div style="color:#8b949e;font-size:10px;margin-top:3px;text-align:right;">'+priceDisplay+'</div>';
         html += '</div>';
-    });
+    }
     el.innerHTML = html;
+}
+
+// ====== 商城动态渲染（数据单一化：从 WEAPON_DISPLAY_DATA + WEAPON_FULL_DESC + getWeaponBaseDmg 生成） ======
+function buildShop() {
+    const container = document.getElementById('shop-items-container');
+    if (!container) return;
+    // 通过 window 访问（数据源在 initAll 内部定义并暴露到 window）
+    const WD = window.WEAPON_DISPLAY_DATA;
+    const WF = window.WEAPON_FULL_DESC;
+    const gwd = window.getWeaponBaseDmg;
+    if (!WD) return;
+    const qualityColors = {'神级':'#ff1744','传说级':'#e040fb','英雄级':'#ffd700'};
+    // 按 slotType 分组渲染（与筛选栏 data-filter 一致）
+    const groupConfig = [
+        { slotType:'primary',   icon:'⚔',  title:'主武器',    filter:'primary'   },
+        { slotType:'secondary', icon:'🔫', title:'副武器',    filter:'secondary' },
+        { slotType:'melee',     icon:'🗡', title:'近战武器',  filter:'melee'     },
+        { slotType:'grenade',   icon:'💣', title:'手雷',      filter:'grenade'   },
+        { slotType:'tactical',  icon:'🧊', title:'战术武器',  filter:'tactical'  }
+    ];
+    let html = '';
+    for (const g of groupConfig) {
+        // 收集该组下所有可购买武器（排除 isDefault 初始装备）
+        const keys = Object.keys(WD).filter(k => {
+            const d = WD[k];
+            if (d.slotType !== g.slotType) return false;
+            const desc = WF && WF[k];
+            return !(desc && desc.isDefault);
+        });
+        if (keys.length === 0) continue;
+        html += '<div class="shop-category" data-shop-group="' + g.filter + '">';
+        html += '<div class="shop-category-header">';
+        html += '<span class="shop-category-icon">' + g.icon + '</span>';
+        html += '<span class="shop-category-title">' + g.title + '</span>';
+        html += '<span class="shop-category-count">' + keys.length + '件商品</span>';
+        html += '</div>';
+        for (const key of keys) {
+            const d = WD[key];
+            const desc = (WF && WF[key]) || { tagline:'', typeLabel:d.category, bonus:'无', passives:['无'], actives:['无'], price:0 };
+            const qColor = qualityColors[d.qualityLabel] || '#ffd700';
+            // 基础伤害从 getWeaponBaseDmg() 读取
+            const baseDmgDisplay = (typeof gwd === 'function') ? gwd(key) : d.baseDmg;
+            const fireRateDisplay = d.fireRate || '无';
+            const magazineDisplay = d.magazine || '无';
+            const priceText = desc.price.toLocaleString() + ' 金币';
+            const passives = Array.isArray(desc.passives) ? desc.passives : [desc.passives];
+            const actives = Array.isArray(desc.actives) ? desc.actives : [desc.actives];
+            // 品质标签样式：神级/传说级用对应色，英雄级用默认 hero-tag
+            let heroTagStyle = '';
+            if (d.qualityLabel === '神级') {
+                heroTagStyle = ' style="color:#ff1744;border-color:#ff1744;background:rgba(255,23,68,0.08);"';
+            } else if (d.qualityLabel === '传说级') {
+                heroTagStyle = ' style="color:#e040fb;border-color:#e040fb;background:rgba(224,64,251,0.08);"';
+            }
+            html += '<div class="shop-item" id="shop-' + key + '" data-category="' + g.filter + '">';
+            html += '<div class="shop-header">';
+            html += '<span class="shop-icon">' + d.icon + '</span>';
+            html += '<div>';
+            html += '<div class="shop-name" style="color:' + qColor + '">' + d.name + ' <span class="hero-tag"' + heroTagStyle + '>' + d.qualityLabel + '</span></div>';
+            html += '<div class="shop-price">&#11044; ' + priceText + '</div>';
+            html += '</div>';
+            html += '</div>';
+            html += '<div class="shop-desc">' + desc.tagline + '</div>';
+            html += '<ul class="shop-feature">';
+            html += '<li>类型：<b style="color:' + qColor + '">' + desc.typeLabel + '</b></li>';
+            html += '<li>弹匣' + magazineDisplay + ' | 射速' + fireRateDisplay + ' | 基础伤害<b style="color:#ff6659">' + baseDmgDisplay + '</b></li>';
+            html += '<li>装备加成：' + desc.bonus + '</li>';
+            // 主动技能 bullets
+            for (const a of actives) {
+                if (a === '无') continue;
+                html += '<li>主动·' + a + '</li>';
+            }
+            // 被动技能 bullets
+            for (const p of passives) {
+                if (p === '无') continue;
+                html += '<li>被动·' + p + '</li>';
+            }
+            html += '</ul>';
+            html += '<button class="shop-buy-btn" id="buy-' + key + '-btn">购买 ' + priceText + '</button>';
+            html += '</div>';
+        }
+        html += '</div>';
+    }
+    container.innerHTML = html;
 }
 
 // ====== 首页按钮（不依赖Three.js）立即注册 ======
@@ -3714,6 +3424,12 @@ function registerStartScreenButtons() {
         if (valEl) valEl.textContent = Math.round(vol * 100) + '%';
         if (sfxCk) sfxCk.checked = sfx;
         if (musicCk) musicCk.checked = mus;
+        // [BGM] 回填音乐独立音量
+        var mvolSlider = document.getElementById('settings-music-volume-slider');
+        var mvolValEl = document.getElementById('settings-music-volume-value');
+        var mvol = (typeof window._getMusicVolume === 'function') ? Math.round(window._getMusicVolume() * 100) : 50;
+        if (mvolSlider) mvolSlider.value = mvol;
+        if (mvolValEl) mvolValEl.textContent = mvol + '%';
     };
     var volSlider = document.getElementById('settings-volume-slider');
     var volValEl = document.getElementById('settings-volume-value');
@@ -3729,6 +3445,14 @@ function registerStartScreenButtons() {
     var musicMuteCk = document.getElementById('settings-music-mute');
     if (musicMuteCk) musicMuteCk.addEventListener('change', function(){
         if (typeof window._setMusicMuted === 'function') window._setMusicMuted(musicMuteCk.checked);
+    });
+    // [BGM] 音乐独立音量滑块事件
+    var mvolSliderEl = document.getElementById('settings-music-volume-slider');
+    var mvolValEl2 = document.getElementById('settings-music-volume-value');
+    if (mvolSliderEl) mvolSliderEl.addEventListener('input', function(){
+        var pct = parseInt(mvolSliderEl.value, 10) || 0;
+        if (mvolValEl2) mvolValEl2.textContent = pct + '%';
+        if (typeof window._setMusicVolume === 'function') window._setMusicVolume(pct / 100);
     });
 
     // ==================== [P3·Task22] 按键重绑定 UI ====================
@@ -4289,6 +4013,7 @@ function initAll() {
             masterVolume: masterVolume,             // [P3·Task23] 主音量 (0~1)
             sfxMuted: sfxMuted,                     // [P3·Task23] 音效静音
             musicMuted: musicMuted,                 // [P3·Task23] 音乐静音偏好
+            musicVolume: musicVolume,               // [BGM] 音乐独立音量 (0~1)
             keymap: keymap,                         // [P3·Task22] 按键映射
             ts: Date.now()
         };
@@ -4339,6 +4064,15 @@ function initAll() {
     };
     window._setMusicMuted = function(m) {
         musicMuted = !!m;
+        applyMasterVolume();
+        if (musicMuted) stopBGM(); else playBGM();   // 取消静音时若 BGM 应在播放则重启
+        saveGameState();
+    };
+    // [BGM] 音乐独立音量 getter/setter
+    window._getMusicVolume = function() { return musicVolume; };
+    window._setMusicVolume = function(v) {
+        musicVolume = Math.max(0, Math.min(1, Number(v) || 0));
+        applyMasterVolume();
         saveGameState();
     };
 
@@ -4419,24 +4153,50 @@ function initAll() {
     // 新增武器或调整数据时，只需修改此处 + 对应的代码常量
     const WEAPON_DISPLAY_DATA = {
         'thunder':         { name:'雷霆之怒',   icon:'🔫', quality:'heroic',     qualityLabel:'英雄级', category:'突击步枪',   baseDmg:'9/发',       fireRate:'10发/秒',  magazine:'150/1500',  activeSkill:'无',                    passiveSkill:'爆头x2',                slot:'1t', slotType:'primary' },
-        'tumo':            { name:'屠魔',       icon:'🎯', quality:'divine',     qualityLabel:'神级',   category:'狙击枪',     baseDmg:'104/发',     fireRate:'10发/秒',  magazine:'无限',      activeSkill:'屠魔护体[E]',          passiveSkill:'割裂箭头+巨力一击(100%穿透)', slot:'1m', slotType:'primary' },
-        'dragonlyknight':  { name:'魔龙骑士',   icon:'🐉', quality:'legendary',  qualityLabel:'传说级', category:'AK47步枪',   baseDmg:'17/发',      fireRate:'15发/秒',  magazine:'50/1000',   activeSkill:'龙威[E]',              passiveSkill:'血怒+龙鳞守护',          slot:'1k', slotType:'primary' },
+        'tumo':            { name:'屠魔',       icon:'🎯', quality:'divine',     qualityLabel:'神级',   category:'狙击枪',     baseDmg:'104/发',     fireRate:'4发/秒',  magazine:'无限',      activeSkill:'屠魔护体[E]',          passiveSkill:'割裂箭头+巨力一击(100%穿透)', slot:'1m', slotType:'primary' },
+        'dragonlyknight':  { name:'魔龙骑士',   icon:'🐉', quality:'legendary',  qualityLabel:'传说级', category:'AK47步枪',   baseDmg:'17/发',      fireRate:'12发/秒',  magazine:'50/1000',   activeSkill:'龙威[E]',              passiveSkill:'血怒+龙鳞守护',          slot:'1k', slotType:'primary' },
         'dawnlight':       { name:'黎明之光',   icon:'☀',  quality:'legendary',  qualityLabel:'传说级', category:'激光枪',     baseDmg:'26/次',      fireRate:'10次/秒',  magazine:'无限',      activeSkill:'黎明解放[右键]',        passiveSkill:'黎明之力+50%减速',       slot:'1dl', slotType:'primary' },
-        'zeushand':        { name:'宙斯之手',   icon:'⚡', quality:'divine',     qualityLabel:'神级',   category:'能量枪',     baseDmg:'173/发',     fireRate:'6发/秒',   magazine:'无限',      activeSkill:'宙斯降临[E]',          passiveSkill:'雷霆能量+感电',          slot:'1z', slotType:'primary' },
-        'phasewalker':     { name:'相位行者',   icon:'✦',  quality:'divine',     qualityLabel:'神级',   category:'相位步枪',   baseDmg:'46/发',      fireRate:'20发/秒',  magazine:'无限',      activeSkill:'相位制导[E]',          passiveSkill:'相位打击+相位怒火',      slot:'1pw', slotType:'primary' },
-        'parasite':        { name:'寄生者',     icon:'💀', quality:'divine',     qualityLabel:'神级',   category:'狙击枪',     baseDmg:'208/发',     fireRate:'5发/秒',   magazine:'无限',      activeSkill:'炮狙模式[右键]+内脏暴击', passiveSkill:'无',                   slot:'1p', slotType:'primary' },
+        'zeushand':        { name:'宙斯之手',   icon:'⚡', quality:'divine',     qualityLabel:'神级',   category:'能量枪',     baseDmg:'173/发',     fireRate:'8发/秒',   magazine:'无限',      activeSkill:'宙斯降临[E]',          passiveSkill:'雷霆能量+感电',          slot:'1z', slotType:'primary' },
+        'phasewalker':     { name:'相位行者',   icon:'✦',  quality:'divine',     qualityLabel:'神级',   category:'相位步枪',   baseDmg:'46/发',      fireRate:'16发/秒',  magazine:'无限',      activeSkill:'相位制导[E]',          passiveSkill:'相位打击+相位怒火',      slot:'1pw', slotType:'primary' },
+        'parasite':        { name:'寄生者',     icon:'💀', quality:'divine',     qualityLabel:'神级',   category:'狙击枪',     baseDmg:'208/发',     fireRate:'4发/秒',   magazine:'无限',      activeSkill:'炮狙模式[右键]+内脏暴击', passiveSkill:'无',                   slot:'1p', slotType:'primary' },
         'shadow':          { name:'幽影双枪',   icon:'🔫', quality:'heroic',     qualityLabel:'英雄级', category:'双持手枪',   baseDmg:'8/发',       fireRate:'12.5发/秒',magazine:'30/180',    activeSkill:'扇火[右键]',           passiveSkill:'无',                    slot:'2s', slotType:'secondary' },
-        'metalstorm':      { name:'金属风暴',   icon:'🔫', quality:'heroic',     qualityLabel:'英雄级', category:'双持手枪',   baseDmg:'5/发',       fireRate:'16.7发/秒',magazine:'60/360',    activeSkill:'锁敌风暴[E]',          passiveSkill:'极速射速',              slot:'2m', slotType:'secondary' },
-        'whitenight':      { name:'白夜铳刃',   icon:'⚔',  quality:'legendary',  qualityLabel:'传说级', category:'铳刃手枪',   baseDmg:'78/发',      fireRate:'5发/秒',   magazine:'25/500',    activeSkill:'白夜领域[右键]',        passiveSkill:'领域牵引',              slot:'2w', slotType:'secondary' },
-        'moonbow':         { name:'皓月神弓',   icon:'🏹', quality:'divine',     qualityLabel:'神级',   category:'神弓',       baseDmg:'92/发',      fireRate:'10发/秒',  magazine:'无限',      activeSkill:'万箭齐发[E]',          passiveSkill:'冰霜箭', slot:'2b', slotType:'secondary' },
+        'metalstorm':      { name:'金属风暴',   icon:'🔫', quality:'heroic',     qualityLabel:'英雄级', category:'双持手枪',   baseDmg:'5/发',       fireRate:'13发/秒', magazine:'60/360',    activeSkill:'锁敌风暴[E]',          passiveSkill:'极速射速',              slot:'2m', slotType:'secondary' },
+        'whitenight':      { name:'白夜铳刃',   icon:'⚔',  quality:'legendary',  qualityLabel:'传说级', category:'铳刃手枪',   baseDmg:'78/发',      fireRate:'7发/秒',   magazine:'25/500',    activeSkill:'白夜领域[右键]',        passiveSkill:'领域牵引',              slot:'2w', slotType:'secondary' },
+        'moonbow':         { name:'皓月神弓',   icon:'🏹', quality:'divine',     qualityLabel:'神级',   category:'神弓',       baseDmg:'92/发',      fireRate:'8发/秒',  magazine:'无限',      activeSkill:'万箭齐发[E]',          passiveSkill:'冰霜箭', slot:'2b', slotType:'secondary' },
         'thunderblade':    { name:'雷霆战刃',   icon:'⚔',  quality:'heroic',     qualityLabel:'英雄级', category:'近战',       baseDmg:'轻击43 / 重击130', fireRate:'无', magazine:'无',        activeSkill:'轻击[左键] / 重击[右键]', passiveSkill:'重击眩晕1.5s+电场',    slot:'3t', slotType:'melee' },
         'hellscythe':      { name:'地狱魔镰',   icon:'🌀', quality:'heroic',     qualityLabel:'英雄级', category:'近战',       baseDmg:'轻风9/次 x10 | 地狱9/次 x10x3', fireRate:'无', magazine:'无', activeSkill:'地狱狂风[E]', passiveSkill:'狂风卷起敌人', slot:'3h', slotType:'melee' },
-        'thousandumbrella':{ name:'千机伞',     icon:'☂',  quality:'divine',     qualityLabel:'神级',   category:'伞刃',       baseDmg:'520/击',     fireRate:'2击/秒',   magazine:'无限',      activeSkill:'天罗伞阵[E]+伞舞龙卷[右键]+千机百变[X]', passiveSkill:'三形态切换+0.5秒无敌+伤害加成', slot:'3u', slotType:'melee' },
+        'thousandumbrella':{ name:'千机伞',     icon:'☂',  quality:'divine',     qualityLabel:'神级',   category:'伞刃',       baseDmg:'520/击',     fireRate:'2.5击/秒', magazine:'无限',      activeSkill:'天罗伞阵[E]+伞舞龙卷[右键]+千机百变[X]', passiveSkill:'三形态切换+0.5秒无敌+伤害加成', slot:'3u', slotType:'melee' },
         'normalgrenade':   { name:'爆炎手雷',   icon:'💣', quality:'heroic',     qualityLabel:'英雄级', category:'手雷',       baseDmg:'240(爆炸)+DPS24(灼烧3s)', fireRate:'无', magazine:'x3', activeSkill:'投掷[左键] / 蓄力投[长按]', passiveSkill:'灼烧区域持续3秒', slot:'4n', slotType:'grenade' },
         'deathlight':      { name:'死神之光',   icon:'☢',  quality:'heroic',     qualityLabel:'英雄级', category:'手雷',       baseDmg:'爆炸120 + 10x12火箭', fireRate:'无', magazine:'x5', activeSkill:'投掷[左键/右键]', passiveSkill:'25%概率返还+眩晕3s', slot:'4d', slotType:'grenade' },
         'froststar':       { name:'急冻霜星',   icon:'❄',  quality:'heroic',     qualityLabel:'英雄级', category:'手雷',       baseDmg:'首爆120 + 二段120', fireRate:'无', magazine:'x3', activeSkill:'投掷[左键/右键]', passiveSkill:'冰冻3s+二段爆炸', slot:'4f', slotType:'grenade' },
         'tanglotus':       { name:'佛怒唐莲',   icon:'🪷', quality:'divine',     qualityLabel:'神级',   category:'手雷',       baseDmg:'800(爆炸)+1000x8(花瓣)', fireRate:'无', magazine:'x5', activeSkill:'投掷[左键/右键]', passiveSkill:'金红龙卷10秒+花瓣追踪+秒杀/真伤', slot:'4tl', slotType:'grenade' },
         'datacube':        { name:'数据魔方',   icon:'🧊', quality:'heroic',     qualityLabel:'英雄级', category:'辅助增益',   baseDmg:'无',         fireRate:'无',       magazine:'无(按键5切换)', activeSkill:'无', passiveSkill:'魔方增幅 每秒+1%伤害(100秒满100%,死亡重置)', slot:'5d', slotType:'tactical' },
+    };
+
+    // ====== 武器完整描述数据表（图鉴+商城共用） ======
+    // tagline: 商城一句话标语；typeLabel: 类型行；bonus: 装备加成字符串；
+    // passives/actives: 字符串数组（每个元素一行 bullet）；price/isDefault: 价格信息
+    // 描述文本中保留原"基础伤害 XXX%"等技能倍率描述（非 baseDmg 字段）
+    const WEAPON_FULL_DESC = {
+        'thunder':         { tagline:'英雄级突击步枪 — 初始装备', typeLabel:'主武器（突击步枪）', bonus:'生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1', passives:['无'], actives:['无'], price:0, isDefault:true },
+        'tumo':            { tagline:'神级狙击枪 — 屠魔弑神之枪', typeLabel:'主武器（狙击枪）', bonus:'生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3', passives:['割裂箭头：命中施加10秒割裂，移动时每帧受基础伤害100%','巨力一击：命中击退3米，子弹100%穿透前方所有敌人与建筑物'], actives:['屠魔护体[E]：开关型，无冷却，90%减伤，每秒消耗2%最大能量'], price:10000 },
+        'dragonlyknight':  { tagline:'传说级AK47步枪 — 魔龙化身，战场主宰', typeLabel:'主武器（AK47步枪）', bonus:'生命+20000 | 护盾+20000 | 魂力+5000 | 移速+2 | 能量+40 | 暴击+3% | 每秒回复生命+500 | 每秒回复护盾+500 | 每秒回复能量+2', passives:['血怒：每损失1%生命值，伤害提升1%','龙鳞守护：受到致命伤害时触发，无敌3秒并恢复护盾至上限，冷却60秒'], actives:['龙威[E]：开关型，移速+50%，伤害+100%，开枪不消耗子弹，每秒消耗1%最大能量，能量低于10%自动关闭，无冷却'], price:10000 },
+        'dawnlight':       { tagline:'传说级激光枪 — 破晓之光，净化黑暗', typeLabel:'主武器（激光枪）', bonus:'生命+20000 | 护盾+20000 | 魂力+5000 | 移速+2 | 能量+40 | 暴击+3% | 每秒回复生命+500 | 每秒回复护盾+500 | 每秒回复能量+2', passives:['黎明之力：持续射击时每秒+30%伤害，最高+300%，中断归零'], actives:['黎明解放[右键]：长按右键释放，松开右键关闭，每秒消耗1%能量上限，范围大幅扩大，伤害+100%，激光穿透障碍物'], price:10000 },
+        'zeushand':        { tagline:'神级能量枪 — 雷霆万钧，宙斯降临', typeLabel:'主武器（能量枪）', bonus:'生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3', passives:['雷霆能量：雷球命中充能，充满后释放闪电链，跳跃10次，每次50%武器基础伤害','感电：闪电链击中目标施加15秒感电，受宙斯之手伤害+100%，击中感电目标回复1%能量'], actives:['宙斯降临[E]：在当前位置召唤宙斯幻影，自动攻击大范围敌人，继承本体普攻。最多5个幻影，每个消耗30能量，无冷却。幻影不会自动消失，无生命值，无持续时间限制'], price:30000 },
+        'phasewalker':     { tagline:'神级相位步枪 — 相位制导，精准追踪', typeLabel:'主武器（相位步枪）', bonus:'生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3', passives:['相位打击：敌方存在信标时，每发1%概率造成目标1%生命上限真实伤害','相位怒火：目标血量<75%/50%/25%时对该目标伤害+100%/+200%/+300%'], actives:['相位制导[E]：按E键开启/关闭，无冷却。每秒消耗1%能量上限，能量<10%无法开启。命中目标附加信标整体标记（不区分部位），标记目标受到的伤害必定为爆头伤害；未命中子弹自动追踪并命中标记目标头部；击杀标记目标触发300%武器伤害范围爆炸；距离标记目标越近伤害越高（上限+100%，超过100米无加成）；击杀后信标传染至附近血量最低目标（传染目标同样始终被爆头）；关闭技能后信标清除，重新开启可重新标记；信标3s/5s/10s易伤+100%/+200%/+300%；技能期间移速+30%'], price:100000 },
+        'parasite':        { tagline:'神级狙击枪 — 寄生于死，噬魂而生', typeLabel:'主武器（狙击枪）', bonus:'生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3', passives:['内脏暴击：炮狙模式下命中目标施加递增层数标记（1层300%、2层600%、3层900%、4层1200%、5层1500%范围伤害），最高5层后50%维持/50%重置。范围伤害可同时为多目标叠加'], actives:['炮狙模式[右键]：需能量>10%，开关型。开启后左键发射巨炮冲击波，消耗1%能量，造成200%武器基础范围伤害，吸入附近目标。再次按右键关闭'], price:20000 },
+        'shadow':          { tagline:'英雄级双持手枪 — 初始装备', typeLabel:'副武器（双持手枪）', bonus:'生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1', passives:['无'], actives:['扇火[右键]：扇形快速连射6发，每发基础伤害8'], price:0, isDefault:true },
+        'metalstorm':      { tagline:'英雄级双持手枪 — 毁灭性弹幕压制装置', typeLabel:'副武器（双持手枪）', bonus:'生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1', passives:['极速射速：双持高射速手枪'], actives:['锁敌风暴[E]：每秒消耗2能量，自动锁定范围内敌人射击，基础伤害50/发，不消耗弹药，无冷却，能量>20%可激活'], price:5000 },
+        'whitenight':      { tagline:'传说级铳刃手枪 — 白夜降临，万物肃杀', typeLabel:'副武器（铳刃手枪）', bonus:'生命+20000 | 护盾+20000 | 魂力+5000 | 移速+2 | 能量+40 | 暴击+3% | 每秒回复生命+500 | 每秒回复护盾+500 | 每秒回复能量+2', passives:['领域牵引：技能激活期间，左键命中敌人可将范围中心转移至该敌人并跟随移动'], actives:['白夜领域[右键]：对目标区域持续造成高频范围伤害，持续20秒，消耗10能量，冷却5秒'], price:10000 },
+        'moonbow':         { tagline:'神级副武器 — 皓月当空，冰霜降临', typeLabel:'副武器（神弓）', bonus:'生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3', passives:['冰霜箭：命中施加50%减速3秒 | 命中10%概率触发冰冻1秒（1秒内置冷却，不叠加）'], actives:['万箭齐发[E]：选定区域降下箭雨，每秒30次，每次300%基础伤害，持续30秒，消耗50能量，冷却5秒'], price:30000 },
+        'thunderblade':    { tagline:'英雄级近战武器 — 初始装备', typeLabel:'近战武器', bonus:'生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1', passives:['重击命中产生电场范围持续伤害'], actives:['轻击[左键]：快速近战','重击[右键]：蓄力重击+眩晕+电场'], price:0, isDefault:true },
+        'hellscythe':      { tagline:'英雄级近战武器 — 地狱锻造的魔镰', typeLabel:'近战武器', bonus:'生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1', passives:['狂风投射物可卷起敌人击退'], actives:['普通狂风[右键]：1道x10次，基础伤害800/次，无冷却，1能量','地狱狂风[E]：3道x10次，基础伤害800/次，冷却15秒，30能量'], price:5000 },
+        'thousandumbrella':{ tagline:'神级近战武器 — 千机百变，三形态机关伞刃', typeLabel:'近战武器', bonus:'生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3', passives:['千机百变：刃形态扇形范围斩击200%伤害 | 盾形态减免90%伤害+反弹50%近战 | 羽形态飞行+移速+100%+3道风刃150%伤害','形态切换：切换瞬间0.5秒无敌，3秒内下次攻击伤害+100%'], actives:['天罗伞阵[E]：跃空投射巨型伞阵(直径20米)，持续10秒，每秒108道伞刃(300%伤害+0.5秒禁锢)，结束万伞归一爆炸(1200%伤害+5米击飞)，期间闪避+80%，消耗80能量冷却15秒','伞舞龙卷[右键]：解体360片飞刃形成龙卷(5米)，持续5秒，每秒400%伤害+吸附，重组冲击波800%伤害，飞行状态范围10米×2吸附，消耗35能量冷却8秒'], price:30000 },
+        'normalgrenade':   { tagline:'英雄级手雷 — 初始装备', typeLabel:'手雷', bonus:'生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1', passives:['灼烧区域持续3秒伤害'], actives:['投掷[左键/右键]','蓄力投[左键长按]'], price:0, isDefault:true },
+        'deathlight':      { tagline:'英雄级手雷 — 毁灭性光能爆破装置', typeLabel:'手雷', bonus:'生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1', passives:['25%概率使用后返还一枚手雷'], actives:['投掷[左键/右键]'], price:3000 },
+        'froststar':       { tagline:'英雄级手雷 — 二段式冰霜毁灭装置', typeLabel:'手雷', bonus:'生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1', passives:['二段爆炸：冰冻解除时自动触发二段冰霜爆炸'], actives:['投掷[左键/右键]'], price:3000 },
+        'tanglotus':       { tagline:'神级手雷 — 金红龙卷，万瓣追魂', typeLabel:'手雷', bonus:'生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3', passives:['花瓣追踪：所有花瓣自动追踪地图范围内全部敌人，必定命中，不会落空','若仅剩一个敌人，该目标承受每秒100朵全部伤害','每朵花瓣独立判定：1%秒杀小怪，1%对BOSS造成1%最大生命真伤(秒杀对BOSS无效)'], actives:['投掷[左键/右键]：引爆后生成金红龙卷，持续释放追踪花瓣'], price:200000 },
+        'datacube':        { tagline:'英雄级战术武器 — 辅助增益型数据魔方装置', typeLabel:'战术武器', bonus:'生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1', passives:['魔方增幅：伤害加成初始为0%，每秒自动累加1%，100秒达到100%上限。死亡后伤害加成立即重置为0%，复活后重新从0%开始累加'], actives:['无主动技能（纯被动辅助增益武器）'], price:8000 },
     };
 
     // ====== 集中式武器基础伤害目录（数据同步机制核心） ======
@@ -4478,6 +4238,10 @@ function initAll() {
         if (key === 'datacube') return '无';
         return `${cat.baseDmg}${cat.unit}`;
     }
+    // [数据单一化] 暴露到 window 供全局函数 buildEquipCodex / buildShop 访问（不修改数据本身）
+    window.WEAPON_DISPLAY_DATA = WEAPON_DISPLAY_DATA;
+    window.WEAPON_FULL_DESC = WEAPON_FULL_DESC;
+    window.getWeaponBaseDmg = getWeaponBaseDmg;
 
     // 当前装备的武器属性加成
     let equippedWeaponBonuses = { hp:0, shield:0, soulPower:0, moveSpeed:0, energy:0, critRate:0, hpRegen:0, shieldRegen:0, energyRegen:0 };
@@ -4599,7 +4363,7 @@ function initAll() {
     // ====== 金属风暴武器系统 ======
     let metalStormWeaponGroup = null;
     const METALSTORM_DAMAGE = 80;
-    const METALSTORM_FIRE_RATE = 0.06;
+    const METALSTORM_FIRE_RATE = 0.0769;
     const METALSTORM_MAG_SIZE = 60;
     const METALSTORM_RESERVE_MAX = 360;
     let metalstormAmmo = METALSTORM_MAG_SIZE;
@@ -4610,7 +4374,7 @@ function initAll() {
     const METALSTORM_RELOAD_TIME = 1.5;
     let metalstormPistolSide = 0;
     // 白夜铳刃 - 传说级副武器
-    const WHITENIGHT_FIRE_RATE = 0.2; // 5发/秒
+    const WHITENIGHT_FIRE_RATE = 0.1429; // 7发/秒
     const WHITENIGHT_MAG_SIZE = 25;
     const WHITENIGHT_RESERVE_MAX = 500;
     let whitenightAmmo = WHITENIGHT_MAG_SIZE;
@@ -4641,7 +4405,7 @@ function initAll() {
     const TUMO_DAMAGE = 100000000;
     const TUMO_MAG_SIZE = Infinity;
     const TUMO_RESERVE_MAX = Infinity;
-    const TUMO_FIRE_RATE = 0.1; // 10发/秒 = 0.1秒间隔
+    const TUMO_FIRE_RATE = 0.25; // 4发/秒 = 0.25秒间隔
     const TUMO_RELOAD_TIME = 2.5;
     let tumoAmmo = TUMO_MAG_SIZE;
     let tumoReserve = TUMO_RESERVE_MAX;
@@ -4666,7 +4430,7 @@ function initAll() {
     // ====== 魔龙骑士步枪系统 ======
     const DRAGON_KNIGHT_MAG_SIZE = 50;
     const DRAGON_KNIGHT_RESERVE_MAX = 1000;
-    const DRAGON_KNIGHT_FIRE_RATE = 0.067; // 15发/秒 = 0.067秒间隔
+    const DRAGON_KNIGHT_FIRE_RATE = 0.0833; // 12发/秒 = 0.0833秒间隔
     const DRAGON_KNIGHT_BASE_DMG = 17; // 基础伤害17（传说级 deriveBaseDmg(300,15,0.85)）
     const DRAGON_KNIGHT_RELOAD_TIME = 2.0;
     let dragonKnightAmmo = DRAGON_KNIGHT_MAG_SIZE;
@@ -4717,7 +4481,7 @@ function initAll() {
 
     // ====== 寄生者神级狙击枪系统 ======
     const PARASITE_BASE_DMG = 208; // 基础伤害208（神级 deriveBaseDmg(800,5,1.3)）
-    const PARASITE_FIRE_RATE = 0.2; // 5发/秒 = 0.2秒间隔
+    const PARASITE_FIRE_RATE = 0.25; // 4发/秒 = 0.25秒间隔
     const PARASITE_MAG_SIZE = Infinity; // 无限弹匣
     const PARASITE_PRICE = 20000;
     let parasiteWeaponGroup = null;
@@ -4738,13 +4502,13 @@ function initAll() {
     // ====== 宙斯之手能量枪系统 ======
     let zeusHandWeaponGroup = null;
     const ZEUS_HAND_BASE_DMG = 173; // 基础伤害173（神级 deriveBaseDmg(800,6,1.3)）
-    const ZEUS_HAND_FIRE_RATE = 0.167; // 6发/秒（射速提升100%，原3发/秒）
+    const ZEUS_HAND_FIRE_RATE = 0.125; // 8发/秒（射速提升100%，原4发/秒）
     const ZEUS_HAND_MAG_SIZE = Infinity;
     let zeusHandShootCooldown = 0;
 
     // ====== 相位行者 ======
     const PHASE_WALKER_DAMAGE = 46; // 基础伤害46（神级 deriveBaseDmg(800,20,1.15)）
-    const PHASE_WALKER_FIRE_RATE = 0.05; // 20发/秒
+    const PHASE_WALKER_FIRE_RATE = 0.0625; // 16发/秒
     const PHASE_WALKER_PRICE = 100000;
     let phaseWalkerWeaponGroup = null;
     let phaseWalkerShootCooldown = 0;
@@ -4809,8 +4573,8 @@ function initAll() {
     // Charge mechanism removed - frost crit/freeze/aoe deprecated
     let moonbowArrowRainVisuals = []; // visual mesh objects for arrow rain
     // 皓月超速箭系统：自适应动态射速
-    const MOONBOW_MIN_FIRE_RATE = 10; // 固定射速10发/秒（皓月超速箭已移除）
-    const MOONBOW_MAX_FIRE_RATE = 10; // 固定射速10发/秒（皓月超速箭已移除）
+    const MOONBOW_MIN_FIRE_RATE = 8; // 固定射速8发/秒（皓月超速箭已移除）
+    const MOONBOW_MAX_FIRE_RATE = 8; // 固定射速8发/秒（皓月超速箭已移除）
     let moonbowCurrentFireRate = MOONBOW_MIN_FIRE_RATE; // 当前射速
     let moonbowChargePercent = 0; // 已弃用（皓月超速箭移除）
     let moonbowLastHitTime = 0; // 已弃用（皓月超速箭移除）
@@ -5406,7 +5170,7 @@ function initAll() {
     let umbrellaFlying = false; // 羽形态飞行状态
     let umbrellaFlyingHeight = 0; // 飞行额外高度
     let umbrellaAttackCooldown = 0;
-    const UMBRELLA_ATTACK_CD = 0.5; // 2击/秒 = 0.5秒间隔
+    const UMBRELLA_ATTACK_CD = 0.4; // 2.5击/秒 = 0.4秒间隔
     let umbrellaTornadoActive = false;
     let umbrellaTornadoTimer = 0;
     const UMBRELLA_TORNADO_DURATION = 5.0;
@@ -6423,7 +6187,13 @@ function initAll() {
     // [P3·Task23] 音量偏好（容忍缺失字段，默认全音量、非静音）
     let masterVolume = 1.0;   // 0.0 ~ 1.0
     let sfxMuted = false;     // 音效静音（生效）
-    let musicMuted = false;   // 音乐静音（当前无真实音乐，仅存档记录偏好）
+    let musicMuted = false;   // 音乐静音（生效）
+    // [BGM] 音乐相关变量：独立增益节点、独立音量、调度器句柄与状态
+    let musicGainNode = null;        // 音乐独立增益节点（挂在 masterGainNode 下，使主音量统管全局）
+    let musicVolume = 0.5;           // 音乐独立音量 0.0~1.0
+    let bgmSchedulerId = null;       // BGM 调度器 setInterval 句柄
+    let bgmNextNoteTime = 0;         // BGM 下一个音符的绝对时间
+    let bgmPlaying = false;          // BGM 是否在播放
     // [P3·Task23] 从存档容忍加载音量偏好（缺失字段保持默认值）
     try {
         const _volSaved = localStorage.getItem('cs_save_v2');
@@ -6432,6 +6202,7 @@ function initAll() {
             if (typeof _volData.masterVolume === 'number' && isFinite(_volData.masterVolume)) masterVolume = Math.max(0, Math.min(1, _volData.masterVolume));
             if (typeof _volData.sfxMuted === 'boolean') sfxMuted = _volData.sfxMuted;
             if (typeof _volData.musicMuted === 'boolean') musicMuted = _volData.musicMuted;
+            if (typeof _volData.musicVolume === 'number' && isFinite(_volData.musicVolume)) musicVolume = Math.max(0, Math.min(1, _volData.musicVolume));
         }
     } catch(e) {}
 
@@ -6495,8 +6266,10 @@ function initAll() {
     };
     window._keyDisplayName = keyDisplayName;
     // 应用音量到 masterGainNode 的统一函数（audioCtx 未就绪时仅记录偏好）
+    // [BGM] 同时应用音乐支路音量：musicGainNode = musicMuted ? 0 : (masterVolume * musicVolume)
     function applyMasterVolume() {
         if (masterGainNode) masterGainNode.gain.value = sfxMuted ? 0 : masterVolume;
+        if (musicGainNode) musicGainNode.gain.value = musicMuted ? 0 : (masterVolume * musicVolume);
     }
     window._applyMasterVolume = applyMasterVolume;
 
@@ -6654,6 +6427,8 @@ function initAll() {
     const panelHellScytheSkillCard = document.getElementById('panel-hellscythe-skill-card');
     const preview3dContainer = document.getElementById('preview-3d');
     const weaponGridEl = document.getElementById('weapon-grid');
+    // 商城动态渲染：必须在 buy-btn const 引用之前执行，使 #buy-{key}-btn 元素存在
+    try { buildShop(); } catch(e) { console.error('buildShop init error:', e); }
     const buyDeathlightBtn = document.getElementById('buy-deathlight-btn');
     const buyMetalStormBtn = document.getElementById('buy-metalstorm-btn');
     const buyFrostStarBtn = document.getElementById('buy-froststar-btn');
@@ -6982,11 +6757,16 @@ function initAll() {
     // ==================== 音效 ====================
     function initAudio() {
         try {
+            stopBGM();   // 重置 BGM 状态（避免跨 audioCtx 重建时 bgmPlaying 残留）
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             // [P3·Task23] 创建主音量 GainNode 并连接到真实输出，所有音效经此路由
             masterGainNode = audioCtx.createGain();
             masterGainNode.connect(audioCtx.destination);
+            // [BGM] 音乐增益节点挂在 masterGainNode 下，主音量统管全局，音乐静音只叠加在此节点
+            musicGainNode = audioCtx.createGain();
+            musicGainNode.connect(masterGainNode);
             applyMasterVolume();
+            playBGM();   // audioCtx 与 musicGainNode 就绪后启动 BGM
         } catch(e) {}
     }
     // 噪声缓冲区缓存：按 (duration, decayPower) 缓存，避免每次播放都重新分配 AudioBuffer
@@ -7028,6 +6808,131 @@ function initAll() {
     function playCritSound() { withAudioCtx(ctx => { const t = ctx.currentTime; const o = ctx.createOscillator(); const g = ctx.createGain(); o.type='sine'; o.frequency.setValueAtTime(1200,t); o.frequency.setValueAtTime(1800,t+0.03); o.frequency.setValueAtTime(2400,t+0.06); g.gain.setValueAtTime(0.2,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.15); o.connect(g); g.connect(masterGainNode); o.start(t); o.stop(t+0.17); const o2 = ctx.createOscillator(); const g2 = ctx.createGain(); o2.type='triangle'; o2.frequency.setValueAtTime(3000,t+0.02); o2.frequency.exponentialRampToValueAtTime(1500,t+0.1); g2.gain.setValueAtTime(0.1,t+0.02); g2.gain.exponentialRampToValueAtTime(0.001,t+0.12); o2.connect(g2); g2.connect(masterGainNode); o2.start(t+0.02); o2.stop(t+0.14); }); }
     function playExplosionSound() { withAudioCtx(ctx => { const t = ctx.currentTime; const n = ctx.createBufferSource(); n.buffer = getNoiseBuffer(0.6,1); const ng = ctx.createGain(); ng.gain.setValueAtTime(0.4,t); ng.gain.exponentialRampToValueAtTime(0.001,t+0.6); const nf = ctx.createBiquadFilter(); nf.type='lowpass'; nf.frequency.setValueAtTime(3000,t); nf.frequency.exponentialRampToValueAtTime(100,t+0.5); n.connect(nf); nf.connect(ng); ng.connect(masterGainNode); n.start(t); n.stop(t+0.65); const o = ctx.createOscillator(); const g = ctx.createGain(); o.type='sine'; o.frequency.setValueAtTime(80,t); o.frequency.exponentialRampToValueAtTime(20,t+0.4); g.gain.setValueAtTime(0.35,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.5); o.connect(g); g.connect(masterGainNode); o.start(t); o.stop(t+0.55); }); }
     function playBeepSound() { withAudioCtx(ctx => { const t = ctx.currentTime; const o = ctx.createOscillator(); const g = ctx.createGain(); o.type='square'; o.frequency.setValueAtTime(800,t); g.gain.setValueAtTime(0.15,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.1); o.connect(g); g.connect(masterGainNode); o.start(t); o.stop(t+0.12); }); }
+
+    // ==================== [BGM] 程序合成赛博朋克电子循环背景音乐 ====================
+    // 设计：BPM=128，4/4 拍，64 步（4 小节）循环，三声部（鼓 / bass / lead）
+    // 调性：A 小调（A C D E G），节奏明快带鼓点驱动感
+    // 调度策略：lookahead 0.1s，schedule 0.2s 内的音符，setInterval 每 25ms 检查
+    // 音量层级：音符 gain（0.15~0.3）→ musicGainNode（= masterVolume*musicVolume）→ masterGainNode → destination
+    // 4 小节根音：A2(110Hz) / F2(87.31Hz) / C3(130.81Hz) / G2(98Hz)
+    const BGM_BASS_ROOTS = [110.00, 87.31, 130.81, 98.00];
+    // lead 旋律：A 小调音阶，索引到 [步, 频率Hz, 持续(拍)]
+    // 散布于 64 步中，营造赛博朋克跳跃感
+    const BGM_LEAD_PATTERN = [
+        [0,  440.00, 1], [4,  523.25, 1], [8,  659.25, 1], [12, 587.33, 1],
+        [16, 523.25, 1], [20, 440.00, 1], [24, 392.00, 2],
+        [40, 659.25, 1], [44, 783.99, 1], [48, 880.00, 1], [52, 783.99, 1],
+        [56, 659.25, 2]
+    ];
+    // 单步调度：根据 step 索引触发三个声部
+    function _scheduleBGMStep(step, t, secPerBeat) {
+        const bar = Math.floor(step / 16);            // 当前小节 0~3
+        // ---- 鼓机 ----
+        // kick：每拍一次（step % 4 === 0），sine 150→50Hz 下滑 + 短促低频噪声
+        if (step % 4 === 0) {
+            const kOsc = audioCtx.createOscillator();
+            const kGain = audioCtx.createGain();
+            kOsc.type = 'sine';
+            kOsc.frequency.setValueAtTime(150, t);
+            kOsc.frequency.exponentialRampToValueAtTime(50, t + 0.12);
+            kGain.gain.setValueAtTime(0.30, t);
+            kGain.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+            kOsc.connect(kGain); kGain.connect(musicGainNode);
+            kOsc.start(t); kOsc.stop(t + 0.20);
+        }
+        // snare：反拍（第2、4拍，即 step % 8 === 4），噪声 bandpass 1500Hz
+        if (step % 8 === 4) {
+            const sSrc = audioCtx.createBufferSource();
+            sSrc.buffer = getNoiseBuffer(0.18, 2);
+            const sGain = audioCtx.createGain();
+            sGain.gain.setValueAtTime(0.22, t);
+            sGain.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+            const sFilt = audioCtx.createBiquadFilter();
+            sFilt.type = 'bandpass';
+            sFilt.frequency.value = 1500;
+            sFilt.Q.value = 0.8;
+            sSrc.connect(sFilt); sFilt.connect(sGain); sGain.connect(musicGainNode);
+            sSrc.start(t); sSrc.stop(t + 0.20);
+        }
+        // hi-hat：每步触发，偶数步强、奇数步弱，噪声 highpass 7000Hz 短促
+        {
+            const hSrc = audioCtx.createBufferSource();
+            hSrc.buffer = getNoiseBuffer(0.04, 6);
+            const hGain = audioCtx.createGain();
+            const amp = (step % 2 === 0) ? 0.10 : 0.05;
+            hGain.gain.setValueAtTime(amp, t);
+            hGain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+            const hFilt = audioCtx.createBiquadFilter();
+            hFilt.type = 'highpass';
+            hFilt.frequency.value = 7000;
+            hSrc.connect(hFilt); hFilt.connect(hGain); hGain.connect(musicGainNode);
+            hSrc.start(t); hSrc.stop(t + 0.05);
+        }
+        // ---- bass：每拍一次（step % 4 === 0），按小节切换根音，sawtooth 低频律动 ----
+        if (step % 4 === 0) {
+            const bOsc = audioCtx.createOscillator();
+            const bGain = audioCtx.createGain();
+            bOsc.type = 'sawtooth';
+            const rootFreq = BGM_BASS_ROOTS[bar % 4];
+            bOsc.frequency.setValueAtTime(rootFreq, t);
+            const bDur = secPerBeat * 0.9;
+            bGain.gain.setValueAtTime(0, t);
+            bGain.gain.linearRampToValueAtTime(0.22, t + 0.01);
+            bGain.gain.setValueAtTime(0.22, t + bDur * 0.6);
+            bGain.gain.exponentialRampToValueAtTime(0.001, t + bDur);
+            // 低通滤波让 bass 更厚实
+            const bFilt = audioCtx.createBiquadFilter();
+            bFilt.type = 'lowpass';
+            bFilt.frequency.value = 600;
+            bOsc.connect(bFilt); bFilt.connect(bGain); bGain.connect(musicGainNode);
+            bOsc.start(t); bOsc.stop(t + bDur + 0.02);
+        }
+        // ---- lead：按预设旋律数组调度 square 旋律线 ----
+        for (let i = 0; i < BGM_LEAD_PATTERN.length; i++) {
+            const entry = BGM_LEAD_PATTERN[i];
+            if (entry[0] !== step) continue;
+            const freq = entry[1];
+            const durBeats = entry[2];
+            const lDur = secPerBeat * durBeats;
+            const lOsc = audioCtx.createOscillator();
+            const lGain = audioCtx.createGain();
+            lOsc.type = 'square';
+            lOsc.frequency.setValueAtTime(freq, t);
+            lGain.gain.setValueAtTime(0, t);
+            lGain.gain.linearRampToValueAtTime(0.16, t + 0.015);
+            lGain.gain.setValueAtTime(0.16, t + lDur * 0.5);
+            lGain.gain.exponentialRampToValueAtTime(0.001, t + lDur);
+            // 轻微 lowpass 削弱 square 的刺耳高频
+            const lFilt = audioCtx.createBiquadFilter();
+            lFilt.type = 'lowpass';
+            lFilt.frequency.value = 3500;
+            lOsc.connect(lFilt); lFilt.connect(lGain); lGain.connect(musicGainNode);
+            lOsc.start(t); lOsc.stop(t + lDur + 0.02);
+        }
+    }
+    // 启动 BGM 调度器
+    function playBGM() {
+        if (bgmPlaying || !audioCtx || !musicGainNode) return;
+        bgmPlaying = true;
+        const bpm = 128;
+        const secPerBeat = 60 / bpm;
+        const secPer16th = secPerBeat / 4;
+        bgmNextNoteTime = audioCtx.currentTime + 0.1;
+        let step = 0;   // 16 分音符步进计数器，循环长度 64 步（4 小节）
+        bgmSchedulerId = setInterval(() => {
+            if (!audioCtx || !musicGainNode) { stopBGM(); return; }
+            while (bgmNextNoteTime < audioCtx.currentTime + 0.2) {
+                _scheduleBGMStep(step % 64, bgmNextNoteTime, secPerBeat);
+                bgmNextNoteTime += secPer16th;
+                step++;
+            }
+        }, 25);
+    }
+    // 停止 BGM 调度器（已调度的音符让其自然衰减，不强切）
+    function stopBGM() {
+        if (bgmSchedulerId !== null) { clearInterval(bgmSchedulerId); bgmSchedulerId = null; }
+        bgmPlaying = false;
+    }
 
     // [新增] 脚步声音效：合成短促的低频闷响（模拟鞋底踏地声）
     // 左右脚交替时音高微调，增加真实感
@@ -23497,9 +23402,10 @@ function initAll() {
         const pct = Math.max(0, playerHealth / maxHP * 100);
         healthBarInner.style.width = pct + '%';
         healthText.textContent = formatCN(Math.round(playerHealth));
-        if(pct<30){healthBarInner.style.background='linear-gradient(180deg,#ff1744,#b71c1c)';lowHealthOverlay.style.opacity='0.6';}
-        else if(pct<60){healthBarInner.style.background='linear-gradient(180deg,#ff9100,#e65100)';lowHealthOverlay.style.opacity='0';}
-        else{healthBarInner.style.background='linear-gradient(180deg,#ff6659,#d32f2f)';lowHealthOverlay.style.opacity='0';}
+        healthBarInner.classList.remove('hp-low','hp-mid','hp-high');
+        if(pct<30){healthBarInner.classList.add('hp-low');lowHealthOverlay.style.opacity='0.6';}
+        else if(pct<60){healthBarInner.classList.add('hp-mid');lowHealthOverlay.style.opacity='0';}
+        else{healthBarInner.classList.add('hp-high');lowHealthOverlay.style.opacity='0';}
         updateShieldUI();
         updateEnergyUI();
     }
@@ -30785,6 +30691,8 @@ break;
     const shopModalClose = document.getElementById('shop-modal-close');
     if (openShopBtn) openShopBtn.addEventListener('click', () => {
         if(shopModal) {
+            // 兜底：确保商城卡片已渲染（updateShopState 依赖 #buy-{key}-btn 存在）
+            try { buildShop(); } catch(e) { console.error('buildShop open error:', e); }
             shopModal.style.display = 'flex';
             updateGoldUI();
             updateShopState();
