@@ -188,12 +188,6 @@
         z-index: 2; color: rgba(139,148,158,0.5); font-size: 12px; letter-spacing: 2px;
     }
     .start-bottom-bar span { margin: 0 8px; }
-    .recharge-pkg { display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-radius:8px; border:1px solid rgba(255,215,0,0.15); background:rgba(255,215,0,0.03); cursor:pointer; transition:all 0.2s; }
-    .recharge-pkg:hover { border-color:rgba(255,215,0,0.4); background:rgba(255,215,0,0.08); transform:translateX(4px); }
-    .recharge-pkg .pkg-left { display:flex; flex-direction:column; }
-    .recharge-pkg .pkg-gold { color:#ffd740; font-size:18px; font-weight:bold; }
-    .recharge-pkg .pkg-bonus { color:#69f0ae; font-size:11px; margin-top:2px; }
-    .recharge-pkg .pkg-price { color:#e6edf3; font-size:14px; font-weight:bold; background:rgba(255,215,0,0.1); padding:6px 14px; border-radius:6px; border:1px solid rgba(255,215,0,0.2); }
 
     #pause-menu { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10,14,23,0.88); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 200; cursor: default; backdrop-filter: blur(8px); }
     #pause-menu h2 { font-size: 42px; color: #e6edf3; text-shadow: 0 0 20px rgba(0,229,255,0.3); margin-bottom: 40px; letter-spacing: 8px; font-weight: 300; }
@@ -1628,29 +1622,6 @@
         text-shadow: 0 0 6px rgba(0, 255, 100, 0.6) !important;
     }
 
-    /* ----- Recharge Premium ----- */
-    .recharge-pkg {
-        backdrop-filter: blur(8px) saturate(180%) !important;
-        -webkit-backdrop-filter: blur(8px) saturate(180%) !important;
-        background: linear-gradient(135deg, rgba(255, 215, 0, 0.05) 0%, rgba(255, 170, 0, 0.03) 100%) !important;
-        border: 1px solid rgba(255, 215, 0, 0.2) !important;
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    }
-    .recharge-pkg:hover {
-        border-color: rgba(255, 215, 0, 0.6) !important;
-        background: linear-gradient(135deg, rgba(255, 215, 0, 0.12) 0%, rgba(255, 170, 0, 0.08) 100%) !important;
-        box-shadow: 0 8px 24px rgba(255, 215, 0, 0.2) !important;
-        transform: translateX(6px) !important;
-    }
-    .recharge-pkg .pkg-gold {
-        font-family: var(--cy-font-display) !important;
-        text-shadow: 0 0 8px rgba(255, 215, 64, 0.5) !important;
-    }
-    .recharge-pkg .pkg-price {
-        font-family: var(--cy-font-display) !important;
-        font-weight: 700 !important;
-    }
-
     /* ----- Tooltips & indicators premium ----- */
     #boss-warning, #wave-announce {
         font-family: var(--cy-font-display) !important;
@@ -1818,37 +1789,6 @@
     <div class="loading-tips" id="loading-tip">提示：装备武器可大幅提升角色属性</div>
 </div>
 
-<!-- Recharge Modal -->
-<div class="modal-overlay" id="recharge-modal">
-    <div class="modal-box">
-        <button class="modal-close" data-close="recharge-modal">&times;</button>
-        <h3>充值中心</h3>
-        <p style="color:#8b949e;margin-bottom:16px;font-size:13px;">1元人民币 = 10金币 | 当前金币：<span id="recharge-gold-display" style="color:#ffd740;font-weight:bold;">0</span></p>
-        <div id="recharge-packages" style="display:flex;flex-direction:column;gap:10px;"></div>
-    </div>
-</div>
-
-<!-- Recharge Payment Modal -->
-<div class="modal-overlay" id="recharge-pay-modal">
-    <div class="modal-box">
-        <button class="modal-close" data-close="recharge-pay-modal">&times;</button>
-        <h3>确认支付</h3>
-        <p id="recharge-pay-info" style="color:#e6edf3;margin-bottom:16px;font-size:14px;"></p>
-        <div style="display:flex;gap:10px;margin-bottom:20px;">
-            <button id="recharge-wechat-btn" class="btn btn--sm" style="flex:1;color:#07c160;border-color:rgba(7,193,96,0.4);">微信支付</button>
-            <button id="recharge-alipay-btn" class="btn btn--sm" style="flex:1;color:#1677ff;border-color:rgba(22,119,255,0.4);">支付宝</button>
-        </div>
-        <div id="recharge-pay-processing" style="display:none;text-align:center;padding:20px 0;">
-            <div style="color:#e6edf3;font-size:15px;margin-bottom:12px;">正在支付...</div>
-            <div style="width:200px;height:6px;background:rgba(255,255,255,0.1);border-radius:3px;margin:0 auto;overflow:hidden;"><div id="recharge-pay-bar" style="width:0%;height:100%;background:linear-gradient(90deg,#07c160,#1677ff);border-radius:3px;transition:width 0.3s;"></div></div>
-        </div>
-        <div id="recharge-pay-success" style="display:none;text-align:center;padding:20px 0;">
-            <div style="color:#69f0ae;font-size:16px;font-weight:bold;margin-bottom:4px;" id="recharge-pay-success-text">支付成功</div>
-            <div id="recharge-pay-gold-received" style="color:#ffd740;font-size:14px;"></div>
-        </div>
-    </div>
-</div>
-
 <!-- Guide Modal (merged settings + patchnotes + controls) -->
 <div class="modal-overlay" id="guide-modal">
     <div class="modal-box">
@@ -1929,7 +1869,6 @@
             <li><b style="color:#69f0ae">[新增]</b> 动态画质系统：FPS 持续低于 40 时自动降低粒子密度，恢复后切回高画质</li>
             <li><b style="color:#ffd740">[优化]</b> 射击系统：复用全局 Raycaster 与 Vector2，消除每发子弹的内存分配</li>
             <li><b style="color:#ffd740">[优化]</b> 伤害数字对象池：预分配 canvas/texture/sprite，减少 60%+ GC 压力</li>
-            <li><b style="color:#ffd740">[优化]</b> 充值支付 setInterval 泄漏修复</li>
             <li><b style="color:#ffd740">[优化]</b> body 中的 &lt;style&gt; 标签移至 head，避免 FOUC 与强制重排</li>
             <li><b style="color:#ff5252">[修复]</b> 移除生产环境调试 console.log</li>
             <li><b style="color:#ff5252">[修复]</b> #wave-display CSS 重复定义冲突</li>
@@ -2488,7 +2427,6 @@
             </div>
             <div style="display:flex;align-items:center;gap:8px;">
                 <button id="shop-buyall-btn" style="padding:6px 14px;border-radius:6px;background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.3);color:#00e5ff;font-size:12px;font-weight:bold;cursor:pointer;transition:all 0.2s;letter-spacing:1px;">一键购买</button>
-                <button id="shop-recharge-btn" style="padding:6px 14px;border-radius:6px;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.3);color:#ffd740;font-size:12px;font-weight:bold;cursor:pointer;transition:all 0.2s;letter-spacing:1px;">充值</button>
                 <button id="shop-modal-close" style="width:32px;height:32px;border-radius:6px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:#8b949e;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;line-height:1;">&times;</button>
             </div>
         </div>
@@ -3094,117 +3032,13 @@ function buildShop() {
 
 // ====== 首页按钮（不依赖Three.js）立即注册 ======
 // 使用readyState检测确保按钮注册可靠执行，避免DOMContentLoaded已触发导致监听器不执行
-// ====== 模拟充值系统 ======
 // 全局gold桥接（initAll执行前使用临时变量，initAll执行后由内部函数覆盖）
 if (typeof window._pendingGold === 'undefined') window._pendingGold = 0;
 if (typeof window.getGameGold !== 'function') window.getGameGold = () => window._pendingGold;
 if (typeof window.addGameGold !== 'function') window.addGameGold = (amount) => { window._pendingGold += amount; return window._pendingGold; };
-const RECHARGE_PACKAGES = [
-    { rmb: 6,   gold: 60,   bonus: 0,   label: '60金币' },
-    { rmb: 30,  gold: 300,  bonus: 30,  label: '300+30金币' },
-    { rmb: 68,  gold: 680,  bonus: 100, label: '680+100金币' },
-    { rmb: 128, gold: 1280, bonus: 280, label: '1280+280金币' },
-    { rmb: 328, gold: 3280, bonus: 1000,label: '3280+1000金币' },
-    { rmb: 648, gold: 6480, bonus: 2500,label: '6480+2500金币' }
-];
-let selectedRechargePkg = null;
-
-function buildRechargePackages() {
-    const container = document.getElementById('recharge-packages');
-    if (!container) return;
-    container.innerHTML = '';
-    RECHARGE_PACKAGES.forEach((pkg, idx) => {
-        const div = document.createElement('div');
-        div.className = 'recharge-pkg';
-        div.innerHTML = `<div class="pkg-left"><span class="pkg-gold">${pkg.label}</span>${pkg.bonus > 0 ? '<span class="pkg-bonus">额外赠送 ' + pkg.bonus + ' 金币</span>' : ''}</div><span class="pkg-price">¥${pkg.rmb}</span>`;
-        div.addEventListener('click', () => {
-            selectedRechargePkg = pkg;
-            showRechargePayModal(pkg);
-        });
-        container.appendChild(div);
-    });
-}
-
-function showRechargePayModal(pkg) {
-    const payInfo = document.getElementById('recharge-pay-info');
-    const processing = document.getElementById('recharge-pay-processing');
-    const success = document.getElementById('recharge-pay-success');
-    const wechatBtn = document.getElementById('recharge-wechat-btn');
-    const alipayBtn = document.getElementById('recharge-alipay-btn');
-    if (payInfo) payInfo.textContent = `支付 ¥${pkg.rmb}，获得 ${pkg.gold + pkg.bonus} 金币`;
-    if (processing) processing.style.display = 'none';
-    if (success) success.style.display = 'none';
-    if (wechatBtn) { wechatBtn.style.display = 'block'; wechatBtn.disabled = false; }
-    if (alipayBtn) { alipayBtn.style.display = 'block'; alipayBtn.disabled = false; }
-    document.getElementById('recharge-pay-modal').classList.add('show');
-}
-
-function processRechargePayment(method) {
-    if (!selectedRechargePkg) return;
-    const wechatBtn = document.getElementById('recharge-wechat-btn');
-    const alipayBtn = document.getElementById('recharge-alipay-btn');
-    const processing = document.getElementById('recharge-pay-processing');
-    const success = document.getElementById('recharge-pay-success');
-    const bar = document.getElementById('recharge-pay-bar');
-    // [Patch] 清理可能存在的旧 interval，防止用户重复点击导致多个 interval 并行
-    if (window._rechargeBarInterval) { clearInterval(window._rechargeBarInterval); window._rechargeBarInterval = null; }
-    // 禁用按钮，显示处理中
-    if (wechatBtn) wechatBtn.disabled = true;
-    if (alipayBtn) alipayBtn.disabled = true;
-    if (processing) processing.style.display = 'block';
-    if (success) success.style.display = 'none';
-    // 模拟支付进度
-    let progress = 0;
-    const barInterval = regInterval(() => {
-        window._rechargeBarInterval = barInterval;
-        progress += Math.random() * 15 + 5;
-        if (progress >= 100) {
-            progress = 100;
-            clearInterval(barInterval);
-            window._rechargeBarInterval = null;
-            // 支付完成
-            setTimeout(() => {
-                if (processing) processing.style.display = 'none';
-                if (success) success.style.display = 'block';
-                const totalGold = selectedRechargePkg.gold + selectedRechargePkg.bonus;
-                let currentGold;
-                if (typeof window.addGameGold === 'function') { currentGold = window.addGameGold(totalGold); }
-                else { /* fallback: initAll未执行时不应发生 */ currentGold = totalGold; }
-                // 显示"支付成功 +XX 金币已到账"并在1秒后自动关闭
-                const successText = document.getElementById('recharge-pay-success-text');
-                if (successText) successText.textContent = '支付成功 +' + totalGold + ' 金币已到账';
-                const goldReceived = document.getElementById('recharge-pay-gold-received');
-                if (goldReceived) goldReceived.textContent = '';
-                // 更新充值面板的金币显示
-                const goldDisplay = document.getElementById('recharge-gold-display');
-                if (goldDisplay) goldDisplay.textContent = currentGold;
-                // 1秒后自动关闭支付弹窗和充值弹窗
-                setTimeout(() => {
-                    const payModal = document.getElementById('recharge-pay-modal');
-                    if (payModal) payModal.classList.remove('show');
-                    const rechargeModal = document.getElementById('recharge-modal');
-                    if (rechargeModal) rechargeModal.classList.remove('show');
-                    // 重置支付界面状态
-                    if (success) success.style.display = 'none';
-                    if (processing) processing.style.display = 'none';
-                    if (bar) bar.style.width = '0%';
-                    if (wechatBtn) { wechatBtn.style.display = 'block'; wechatBtn.disabled = false; }
-                    if (alipayBtn) { alipayBtn.style.display = 'block'; alipayBtn.disabled = false; }
-                }, 1000);
-            }, 400);
-        }
-        if (bar) bar.style.width = progress + '%';
-    }, 200);
-}
 
 function registerStartScreenButtons() {
     try {
-    // 充值按钮（主页充值入口已移除，仅保留商城内充值入口）
-    // 充值支付按钮
-    var wechatBtn = document.getElementById('recharge-wechat-btn');
-    var alipayBtn = document.getElementById('recharge-alipay-btn');
-    if (wechatBtn) wechatBtn.addEventListener('click', function(){ processRechargePayment('wechat'); });
-    if (alipayBtn) alipayBtn.addEventListener('click', function(){ processRechargePayment('alipay'); });
     // 游戏总设定与操作指南 - 纯UI，无需Three.js
     var guideBtn = document.getElementById('guide-btn');
     if (guideBtn) guideBtn.addEventListener('click', function(){
@@ -3902,7 +3736,7 @@ function initAll() {
             if (data.equipped && typeof data.equipped === 'object') _loadedEquipped = data.equipped;
         }
     } catch(e) { console.warn('loadGameState error:', e); }
-    // 暴露gold到全局（供充值系统等外部函数访问）
+    // 暴露gold到全局（供外部函数访问）
     window.getGameGold = () => gold;
     window.addGameGold = (amount) => { gold += amount; updateGoldUI(); if (typeof saveGameState === 'function') saveGameState(); return gold; };
     let soulPower = 1000; // 魂力：个人属性，影响所有武器最终伤害（基础值1000）
@@ -29379,8 +29213,6 @@ break;
         const gf = g.toLocaleString();
         if (goldValueEl) goldValueEl.textContent = gf;
         if (panelGoldEl) panelGoldEl.textContent = gf;
-        const rechargeGoldDisplay = document.getElementById('recharge-gold-display');
-        if (rechargeGoldDisplay) rechargeGoldDisplay.textContent = gf;
         const shopGoldDisplay = document.getElementById('shop-gold-display');
         if (shopGoldDisplay) shopGoldDisplay.textContent = gf + ' 金币';
         if (document.getElementById('panel-soulpower')) document.getElementById('panel-soulpower').textContent = getEffectiveSoulPower();
@@ -30515,7 +30347,7 @@ break;
 
     function showInsufficientGold() {
         const currentGold = (typeof gold === 'number') ? gold : (typeof window.getGameGold === 'function' ? window.getGameGold() : 0);
-        buyConfirmInfo.innerHTML = '<b style="color:#ff1744">金币不足！</b>当前：' + currentGold.toLocaleString() + ' 金币<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.08);"><div style="color:#e6edf3;font-size:13px;margin-bottom:8px;">是否前往充值？</div><div style="display:flex;gap:8px;"><button onclick="document.getElementById(\'buy-confirm\').classList.remove(\'show\');document.getElementById(\'recharge-gold-display\').textContent=(typeof window.getGameGold===\'function\'?window.getGameGold().toLocaleString():\'0\');buildRechargePackages();document.getElementById(\'recharge-modal\').classList.add(\'show\');" style="flex:1;padding:8px 0;border-radius:6px;border:1px solid rgba(255,215,0,0.4);background:rgba(255,215,0,0.1);color:#ffd740;font-weight:bold;cursor:pointer;font-size:13px;">前往充值</button><button onclick="document.getElementById(\'buy-confirm\').classList.remove(\'show\');" style="flex:1;padding:8px 0;border-radius:6px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.03);color:#8b949e;font-weight:bold;cursor:pointer;font-size:13px;">取消</button></div></div>';
+        buyConfirmInfo.innerHTML = '<b style="color:#ff1744">金币不足！</b>当前：' + currentGold.toLocaleString() + ' 金币<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.08);"><button onclick="document.getElementById(\'buy-confirm\').classList.remove(\'show\');" style="width:100%;padding:8px 0;border-radius:6px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.03);color:#8b949e;font-weight:bold;cursor:pointer;font-size:13px;">确定</button></div>';
         buyConfirmPrice.textContent = '';
         document.getElementById('buy-confirm').querySelector('.confirm-btns').style.display = 'none';
     }
@@ -30553,7 +30385,7 @@ break;
             const currentGold = gold;
             const deficit = totalPrice - currentGold;
             let listHtml = toBuy.map(k => '<div style="display:flex;justify-content:space-between;padding:3px 0;"><span>' + WEAPON_NAMES[k] + '</span><span style="color:#ffd740;">' + BUY_PRICES[k] + ' 金币</span></div>').join('');
-            buyConfirmInfo.innerHTML = '<b style="color:#ff1744">金币不足！</b><div style="margin-top:8px;padding:8px;background:rgba(255,255,255,0.03);border-radius:6px;font-size:12px;">' + listHtml + '<div style="display:flex;justify-content:space-between;padding:5px 0 0;margin-top:5px;border-top:1px solid rgba(255,255,255,0.1);font-weight:bold;"><span>合计</span><span style="color:#ffd700;">' + totalPrice + ' 金币</span></div><div style="display:flex;justify-content:space-between;padding:3px 0;color:#ff8a80;"><span>当前持有</span><span>' + currentGold + ' 金币</span></div><div style="display:flex;justify-content:space-between;padding:3px 0;color:#ff1744;"><span>差额</span><span>' + deficit + ' 金币</span></div></div><div style="margin-top:10px;display:flex;gap:8px;"><button onclick="document.getElementById(\'buy-confirm\').classList.remove(\'show\');document.getElementById(\'recharge-gold-display\').textContent=(typeof window.getGameGold===\'function\'?window.getGameGold().toLocaleString():\'0\');buildRechargePackages();document.getElementById(\'recharge-modal\').classList.add(\'show\');" style="flex:1;padding:8px 0;border-radius:6px;border:1px solid rgba(255,215,0,0.4);background:rgba(255,215,0,0.1);color:#ffd740;font-weight:bold;cursor:pointer;font-size:13px;">前往充值</button><button onclick="document.getElementById(\'buy-confirm\').classList.remove(\'show\');" style="flex:1;padding:8px 0;border-radius:6px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.03);color:#8b949e;font-weight:bold;cursor:pointer;font-size:13px;">取消</button></div>';
+            buyConfirmInfo.innerHTML = '<b style="color:#ff1744">金币不足！</b><div style="margin-top:8px;padding:8px;background:rgba(255,255,255,0.03);border-radius:6px;font-size:12px;">' + listHtml + '<div style="display:flex;justify-content:space-between;padding:5px 0 0;margin-top:5px;border-top:1px solid rgba(255,255,255,0.1);font-weight:bold;"><span>合计</span><span style="color:#ffd700;">' + totalPrice + ' 金币</span></div><div style="display:flex;justify-content:space-between;padding:3px 0;color:#ff8a80;"><span>当前持有</span><span>' + currentGold + ' 金币</span></div><div style="display:flex;justify-content:space-between;padding:3px 0;color:#ff1744;"><span>差额</span><span>' + deficit + ' 金币</span></div></div><div style="margin-top:10px;"><button onclick="document.getElementById(\'buy-confirm\').classList.remove(\'show\');" style="width:100%;padding:8px 0;border-radius:6px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.03);color:#8b949e;font-weight:bold;cursor:pointer;font-size:13px;">确定</button></div>';
             buyConfirmPrice.textContent = '';
             buyConfirmEl.querySelector('.confirm-btns').style.display = 'none';
             buyConfirmEl.classList.add('show');
@@ -30701,16 +30533,6 @@ break;
     // 武器强化系统事件绑定已移除
     if (shopModalClose) shopModalClose.addEventListener('click', () => { if(shopModal) shopModal.style.display = 'none'; });
     if (shopModal) shopModal.addEventListener('click', (e) => { if(e.target === shopModal) shopModal.style.display = 'none'; });
-    // 商城内充值按钮
-    const shopRechargeBtn = document.getElementById('shop-recharge-btn');
-    if (shopRechargeBtn) shopRechargeBtn.addEventListener('click', () => {
-        // 不关闭商城，充值弹窗叠加在商城上方显示
-        const goldDisplay = document.getElementById('recharge-gold-display');
-        if (goldDisplay) goldDisplay.textContent = gold.toLocaleString();
-        if (typeof buildRechargePackages === 'function') buildRechargePackages();
-        const m = document.getElementById('recharge-modal');
-        if (m) m.classList.add('show');
-    });
     // 一键购买按钮
     const shopBuyAllBtn = document.getElementById('shop-buyall-btn');
     if (shopBuyAllBtn) shopBuyAllBtn.addEventListener('click', () => {
