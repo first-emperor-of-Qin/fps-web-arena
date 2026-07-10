@@ -1797,7 +1797,7 @@
         <p><span>R</span> — 换弹 | <span>空格</span> — 跳跃 | <span>ESC</span> — 暂停</p>
         <p><span>E</span> — 武器专属技能 | <span>X</span> — 千机伞变形/雷霆万钧</p>
         <p><span>O</span> — 第三人称 | <span>Q</span> — 个人面板(含商城) | <span>M</span> — 跳至BOSS战</p>
-        <p><span style="color:#ffd700">[1] 雷霆之怒/屠魔/宙斯之手</span> | <span style="color:#b0bec5">[2] 幽影双枪/金属风暴</span> | <span style="color:#00e5ff">[3] 雷霆战刃/地狱魔镰</span> | <span style="color:#ff6d00">[4] 手雷系统</span></p>
+        <p><span style="color:#ffd700">[1] 雷霆之怒/屠魔/宙斯之手</span> | <span style="color:#b0bec5">[2] 幽影双枪/金属风暴</span> | <span style="color:#00e5ff">[3] 雷霆战刃/地狱魔镰</span> | <span style="color:#ff6d00">[4] 投掷武器系统</span></p>
         <p class="section-title">基础设定</p>
         <p>生命值：10000 | 护盾值：10000（优先消耗） | 能量值：100（每秒+1）</p>
         <p>移动速度：10 | 跳跃重力：-20</p>
@@ -1815,10 +1815,10 @@
         <p><span style="color:#b0bec5">金属风暴</span>（英雄级双枪）：锁敌风暴(E)自动锁定，基础伤害500/发</p>
         <p>雷霆战刃：轻击基础伤害120，重击基础伤害200+眩晕1.5s+电场</p>
         <p><span style="color:#ff4444">地狱魔镰</span>（英雄级近战）：普通狂风(右键)1道x10次，基础伤害800/次，无CD，1能量 | 地狱狂风(E)3道x10次，基础伤害800/次，CD 15s，30能量 | 狂风可卷起敌人</p>
-        <p class="section-title">手雷系统</p>
+        <p class="section-title">投掷武器系统</p>
         <p>爆炎手雷：固定基础伤害250，范围灼烧基础DPS 25/3s，携带x3</p>
-        <p><span style="color:#ffd700">死神之光</span>（英雄级手雷）：爆炸基础伤害600+10枚跟踪火箭弹(每枚基础伤害60)+3秒眩晕，携带x5，25%概率返还</p>
-        <p><span style="color:#4fc3f7">急冻霜星</span>（英雄级手雷）：冰霜新星，范围冰冻3秒+首爆基础伤害700，二段基础伤害700，携带x3</p>
+        <p><span style="color:#ffd700">死神之光</span>（英雄级投掷武器）：爆炸基础伤害600+10枚跟踪火箭弹(每枚基础伤害60)+3秒眩晕，携带x5，25%概率返还</p>
+        <p><span style="color:#4fc3f7">急冻霜星</span>（英雄级投掷武器）：冰霜新星，范围冰冻3秒+首爆基础伤害700，二段基础伤害700，携带x3</p>
         <p class="section-title">技能系统</p>
         <p>人物专属技能已整合至各武器系统中</p>
         <p>武器专属（绑定金属风暴）：锁敌风暴(E) 每秒2能量，自动锁定，基础伤害50/发，无冷却，能量>20%可激活</p>
@@ -1956,7 +1956,7 @@
                 游戏数据自动保存在浏览器本地存储（localStorage），包括：<br>
                 • 金币余额<br>
                 • 已购武器<br>
-                • 已装备武器（主武器/副武器/近战/手雷）<br>
+                • 已装备武器（主武器/副武器/近战/投掷武器）<br>
                 • 装备属性加成状态
             </p>
             <div style="display:flex;gap:10px;">
@@ -2325,7 +2325,7 @@
                         <div>主武器：<span id="eq-primary" style="color:#fff;">雷霆之怒</span></div>
                         <div>副武器：<span id="eq-secondary" style="color:#fff;">幽影双枪</span></div>
                         <div>近战武器：<span id="eq-melee" style="color:#fff;">雷霆战刃</span></div>
-                        <div>手雷：<span id="eq-grenade" style="color:#fff;">爆炎手雷</span></div>
+                        <div>投掷武器：<span id="eq-grenade" style="color:#fff;">爆炎手雷</span></div>
                         <div>战术武器：<span id="eq-tactical" style="color:#fff;">无</span></div>
                     </div>
                 </div>
@@ -2347,7 +2347,7 @@
                         <button class="weapon-filter-btn" data-filter="primary" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:11px;cursor:pointer;transition:all 0.2s;">主武器</button>
                         <button class="weapon-filter-btn" data-filter="secondary" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:11px;cursor:pointer;transition:all 0.2s;">副武器</button>
                         <button class="weapon-filter-btn" data-filter="melee" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:11px;cursor:pointer;transition:all 0.2s;">近战武器</button>
-                        <button class="weapon-filter-btn" data-filter="grenade" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:11px;cursor:pointer;transition:all 0.2s;">手雷</button>
+                        <button class="weapon-filter-btn" data-filter="grenade" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:11px;cursor:pointer;transition:all 0.2s;">投掷武器</button>
                         <button class="weapon-filter-btn" data-filter="tactical" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:11px;cursor:pointer;transition:all 0.2s;">战术武器</button>
                     </div>
                     <div id="tab-warehouse">
@@ -2434,7 +2434,7 @@
                         <button class="shop-filter-btn" data-filter="primary" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:11px;cursor:pointer;transition:all 0.2s;">主武器</button>
                         <button class="shop-filter-btn" data-filter="secondary" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:11px;cursor:pointer;transition:all 0.2s;">副武器</button>
                         <button class="shop-filter-btn" data-filter="melee" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:11px;cursor:pointer;transition:all 0.2s;">近战武器</button>
-                        <button class="shop-filter-btn" data-filter="grenade" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:11px;cursor:pointer;transition:all 0.2s;">手雷</button>
+                        <button class="shop-filter-btn" data-filter="grenade" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:11px;cursor:pointer;transition:all 0.2s;">投掷武器</button>
                         <button class="shop-filter-btn" data-filter="tactical" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:11px;cursor:pointer;transition:all 0.2s;">战术武器</button>
                         <button class="shop-filter-btn" data-filter="material" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:11px;cursor:pointer;transition:all 0.2s;">材料</button>
                     </div>
@@ -2577,7 +2577,7 @@ function buildShop() {
         { slotType:'primary',   icon:'⚔',  title:'主武器',    filter:'primary'   },
         { slotType:'secondary', icon:'🔫', title:'副武器',    filter:'secondary' },
         { slotType:'melee',     icon:'🗡', title:'近战武器',  filter:'melee'     },
-        { slotType:'grenade',   icon:'💣', title:'手雷',      filter:'grenade'   },
+        { slotType:'grenade',   icon:'💣', title:'投掷武器',      filter:'grenade'   },
         { slotType:'tactical',  icon:'🧊', title:'战术武器',  filter:'tactical'  }
     ];
     let html = '';
@@ -3531,12 +3531,12 @@ function initAll() {
         'thunder':        { label:'雷霆之怒', type:'主武器', hp:10000, shield:10000, soulPower:3000, moveSpeed:1, energy:30, critRate:2, hpRegen:100, shieldRegen:100, energyRegen:1 },
         'shadow':         { label:'幽影双枪', type:'副武器', hp:10000, shield:10000, soulPower:3000, moveSpeed:1, energy:30, critRate:2, hpRegen:100, shieldRegen:100, energyRegen:1 },
         'thunderblade':   { label:'雷霆战刃', type:'近战武器', hp:10000, shield:10000, soulPower:3000, moveSpeed:1, energy:30, critRate:2, hpRegen:100, shieldRegen:100, energyRegen:1 },
-        'normalgrenade':  { label:'爆炎手雷', type:'手雷',   hp:10000, shield:10000, soulPower:3000, moveSpeed:1, energy:30, critRate:2, hpRegen:100, shieldRegen:100, energyRegen:1 },
+        'normalgrenade':  { label:'爆炎手雷', type:'投掷武器',   hp:10000, shield:10000, soulPower:3000, moveSpeed:1, energy:30, critRate:2, hpRegen:100, shieldRegen:100, energyRegen:1 },
         // —— 英雄级 ——
         'metalstorm':     { label:'金属风暴', type:'副武器', hp:10000, shield:10000, soulPower:3000, moveSpeed:1, energy:30, critRate:2, hpRegen:100, shieldRegen:100, energyRegen:1 },
         'hellscythe':     { label:'地狱魔镰', type:'近战武器', hp:10000, shield:10000, soulPower:3000, moveSpeed:1, energy:30, critRate:2, hpRegen:100, shieldRegen:100, energyRegen:1 },
-        'deathlight':     { label:'死神之光', type:'手雷',   hp:10000, shield:10000, soulPower:3000, moveSpeed:1, energy:30, critRate:2, hpRegen:100, shieldRegen:100, energyRegen:1 },
-        'froststar':      { label:'急冻霜星', type:'手雷',   hp:10000, shield:10000, soulPower:3000, moveSpeed:1, energy:30, critRate:2, hpRegen:100, shieldRegen:100, energyRegen:1 },
+        'deathlight':     { label:'死神之光', type:'投掷武器',   hp:10000, shield:10000, soulPower:3000, moveSpeed:1, energy:30, critRate:2, hpRegen:100, shieldRegen:100, energyRegen:1 },
+        'froststar':      { label:'急冻霜星', type:'投掷武器',   hp:10000, shield:10000, soulPower:3000, moveSpeed:1, energy:30, critRate:2, hpRegen:100, shieldRegen:100, energyRegen:1 },
         'datacube':       { label:'数据魔方', type:'战术武器', hp:10000, shield:10000, soulPower:3000, moveSpeed:1, energy:30, critRate:2, hpRegen:100, shieldRegen:100, energyRegen:1 },
         // —— 传说级 ——
         'dragonlyknight': { label:'魔龙骑士',   type:'主武器', hp:20000, shield:20000, soulPower:5000, moveSpeed:2, energy:40, critRate:3, hpRegen:500, shieldRegen:500, energyRegen:2 },
@@ -3549,7 +3549,7 @@ function initAll() {
         'moonbow':        { label:'皓月神弓',   type:'副武器', hp:50000, shield:50000, soulPower:10000, moveSpeed:3, energy:50, critRate:4, hpRegen:1000, shieldRegen:1000, energyRegen:3 },
         'thousandumbrella':{ label:'千机伞',    type:'近战武器', hp:50000, shield:50000, soulPower:10000, moveSpeed:3, energy:50, critRate:4, hpRegen:1000, shieldRegen:1000, energyRegen:3 },
         'phasewalker':    { label:'相位行者',   type:'主武器', hp:50000, shield:50000, soulPower:10000, moveSpeed:3, energy:50, critRate:4, hpRegen:1000, shieldRegen:1000, energyRegen:3 },
-        'tanglotus':      { label:'佛怒唐莲',   type:'手雷',   hp:50000, shield:50000, soulPower:10000, moveSpeed:3, energy:50, critRate:4, hpRegen:1000, shieldRegen:1000, energyRegen:3 }
+        'tanglotus':      { label:'佛怒唐莲',   type:'投掷武器',   hp:50000, shield:50000, soulPower:10000, moveSpeed:3, energy:50, critRate:4, hpRegen:1000, shieldRegen:1000, energyRegen:3 }
     };
 
     // ====== 武器重量参数表（用于后坐力系统） ======
@@ -3593,10 +3593,10 @@ function initAll() {
         'thunderblade':    { name:'雷霆战刃',   icon:'⚔',  quality:'heroic',     qualityLabel:'英雄级', category:'近战',       baseDmg:'轻击43 / 重击130', fireRate:'无', magazine:'无',        activeSkill:'轻击[左键] / 重击[右键]', passiveSkill:'重击眩晕1.5s+电场',    slot:'3t', slotType:'melee' },
         'hellscythe':      { name:'地狱魔镰',   icon:'🌀', quality:'heroic',     qualityLabel:'英雄级', category:'近战',       baseDmg:'轻风9/次 x10 | 地狱9/次 x10x3', fireRate:'无', magazine:'无', activeSkill:'地狱狂风[E]', passiveSkill:'狂风卷起敌人', slot:'3h', slotType:'melee' },
         'thousandumbrella':{ name:'千机伞',     icon:'☂',  quality:'divine',     qualityLabel:'神级',   category:'伞刃',       baseDmg:'520/击',     fireRate:'2.5击/秒', magazine:'无限',      activeSkill:'天罗伞阵[E]+伞舞龙卷[右键]+千机百变[X]', passiveSkill:'三形态切换+0.5秒无敌+伤害加成', slot:'3u', slotType:'melee' },
-        'normalgrenade':   { name:'爆炎手雷',   icon:'💣', quality:'heroic',     qualityLabel:'英雄级', category:'手雷',       baseDmg:'240(爆炸)+DPS24(灼烧3s)', fireRate:'无', magazine:'x3', activeSkill:'投掷[左键] / 蓄力投[长按]', passiveSkill:'灼烧区域持续3秒', slot:'4n', slotType:'grenade' },
-        'deathlight':      { name:'死神之光',   icon:'☢',  quality:'heroic',     qualityLabel:'英雄级', category:'手雷',       baseDmg:'爆炸120 + 10x12火箭', fireRate:'无', magazine:'x5', activeSkill:'投掷[左键/右键]', passiveSkill:'25%概率返还+眩晕3s', slot:'4d', slotType:'grenade' },
-        'froststar':       { name:'急冻霜星',   icon:'❄',  quality:'heroic',     qualityLabel:'英雄级', category:'手雷',       baseDmg:'首爆120 + 二段120', fireRate:'无', magazine:'x3', activeSkill:'投掷[左键/右键]', passiveSkill:'冰冻3s+二段爆炸', slot:'4f', slotType:'grenade' },
-        'tanglotus':       { name:'佛怒唐莲',   icon:'🪷', quality:'divine',     qualityLabel:'神级',   category:'手雷',       baseDmg:'800(爆炸)+1000x8(花瓣)', fireRate:'无', magazine:'x5', activeSkill:'投掷[左键/右键]', passiveSkill:'金红龙卷10秒+花瓣追踪+秒杀/真伤', slot:'4tl', slotType:'grenade' },
+        'normalgrenade':   { name:'爆炎手雷',   icon:'💣', quality:'heroic',     qualityLabel:'英雄级', category:'投掷武器',       baseDmg:'240(爆炸)+DPS24(灼烧3s)', fireRate:'无', magazine:'x3', activeSkill:'投掷[左键] / 蓄力投[长按]', passiveSkill:'灼烧区域持续3秒', slot:'4n', slotType:'grenade' },
+        'deathlight':      { name:'死神之光',   icon:'☢',  quality:'heroic',     qualityLabel:'英雄级', category:'投掷武器',       baseDmg:'爆炸120 + 10x12火箭', fireRate:'无', magazine:'x5', activeSkill:'投掷[左键/右键]', passiveSkill:'25%概率返还+眩晕3s', slot:'4d', slotType:'grenade' },
+        'froststar':       { name:'急冻霜星',   icon:'❄',  quality:'heroic',     qualityLabel:'英雄级', category:'投掷武器',       baseDmg:'首爆120 + 二段120', fireRate:'无', magazine:'x3', activeSkill:'投掷[左键/右键]', passiveSkill:'冰冻3s+二段爆炸', slot:'4f', slotType:'grenade' },
+        'tanglotus':       { name:'佛怒唐莲',   icon:'🪷', quality:'divine',     qualityLabel:'神级',   category:'投掷武器',       baseDmg:'800(爆炸)+1000x8(花瓣)', fireRate:'无', magazine:'x5', activeSkill:'投掷[左键/右键]', passiveSkill:'金红龙卷10秒+花瓣追踪+秒杀/真伤', slot:'4tl', slotType:'grenade' },
         'datacube':        { name:'数据魔方',   icon:'🧊', quality:'heroic',     qualityLabel:'英雄级', category:'辅助增益',   baseDmg:'无',         fireRate:'无',       magazine:'无(按键5切换)', activeSkill:'无', passiveSkill:'魔方增幅 每秒+1%伤害(100秒满100%,死亡重置)', slot:'5d', slotType:'tactical' },
     };
 
@@ -3619,10 +3619,10 @@ function initAll() {
         'thunderblade':    { tagline:'英雄级近战武器 — 初始装备', typeLabel:'近战武器', bonus:'生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1', passives:['重击命中产生电场范围持续伤害'], actives:['轻击[左键]：快速近战','重击[右键]：蓄力重击+眩晕+电场'], price:0, isDefault:true },
         'hellscythe':      { tagline:'英雄级近战武器 — 地狱锻造的魔镰', typeLabel:'近战武器', bonus:'生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1', passives:['狂风投射物可卷起敌人击退'], actives:['普通狂风[右键]：1道x10次，基础伤害800/次，无冷却，1能量','地狱狂风[E]：3道x10次，基础伤害800/次，冷却15秒，30能量'], price:5000 },
         'thousandumbrella':{ tagline:'神级近战武器 — 千机百变，三形态机关伞刃', typeLabel:'近战武器', bonus:'生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3', passives:['千机百变：刃形态扇形范围斩击200%伤害 | 盾形态减免90%伤害+反弹50%近战 | 羽形态飞行+移速+100%+3道风刃150%伤害','形态切换：切换瞬间0.5秒无敌，3秒内下次攻击伤害+100%'], actives:['天罗伞阵[E]：跃空投射巨型伞阵(直径20米)，持续10秒，每秒108道伞刃(300%伤害+0.5秒禁锢)，结束万伞归一爆炸(1200%伤害+5米击飞)，期间闪避+80%，消耗80能量冷却15秒','伞舞龙卷[右键]：解体360片飞刃形成龙卷(5米)，持续5秒，每秒400%伤害+吸附，重组冲击波800%伤害，飞行状态范围10米×2吸附，消耗35能量冷却8秒'], price:30000 },
-        'normalgrenade':   { tagline:'英雄级手雷 — 初始装备', typeLabel:'手雷', bonus:'生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1', passives:['灼烧区域持续3秒伤害'], actives:['投掷[左键/右键]','蓄力投[左键长按]'], price:0, isDefault:true },
-        'deathlight':      { tagline:'英雄级手雷 — 毁灭性光能爆破装置', typeLabel:'手雷', bonus:'生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1', passives:['25%概率使用后返还一枚手雷'], actives:['投掷[左键/右键]'], price:3000 },
-        'froststar':       { tagline:'英雄级手雷 — 二段式冰霜毁灭装置', typeLabel:'手雷', bonus:'生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1', passives:['二段爆炸：冰冻解除时自动触发二段冰霜爆炸'], actives:['投掷[左键/右键]'], price:3000 },
-        'tanglotus':       { tagline:'神级手雷 — 金红龙卷，万瓣追魂', typeLabel:'手雷', bonus:'生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3', passives:['花瓣追踪：所有花瓣自动追踪地图范围内全部敌人，必定命中，不会落空','若仅剩一个敌人，该目标承受每秒100朵全部伤害','每朵花瓣独立判定：1%秒杀小怪，1%对BOSS造成1%最大生命真伤(秒杀对BOSS无效)'], actives:['投掷[左键/右键]：引爆后生成金红龙卷，持续释放追踪花瓣'], price:200000 },
+        'normalgrenade':   { tagline:'英雄级投掷武器 — 初始装备', typeLabel:'投掷武器', bonus:'生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1', passives:['灼烧区域持续3秒伤害'], actives:['投掷[左键/右键]','蓄力投[左键长按]'], price:0, isDefault:true },
+        'deathlight':      { tagline:'英雄级投掷武器 — 毁灭性光能爆破装置', typeLabel:'投掷武器', bonus:'生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1', passives:['25%概率使用后返还一枚投掷武器'], actives:['投掷[左键/右键]'], price:3000 },
+        'froststar':       { tagline:'英雄级投掷武器 — 二段式冰霜毁灭装置', typeLabel:'投掷武器', bonus:'生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1', passives:['二段爆炸：冰冻解除时自动触发二段冰霜爆炸'], actives:['投掷[左键/右键]'], price:3000 },
+        'tanglotus':       { tagline:'神级投掷武器 — 金红龙卷，万瓣追魂', typeLabel:'投掷武器', bonus:'生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3', passives:['花瓣追踪：所有花瓣自动追踪地图范围内全部敌人，必定命中，不会落空','若仅剩一个敌人，该目标承受每秒100朵全部伤害','每朵花瓣独立判定：1%秒杀小怪，1%对BOSS造成1%最大生命真伤(秒杀对BOSS无效)'], actives:['投掷[左键/右键]：引爆后生成金红龙卷，持续释放追踪花瓣'], price:200000 },
         'datacube':        { tagline:'英雄级战术武器 — 辅助增益型数据魔方装置', typeLabel:'战术武器', bonus:'生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1', passives:['魔方增幅：伤害加成初始为0%，每秒自动累加1%，100秒达到100%上限。死亡后伤害加成立即重置为0%，复活后重新从0%开始累加'], actives:['无主动技能（纯被动辅助增益武器）'], price:8000 },
     };
 
@@ -3691,7 +3691,7 @@ function initAll() {
         if (WEAPON_STATS[equippedSecondary]) _addWeaponBonus(equippedSecondary);
         // 近战武器
         if (WEAPON_STATS[equippedMelee]) _addWeaponBonus(equippedMelee);
-        // 手雷
+        // 投掷武器
         if (WEAPON_STATS[equippedGrenadeType]) _addWeaponBonus(equippedGrenadeType);
         // 战术武器
         if (WEAPON_STATS[equippedTactical]) _addWeaponBonus(equippedTactical);
@@ -4637,11 +4637,11 @@ function initAll() {
     //   shadow        双持手枪  12.5/s 默认1.0   100/12.5×1.0=8          100
     //   thunderblade  近战轻击  2/s    持续0.85  100/2×0.85=42.5→43      86
     //                近战重击  1/s    爆发1.3   100/1×1.3=130            130
-    //   normalgrenade 手雷AoE   0.5/s  AoE1.2    100/0.5×1.2=240          120(+灼烧)
+    //   normalgrenade 投掷武器AoE   0.5/s  AoE1.2    100/0.5×1.2=240          120(+灼烧)
     //   metalstorm    双持手枪  16.7/s 持续0.85  100/16.7×0.85=5          84
     //   hellscythe    近战狂风  10hit/s 持续0.85 100/10×0.85=8.5→9       90
-    //   deathlight    手雷AoE   0.5/s  AoE1.2    爆炸120+10×12火箭+灼烧12  ~138
-    //   froststar     手雷AoE   0.5/s  AoE1.2    首爆120+二段120           ~120
+    //   deathlight    投掷武器AoE   0.5/s  AoE1.2    爆炸120+10×12火箭+灼烧12  ~138
+    //   froststar     投掷武器AoE   0.5/s  AoE1.2    首爆120+二段120           ~120
     //   datacube      战术      -      -         0(无伤害)                 0
     // 传说(target 300):
     //   dragonlyknight AK47    15/s   持续0.85  300/15×0.85=17           255
@@ -4654,7 +4654,7 @@ function initAll() {
     //   moonbow       神弓      10/s   追踪1.15  800/10×1.15=92           920
     //   thousandumbrella 伞刃   2/s    爆发1.3   800/2×1.3=520            1040
     //   phasewalker   相位步枪  20/s   追踪1.15  800/20×1.15=46           920
-    //   tanglotus     手雷AoE   0.1/s  AoE1.2    爆炸800+1000×8花瓣/10s    ~880
+    //   tanglotus     投掷武器AoE   0.1/s  AoE1.2    爆炸800+1000×8花瓣/10s    ~880
     // 验证：同品质 DPS 极差 英雄 156/83.5=1.87× / 传说 390/255=1.53× / 神级 1040/880=1.18×（均 ≤2.5×，神级 ≤10×）
     // 品质递进：英雄100 / 传说300 / 神级800（传说/英雄=3×、神级/传说=2.67×）
 
@@ -4671,7 +4671,7 @@ function initAll() {
     const HELLSCYTHE_WIND_BASE_DMG = 9;   // 普通狂风: deriveBaseDmg(100,10,0.85)=9（英雄级）
     const HELLSCYTHE_HELL_BASE_DMG = 9;   // 地狱狂风: 同上（英雄级技能，3×命中数提升 DPS）
     const GRENADE_BASE_DMG = 240;          // 爆炎手雷: deriveBaseDmg(100,0.5,1.2)=240（英雄级，原普通级）
-    const GRENADE_BURN_BASE_DPS = 24;    // 手雷灼烧: 基础DPS 24/3秒（英雄级，爆炸10%/s）
+    const GRENADE_BURN_BASE_DPS = 24;    // 投掷武器灼烧: 基础DPS 24/3秒（英雄级，爆炸10%/s）
     const DEATHLIGHT_BASE_DMG = 120;      // 死神之光爆炸: 基础伤害120（英雄级 AoE）
     const DEATHLIGHT_ROCKET_BASE_DMG = 12; // 死神之光火箭: 每枚基础伤害12（英雄级）
     const FROSTSTAR_FIRST_BASE_DMG = 120; // 急冻霜星首爆: 基础伤害120（英雄级 AoE）
@@ -4684,7 +4684,7 @@ function initAll() {
     const PARASITE_CANNON_BASE_DMG = 208;  // 寄生者炮狙模式: 与普攻基础一致（神级，内脏暴击叠加提升）
     const THOUSAND_UMBRELLA_BASE_DMG = 520; // 千机伞: deriveBaseDmg(800,2,1.3)=520（神级）
 
-    // ====== 佛怒唐莲手雷系统 ======
+    // ====== 佛怒唐莲投掷武器系统 ======
     const TANGLOTUS_BASE_DMG = 800;          // 佛怒唐莲: 爆炸基础伤害800（神级 AoE，deriveBaseDmg 800×1.2 一次性）
     const TANGLOTUS_PETAL_DMG = 8;           // 每朵花瓣8（1000朵×8=8000 总花瓣伤害 ≈ 神级800DPS×10s）
     const TANGLOTUS_PETALS_PER_SEC = 100;       // 每秒释放100朵花瓣
@@ -4732,7 +4732,7 @@ function initAll() {
             rotation: [0.5, 0, 0]
         },
         grenade: {
-            // 手雷/球类：用球状模型
+            // 投掷武器/球类：用球状模型
             urls: [
                 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r152/examples/models/gltf/Horse.glb',
                 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r152/examples/models/gltf/Flamingo.glb'
@@ -5237,7 +5237,7 @@ function initAll() {
 
     // Grenade - 爆炎手雷
     const GRENADE_MAX_CARRY = 5;
-    let grenadeCount = 0; // 初始无手雷，装备手雷武器后设置
+    let grenadeCount = 0; // 初始无投掷武器，装备投掷武器后设置
     let grenadeCooldown = 0;
     const GRENADE_THROW_CD = 2.0;
     let thrownGrenades = []; // { mesh, velocity, timer, bounced, detonateTimer }
@@ -6469,7 +6469,7 @@ function initAll() {
             POINT_LIGHT_BUDGET = 40;
         }
     }
-    // 仅裁剪“直接挂于场景”的装饰性点光源（房间灯 / 部分特效灯）；挂载在武器组 / 手雷组等子节点上的
+    // 仅裁剪“直接挂于场景”的装饰性点光源（房间灯 / 部分特效灯）；挂载在武器组 / 投掷武器组等子节点上的
     // 常驻灯（光环等）因是嵌套子节点而豁免，避免破坏持久特效。裁剪时优先移除最旧（先入场景）的灯，
     // 即先牺牲静态房间辉光、保留最新特效灯，视觉退化最小且绝不会引发运行时异常。
     function enforcePointLightBudget() {
@@ -26854,7 +26854,7 @@ break;
         grenadeHandMesh.position.set(0.25, -0.15, -0.40);
         grenadeHandMesh.visible = false;
         camera.add(grenadeHandMesh);
-        // [线C] 手雷 GLTF 优先 + fallback（按当前 equippedGrenadeType 区分武器 id）
+        // [线C] 投掷武器 GLTF 优先 + fallback（按当前 equippedGrenadeType 区分武器 id）
         // equippedGrenadeType 为 'normal' 时映射到 normalgrenade 武器 id
         _tryGltfUpgrade(grenadeHandMesh, 'grenade', (equippedGrenadeType === 'normal' ? 'normalgrenade' : equippedGrenadeType), [0, 0, 0], 0.4);
     }
@@ -26942,7 +26942,7 @@ break;
         if (meleeWeaponGroup) meleeWeaponGroup.visible = false;
         if (grenadeHandMesh) grenadeHandMesh.visible = false;
         if (datacubeWeaponGroup) datacubeWeaponGroup.visible = false;
-        // 切换到手雷时重建模型（适配当前手雷类型）
+        // 切换到投掷武器时重建模型（适配当前投掷武器类型）
         if (slot === 4) createGrenadeHandModel();
         // 切换到战术武器时创建模型
         if (slot === 5 && equippedTactical === 'datacube' && ownedWeapons['datacube']) {
@@ -27128,7 +27128,7 @@ break;
                 detail: umbrellaCurrentForm === 'blade' ? '扇形范围斩击200%伤害' : (umbrellaCurrentForm === 'shield' ? '减免90%伤害+反弹50%近战' : '飞行+移速+100%+3道风刃150%') });
         } else if (slot === 4 && equippedGrenadeType === 'deathlight') {
             skills.push({ id:'wsk_p_deathlight', key:'被动', name:'弹药返还', type:'passive', icon:'♻', theme:'wsk-theme-gold',
-                detail:'25%概率返还手雷' });
+                detail:'25%概率返还投掷武器' });
         } else if (slot === 5 && equippedTactical === 'datacube') {
             skills.push({ id:'wsk_p_cube', key:'被动', name:'魔方增幅', type:'passive', icon:'📊', theme:'wsk-theme-cyan',
                 detail:'伤害+1%/秒 | 最高100%' });
@@ -29187,26 +29187,26 @@ break;
             playWeaponSwitchSound();
         } else if (slot === '4n') {
             equippedGrenadeType = 'normal';
-            grenadeCount = 3; // 普通手雷默认3枚
-            createGrenadeHandModel(); // 重建手雷模型
+            grenadeCount = 3; // 普通投掷武器默认3枚
+            createGrenadeHandModel(); // 重建投掷武器模型
             playWeaponSwitchSound();
         } else if (slot === '4d') {
             if (!ownedWeapons['deathlight']) return;
             equippedGrenadeType = 'deathlight';
             grenadeCount = DEATHLIGHT_CARRY_COUNT; // 死神之光默认5枚
-            createGrenadeHandModel(); // 重建手雷模型
+            createGrenadeHandModel(); // 重建投掷武器模型
             playWeaponSwitchSound();
         } else if (slot === '4f') {
             if (!ownedWeapons['froststar']) return;
             equippedGrenadeType = 'froststar';
             grenadeCount = FROSTSTAR_CARRY_COUNT; // 急冻霜星5枚
-            createGrenadeHandModel(); // 重建手雷模型
+            createGrenadeHandModel(); // 重建投掷武器模型
             playWeaponSwitchSound();
         } else if (slot === '4tl') {
             if (!ownedWeapons['tanglotus']) return;
             equippedGrenadeType = 'tanglotus';
             grenadeCount = TANGLOTUS_CARRY_COUNT; // 佛怒唐莲5枚
-            createGrenadeHandModel(); // 重建手雷模型
+            createGrenadeHandModel(); // 重建投掷武器模型
             playWeaponSwitchSound();
         } else if (slot === '2s') {
             equippedSecondary = 'shadow';
@@ -29383,22 +29383,22 @@ break;
             if (umbrellaArrayActive) { umbrellaArrayActive = false; if(umbrellaArrayMesh){scene.remove(umbrellaArrayMesh);umbrellaArrayMesh.traverse(c=>{if(c.geometry)c.geometry.dispose();if(c.material)c.material.dispose();});umbrellaArrayMesh=null;}}
             if (currentWeaponSlot === 3) { currentWeaponSlot = 0; hideAllWeapons(); }
         } else if (slot === '4n') {
-            // 卸下爆炎手雷 → 手雷空
+            // 卸下爆炎手雷 → 投掷武器空
             equippedGrenadeType = 'none';
             grenadeCount = 0;
             if (currentWeaponSlot === 4) { currentWeaponSlot = 0; hideAllWeapons(); }
         } else if (slot === '4d') {
-            // 卸下死神之光 → 手雷空
+            // 卸下死神之光 → 投掷武器空
             equippedGrenadeType = 'none';
             grenadeCount = 0;
             if (currentWeaponSlot === 4) { currentWeaponSlot = 0; hideAllWeapons(); }
         } else if (slot === '4f') {
-            // 卸下急冻霜星 → 手雷空
+            // 卸下急冻霜星 → 投掷武器空
             equippedGrenadeType = 'none';
             grenadeCount = 0;
             if (currentWeaponSlot === 4) { currentWeaponSlot = 0; hideAllWeapons(); }
         } else if (slot === '4tl') {
-            // 卸下佛怒唐莲 → 手雷空
+            // 卸下佛怒唐莲 → 投掷武器空
             equippedGrenadeType = 'none';
             grenadeCount = 0;
             // 清除场上残留的佛怒唐莲龙卷
@@ -29432,7 +29432,7 @@ break;
         if (!previewScene) return;
         // 在3D预览场景中展示全息演示
         const demo = new THREE.Group();
-        // 手雷本体
+        // 投掷武器本体
         const bodyMat = new THREE.MeshStandardMaterial({ color: 0xffd700, roughness: 0.2, metalness: 0.8, emissive: 0x554400 });
         const body = new THREE.Mesh(new THREE.SphereGeometry(0.12, 12, 12), bodyMat);
         body.position.y = 1.0; demo.add(body);
@@ -29645,7 +29645,7 @@ break;
     function showBuyConfirm() {
         if (ownedWeapons['deathlight']) return;
         pendingBuyItem = 'deathlight';
-        buyConfirmInfo.innerHTML = '<b style="color:#ffd700">死神之光</b> — 英雄级手雷<br>爆炸基础伤害600 + 10枚跟踪火箭弹(每枚基础伤害60)<br>非BOSS敌人眩晕3秒<br>被动：25%概率返还一枚<br>装备加成：生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1';
+        buyConfirmInfo.innerHTML = '<b style="color:#ffd700">死神之光</b> — 英雄级投掷武器<br>爆炸基础伤害600 + 10枚跟踪火箭弹(每枚基础伤害60)<br>非BOSS敌人眩晕3秒<br>被动：25%概率返还一枚<br>装备加成：生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1';
         buyConfirmPrice.textContent = '3000 金币';
         buyConfirmEl.querySelector('.confirm-btns').style.display = 'flex'; buyConfirmEl.classList.add('show');
     }
@@ -29661,7 +29661,7 @@ break;
     function showBuyFrostStarConfirm() {
         if (ownedWeapons['froststar']) return;
         pendingBuyItem = 'froststar';
-        buyConfirmInfo.innerHTML = '<b style="color:#4fc3f7">急冻霜星</b> — 英雄级手雷<br>首次爆炸基础伤害700 + 5秒冰冻<br>冰冻解除二段爆炸基础伤害700<br>装备加成：生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1';
+        buyConfirmInfo.innerHTML = '<b style="color:#4fc3f7">急冻霜星</b> — 英雄级投掷武器<br>首次爆炸基础伤害700 + 5秒冰冻<br>冰冻解除二段爆炸基础伤害700<br>装备加成：生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1';
         buyConfirmPrice.textContent = '3000 金币';
         buyConfirmEl.querySelector('.confirm-btns').style.display = 'flex'; buyConfirmEl.classList.add('show');
     }
@@ -29669,7 +29669,7 @@ break;
     function showBuyTangLotusConfirm() {
         if (ownedWeapons['tanglotus']) return;
         pendingBuyItem = 'tanglotus';
-        buyConfirmInfo.innerHTML = '<b style="color:#ff1744">佛怒唐莲</b> — 神级手雷<br>爆炸基础伤害150000 + 金红龙卷持续10秒<br>龙卷每秒释放100朵花瓣(100%武器伤害)，总计1000朵<br>花瓣均匀分配：每秒100朵按存活敌人数平均分配，余数给最近敌人<br>每秒实时刷新分配，一视同仁<br>花瓣自动追踪全部敌人，必定命中<br>特殊：对小怪1%秒杀 | 对BOSS 1%概率造成1%最大生命真伤<br>装备加成：生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3';
+        buyConfirmInfo.innerHTML = '<b style="color:#ff1744">佛怒唐莲</b> — 神级投掷武器<br>爆炸基础伤害150000 + 金红龙卷持续10秒<br>龙卷每秒释放100朵花瓣(100%武器伤害)，总计1000朵<br>花瓣均匀分配：每秒100朵按存活敌人数平均分配，余数给最近敌人<br>每秒实时刷新分配，一视同仁<br>花瓣自动追踪全部敌人，必定命中<br>特殊：对小怪1%秒杀 | 对BOSS 1%概率造成1%最大生命真伤<br>装备加成：生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3';
         buyConfirmPrice.textContent = '200000 金币';
         buyConfirmEl.querySelector('.confirm-btns').style.display = 'flex'; buyConfirmEl.classList.add('show');
     }
@@ -29876,7 +29876,7 @@ break;
             else if (item === 'moonbow') createMoonbowModel();
             else if (item === 'thousandumbrella') createThousandUmbrellaModel();
             else if (item === 'phasewalker') createPhaseWalkerModel();
-            // 佛怒唐莲是手雷，无需创建3D武器模型，装备时自动创建手雷手持模型
+            // 佛怒唐莲是投掷武器，无需创建3D武器模型，装备时自动创建投掷武器手持模型
         } catch(e) { console.warn('confirmBuy: createModel error (non-critical):', e); }
         // 以下UI更新必须始终执行，不受模型创建错误影响
         buyConfirmEl.classList.remove('show');
@@ -30031,7 +30031,7 @@ break;
         });
     }
 
-    // ====== 死神之光手雷系统 ======
+    // ====== 死神之光投掷武器系统 ======
     const DEATHLIGHT_DAMAGE = 800;
     const DEATHLIGHT_STUN_DURATION = 3.0;
     const DEATHLIGHT_ROCKET_COUNT = 10;
@@ -30040,7 +30040,7 @@ break;
     const DEATHLIGHT_CARRY_COUNT = 5;           // 携带数量
     const DEATHLIGHT_REFUND_CHANCE = 0.25; // 25%概率返还
 
-    // ====== 急冻霜星手雷系统 ======
+    // ====== 急冻霜星投掷武器系统 ======
     const FROSTSTAR_DAMAGE_FIRST = 1000;       // 首次爆炸伤害
     const FROSTSTAR_DAMAGE_SECOND = 2000;      // 二段爆炸伤害（首次2倍）
     const FROSTSTAR_FREEZE_DURATION = 5.0;     // 冰冻持续5秒
@@ -30376,7 +30376,7 @@ break;
         trackingRockets.splice(index, 1);
     }
 
-    // ====== 急冻霜星手雷二段式爆炸系统 ======
+    // ====== 急冻霜星投掷武器二段式爆炸系统 ======
     function detonateFrostStarGrenade(index) {
         const g = thrownGrenades[index];
         const pos = g.mesh.position.clone();
@@ -30516,7 +30516,7 @@ break;
         });
     }
 
-    // ====== 佛怒唐莲手雷·金红龙卷花瓣系统 ======
+    // ====== 佛怒唐莲投掷武器·金红龙卷花瓣系统 ======
     let tangLotusTornadoes = []; // { meshGroup, position, timer, petalsFired, totalPetals }
 
     function detonateTangLotusGrenade(index) {
@@ -30842,7 +30842,7 @@ break;
         tempEffects.push({ group: sg, life: 0.5, maxLife: 0.5, type: 'explosion' });
     }
 
-    // 修改投掷手雷函数以支持死神之光、急冻霜星、佛怒唐莲和投掷动画
+    // 修改投掷武器函数以支持死神之光、急冻霜星、佛怒唐莲和投掷动画
     function throwGrenadeOriginal() {
         if (isDead || grenadeCooldown > 0 || grenadeCount <= 0 || weaponSwitching || isThrowingGrenade) return;
         isThrowingGrenade = true;
@@ -30932,7 +30932,7 @@ break;
         scene.add(grenade);
         thrownGrenades.push({ mesh: grenade, velocity: velocity, timer: 2.5, bounced: false, detonateTimer: -1, isDeathlight: equippedGrenadeType === 'deathlight', isFrostStar: equippedGrenadeType === 'froststar', isTangLotus: equippedGrenadeType === 'tanglotus' });
         updateAmmoUI();
-        // 投掷后重建手雷手持模型
+        // 投掷后重建投掷武器手持模型
         setTimeout(() => { createGrenadeHandModel(); if (currentWeaponSlot === 4 && grenadeHandMesh) grenadeHandMesh.visible = true; }, 500);
     }
 
@@ -31815,7 +31815,7 @@ break;
                     }
                 }
             }
-            // 手雷物理
+            // 投掷武器物理
             updateThrownGrenades(delta);
             // 电场更新
             updateElectricFields(delta);
