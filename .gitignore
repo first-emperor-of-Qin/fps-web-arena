@@ -1,4 +1,1 @@
-# Wrangler / Cloudflare
-node_modules
-.wrangler
-.dev.vars
+Nothing needs to be ignored since only a README.md file was added, which is a source/config file and not a build artifact, dependency, or temporary file.
