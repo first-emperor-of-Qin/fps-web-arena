@@ -811,7 +811,7 @@
     .shop-buy-btn { display: block; width: 100%; padding: 8px; margin-top: 8px; background: rgba(255,215,0,0.1); color: #ffd700; font-size: 13px; font-weight: bold; border: 1px solid rgba(255,215,0,0.3); border-radius: 6px; cursor: pointer; letter-spacing: 2px; transition: all 0.2s; position: relative; }
     .shop-buy-btn:hover { border-color: #ffd700; box-shadow: 0 0 12px rgba(255,215,0,0.2); background: rgba(255,215,0,0.15); }
     .shop-buy-btn:active { transform: scale(0.97); }
-    .shop-buy-btn.owned-btn { background: rgba(0,230,118,0.08); color: #00e676; border-color: rgba(0,230,118,0.2); cursor: default; }
+    .shop-buy-btn.owned-btn { background: rgba(128,128,128,0.18) !important; color: #6e7681 !important; border-color: rgba(128,128,128,0.35) !important; text-shadow: none !important; cursor: not-allowed !important; opacity: 1 !important; }
     .shop-buy-btn.owned-btn:hover { transform: none; box-shadow: none; }
 
     /* 购买确认弹窗 */
@@ -1982,9 +1982,6 @@
                 <div style="font-size:17px;font-weight:bold;">永恒</div>
                 <div style="font-size:12px;color:#8b949e;">血量与伤害 ×32</div>
             </button>
-        </div>
-        <div style="margin-top:14px;padding:10px;background:rgba(0,229,255,0.05);border:1px solid rgba(0,229,255,0.2);border-radius:8px;text-align:center;">
-            <div style="color:#8b949e;font-size:12px;">存档管理已迁移至首页「⚙️ 设置」面板</div>
         </div>
     </div>
 </div>
@@ -4731,6 +4728,18 @@ function initAll() {
             else if (b.tactical === weaponId){ b.tactical = 'none'; removed = true; }
         }
         return removed;
+    }
+    // 查找武器所在背包编号（1-5）；未被任何背包装备返回 0
+    function _bpFindWeaponBackpack(weaponId){
+        if (!weaponId || weaponId === 'none') return 0;
+        for (let i = 0; i < backpacks.length; i++) {
+            const b = backpacks[i];
+            if (!b) continue;
+            if (b.primary === weaponId || b.secondary === weaponId || b.melee === weaponId || b.grenade === weaponId || b.tactical === weaponId) {
+                return i + 1;
+            }
+        }
+        return 0;
     }
     // 切换背包（局内/面板通用）。idx: 0-4
     function switchBackpack(idx){
@@ -28940,6 +28949,11 @@ break;
         if (shopGoldDisplay) shopGoldDisplay.textContent = gf + ' 金币';
         if (document.getElementById('panel-soulpower')) document.getElementById('panel-soulpower').textContent = getEffectiveSoulPower();
     }
+    // [Patch] 暴露商城金币刷新桥接：首页商城入口（registerStartScreenButtons）无法直接访问 initAll 内部的 updateGoldUI/updateShopState，统一通过此全局函数刷新，避免金币显示残留为 0
+    window._refreshShopGold = function() {
+        try { updateGoldUI(); } catch(e) { console.warn('_refreshShopGold updateGoldUI error:', e); }
+        try { updateShopState(); } catch(e) { console.warn('_refreshShopGold updateShopState error:', e); }
+    };
 
     // ====== 武器强化系统 UI 已移除 ======
 
@@ -29109,6 +29123,7 @@ break;
                 const isDefault = ['thunder', 'shadow', 'thunderblade', 'normalgrenade'].includes(key);
                 if (!isDefault && !ownedWeapons[key]) continue;
                 const equipped = isEquipped(key, d);
+                const equippedBpNum = _bpFindWeaponBackpack(key); // 1-5 表示已装备于某背包，0 表示未装备
                 const bonusData = WEAPON_STATS[key] || null;
                 let magDisplay = d.magazine;
                 if (key === 'normalgrenade') magDisplay = 'x' + _gc;
@@ -29125,7 +29140,7 @@ break;
                     passiveSkill: d.passiveSkill,
                     bonus: bonusData,
                     wkey: key
-                }, d.slot, true, equipped);
+                }, d.slot, true, equipped, equippedBpNum);
             }
             weaponGridEl.innerHTML = html;
             // Bind equip buttons
@@ -29153,8 +29168,12 @@ break;
         }
     }
 
-    function buildWeaponItem(w, slot, owned, equipped) {
+    function buildWeaponItem(w, slot, owned, equipped, equippedBpNum) {
         let cls = 'weapon-item' + (owned ? ' owned' : '') + (equipped ? ' equipped' : '');
+        // 装备状态标注：已装备于某背包时显示「已装备于背包X」，否则不显示
+        const equippedBpHtml = (typeof equippedBpNum === 'number' && equippedBpNum > 0)
+            ? '<div style="margin-top:6px;padding:3px 8px;background:rgba(0,230,118,0.1);border:1px solid rgba(0,230,118,0.3);border-radius:4px;color:#00e676;font-size:11px;font-weight:bold;letter-spacing:1px;text-align:center;">已装备于背包' + equippedBpNum + '</div>'
+            : '';
         // 构建装备属性加成文本
         let bonusParts = [];
         if (w.bonus) {
@@ -29197,6 +29216,7 @@ break;
             <div class="wi-quality-bar q-${w.quality}"></div>
             <div class="wi-body">
                 <div class="wi-header"><span class="wi-icon">${w.icon}</span><div><div class="wi-name">${w.name}<span class="wi-quality-tag q-${w.quality}">${w.qualityLabel}</span></div><div class="wi-type">${w.category}</div></div></div>
+                ${equippedBpHtml}
                 <div class="wi-divider"></div>
                 <div class="wi-stats">
                     <div class="wi-stat-row"><span class="wi-stat-label">基础伤害</span><span class="wi-stat-value">${w.baseDmg}</span></div>
@@ -29408,6 +29428,12 @@ break;
         currentShopFilter = filter;
         const shopContent = document.getElementById('shop-modal-content');
         if (!shopContent) return;
+        // 切换分类分组容器的显隐：非"全部"时仅显示对应 data-shop-group 的分组（含其标题）
+        const shopGroups = shopContent.querySelectorAll('.shop-category');
+        shopGroups.forEach(group => {
+            const g = group.dataset.shopGroup || 'other';
+            group.style.display = (filter === 'all' || g === filter) ? '' : 'none';
+        });
         const shopItems = shopContent.querySelectorAll('.shop-item');
         shopItems.forEach(item => {
             const cat = item.dataset.category || 'other';
@@ -29952,6 +29978,12 @@ break;
             buyTangLotusBtn.textContent = '购买 200000 金币';
             buyTangLotusBtn.classList.remove('owned-btn');
         }
+        // 统一刷新购买按钮禁用态：已拥有 → disabled（灰色不可点击）
+        document.querySelectorAll('.shop-buy-btn').forEach(btn => {
+            const id = btn.id || '';
+            const key = (id.indexOf('buy-') === 0 && id.lastIndexOf('-btn') === id.length - 4) ? id.substring(4, id.length - 4) : '';
+            btn.disabled = !!(key && ownedWeapons[key]);
+        });
     }
 
     let pendingBuyItem = 'deathlight'; // 'deathlight', 'metalstorm', 'froststar', 'tumo', 'hellscythe', 'datacube', 'dragonlyknight', 'whitenight', 'moonbow'
