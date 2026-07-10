@@ -1772,44 +1772,158 @@
     .bp-ov-item.cur .bp-ov-main { color:#fff; }
     .bp-ov-hint { font-size:11px; color:#8b949e; letter-spacing:2px; }
 
+    /* ============ HOMEPAGE REVAMP: synthwave background + bento button grid ============ */
+    /* Neutralize legacy background layers (hex grid, scanline, cinematic layer, energy rings, embers) */
+    #start-screen::before, #start-screen::after { content: none !important; animation: none !important; }
+    .start-bg-layer, .energy-ring, .ember { display: none !important; }
+
+    /* New synthwave horizon background */
+    #start-screen { background: #04020a !important; }
+    .bg-sky, .bg-stars, .bg-sun, .bg-horizon, .bg-grid-wrap, .bg-scan {
+        position: absolute; pointer-events: none; z-index: 0;
+    }
+    .bg-sky { inset: 0; background: linear-gradient(180deg, #04020a 0%, #0a0420 38%, #1a0a2e 70%, #050810 100%); }
+    .bg-stars { inset: 0; opacity: .55; animation: twinkle 5s ease-in-out infinite;
+        background-image:
+            radial-gradient(1.5px 1.5px at 12% 12%, #bff7ff, transparent),
+            radial-gradient(1px 1px at 28% 26%, #fff, transparent),
+            radial-gradient(1.5px 1.5px at 47% 10%, #fff, transparent),
+            radial-gradient(1px 1px at 63% 22%, #bff7ff, transparent),
+            radial-gradient(1.5px 1.5px at 78% 14%, #fff, transparent),
+            radial-gradient(1px 1px at 88% 30%, #fff, transparent),
+            radial-gradient(1px 1px at 18% 34%, #bff7ff, transparent),
+            radial-gradient(1px 1px at 38% 18%, #fff, transparent),
+            radial-gradient(1.5px 1.5px at 72% 32%, #fff, transparent),
+            radial-gradient(1px 1px at 92% 20%, #bff7ff, transparent);
+    }
+    @keyframes twinkle { 0%, 100% { opacity: .35; } 50% { opacity: .7; } }
+    .bg-sun { left: 50%; top: 30%; transform: translate(-50%, -50%); width: 460px; height: 460px; border-radius: 50%;
+        background: radial-gradient(circle at 50% 45%, rgba(255,90,120,0.62) 0%, rgba(224,64,251,0.36) 40%, rgba(0,229,255,0.14) 64%, transparent 72%);
+        filter: blur(6px); animation: sunPulse 6s ease-in-out infinite; }
+    @keyframes sunPulse { 0%, 100% { opacity: .85; transform: translate(-50%, -50%) scale(1); } 50% { opacity: 1; transform: translate(-50%, -50%) scale(1.04); } }
+    .bg-horizon { left: 0; right: 0; bottom: 46%; height: 2px;
+        background: linear-gradient(90deg, transparent, rgba(0,229,255,0.9) 35%, rgba(255,23,68,0.7) 70%, transparent);
+        box-shadow: 0 0 24px rgba(0,229,255,0.7), 0 0 60px rgba(255,23,68,0.35); }
+    .bg-grid-wrap { left: 0; right: 0; bottom: 0; height: 46%; perspective: 320px; perspective-origin: 50% 0; overflow: hidden; }
+    .bg-grid { position: absolute; left: -50%; width: 200%; top: 0; height: 320%;
+        background-image:
+            linear-gradient(to right, rgba(0,229,255,0.45) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(255,23,68,0.30) 1px, transparent 1px);
+        background-size: 64px 64px;
+        transform: rotateX(80deg); transform-origin: 50% 0;
+        animation: gridScroll 3.5s linear infinite; }
+    @keyframes gridScroll { from { background-position: 0 0, 0 0; } to { background-position: 0 64px, 0 64px; } }
+    .bg-scan { inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,229,255,0.022) 3px, rgba(0,229,255,0.022) 4px);
+        animation: scanMove 7s linear infinite; }
+    @keyframes scanMove { from { background-position: 0 0; } to { background-position: 0 120px; } }
+
+    /* Bento button grid — subversive asymmetric layout */
+    .start-btns {
+        display: grid !important;
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        grid-template-rows: repeat(4, 88px) !important;
+        gap: 12px !important;
+        grid-template-areas:
+            "level level guide monster"
+            "level level equip panel"
+            "shop shop activity activity"
+            "shop shop settings settings" !important;
+        max-width: 920px !important; width: 92% !important; margin-top: 34px !important;
+    }
+    .start-btn {
+        min-width: 0 !important; width: auto !important; padding: 8px 10px !important;
+        display: flex !important; flex-direction: column !important;
+        align-items: center !important; justify-content: center !important;
+        gap: 4px !important; text-align: center !important;
+        letter-spacing: 2px !important; font-size: 14px !important;
+        border-radius: 12px !important; line-height: 1.1 !important;
+    }
+    .start-btn .btn-icon { font-size: 28px !important; margin-right: 0 !important; }
+    .start-btn .btn-label { display: block; font-size: 13px; color: #e6edf3 !important; }
+    #level-select-btn { grid-area: level !important; }
+    #homepage-shop-btn { grid-area: shop !important; }
+    #guide-btn { grid-area: guide !important; }
+    #monster-codex-btn { grid-area: monster !important; }
+    #equip-codex-btn { grid-area: equip !important; }
+    #homepage-panel-btn { grid-area: panel !important; }
+    #homepage-activity-btn { grid-area: activity !important; }
+    #homepage-settings-btn { grid-area: settings !important; }
+    /* Big hero tiles */
+    #level-select-btn .btn-icon, #homepage-shop-btn .btn-icon { font-size: 44px !important; }
+    #level-select-btn .btn-label, #homepage-shop-btn .btn-label { font-size: 17px; letter-spacing: 4px; }
+    #homepage-shop-btn .btn-label { color: #ffd740 !important; }
+
+    /* Per-tile accent (resting) — overrides premium cyan border */
+    #level-select-btn { border-color: rgba(255,23,68,0.55) !important; }
+    #level-select-btn .btn-icon { filter: drop-shadow(0 0 8px rgba(255,23,68,0.6)) !important; }
+    #guide-btn { border-color: rgba(33,150,243,0.5) !important; }
+    #guide-btn .btn-icon { filter: drop-shadow(0 0 8px rgba(33,150,243,0.55)) !important; }
+    #monster-codex-btn { border-color: rgba(156,39,176,0.5) !important; }
+    #monster-codex-btn .btn-icon { filter: drop-shadow(0 0 8px rgba(224,64,251,0.55)) !important; }
+    #equip-codex-btn { border-color: rgba(255,143,0,0.5) !important; }
+    #equip-codex-btn .btn-icon { filter: drop-shadow(0 0 8px rgba(255,143,0,0.55)) !important; }
+    #homepage-panel-btn { border-color: rgba(0,229,255,0.5) !important; }
+    #homepage-panel-btn .btn-icon { filter: drop-shadow(0 0 8px rgba(0,229,255,0.6)) !important; }
+    #homepage-activity-btn { border-color: rgba(105,240,174,0.5) !important; }
+    #homepage-activity-btn .btn-icon { filter: drop-shadow(0 0 8px rgba(105,240,174,0.55)) !important; }
+    #homepage-settings-btn { border-color: rgba(255,255,255,0.25) !important; }
+    #homepage-settings-btn .btn-icon { filter: drop-shadow(0 0 6px rgba(255,255,255,0.35)) !important; }
+    #homepage-shop-btn { border-color: rgba(255,215,64,0.6) !important; }
+    #homepage-shop-btn .btn-icon { filter: drop-shadow(0 0 10px rgba(255,215,64,0.7)) !important; }
+
+    /* Per-tile hover accent — overrides premium cyan hover */
+    #level-select-btn:hover { border-color: #ff1744 !important; box-shadow: 0 12px 40px rgba(255,23,68,0.35), inset 0 0 25px rgba(255,23,68,0.06) !important; }
+    #guide-btn:hover { border-color: #2196f3 !important; box-shadow: 0 12px 40px rgba(33,150,243,0.3), inset 0 0 25px rgba(33,150,243,0.06) !important; }
+    #monster-codex-btn:hover { border-color: #9c27b0 !important; box-shadow: 0 12px 40px rgba(156,39,176,0.3), inset 0 0 25px rgba(156,39,176,0.06) !important; }
+    #equip-codex-btn:hover { border-color: #ff8f00 !important; box-shadow: 0 12px 40px rgba(255,143,0,0.3), inset 0 0 25px rgba(255,143,0,0.06) !important; }
+    #homepage-panel-btn:hover { border-color: #00e5ff !important; box-shadow: 0 12px 40px rgba(0,229,255,0.32), inset 0 0 25px rgba(0,229,255,0.06) !important; }
+    #homepage-activity-btn:hover { border-color: #69f0ae !important; box-shadow: 0 12px 40px rgba(105,240,174,0.3), inset 0 0 25px rgba(105,240,174,0.06) !important; }
+    #homepage-settings-btn:hover { border-color: #c9d1d9 !important; box-shadow: 0 12px 40px rgba(255,255,255,0.18), inset 0 0 25px rgba(255,255,255,0.05) !important; }
+    #homepage-shop-btn:hover { border-color: #ffd740 !important; box-shadow: 0 14px 50px rgba(255,215,64,0.4), inset 0 0 30px rgba(255,215,64,0.08) !important; }
+
+    /* Responsive collapse */
+    @media (max-width: 720px) {
+        .start-btns {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            grid-template-rows: none !important; grid-auto-rows: 78px !important;
+            grid-template-areas:
+                "level level"
+                "shop shop"
+                "guide monster"
+                "equip panel"
+                "activity settings" !important;
+        }
+        #start-screen h1 { font-size: 50px !important; letter-spacing: 10px !important; }
+        .start-subtitle { letter-spacing: 6px !important; }
+    }
+
 </style>
 </head>
 <body>
 
 <div id="start-screen">
-    <!-- Background layers -->
-    <div class="start-bg-layer"></div>
-    <!-- Energy rings -->
-    <div class="energy-ring energy-ring-1"></div>
-    <div class="energy-ring energy-ring-2"></div>
-    <div class="energy-ring energy-ring-3"></div>
-    <!-- Embers (33 particles) -->
-    <div class="ember ember-1"></div><div class="ember ember-2"></div><div class="ember ember-3"></div>
-    <div class="ember ember-4"></div><div class="ember ember-5"></div><div class="ember ember-6"></div>
-    <div class="ember ember-7"></div><div class="ember ember-8"></div><div class="ember ember-9"></div>
-    <div class="ember ember-10"></div><div class="ember ember-11"></div><div class="ember ember-12"></div>
-    <div class="ember ember-13"></div><div class="ember ember-14"></div><div class="ember ember-15"></div>
-    <div class="ember ember-16"></div><div class="ember ember-17"></div><div class="ember ember-18"></div>
-    <div class="ember ember-19"></div><div class="ember ember-20"></div><div class="ember ember-21"></div>
-    <div class="ember ember-22"></div><div class="ember ember-23"></div><div class="ember ember-24"></div>
-    <div class="ember ember-25"></div><div class="ember ember-26"></div><div class="ember ember-27"></div>
-    <div class="ember ember-28"></div><div class="ember ember-29"></div><div class="ember ember-30"></div>
-    <div class="ember ember-31"></div><div class="ember ember-32"></div><div class="ember ember-33"></div>
+    <!-- Background layers (synthwave horizon) -->
+    <div class="bg-sky"></div>
+    <div class="bg-stars"></div>
+    <div class="bg-sun"></div>
+    <div class="bg-horizon"></div>
+    <div class="bg-grid-wrap"><div class="bg-grid"></div></div>
+    <div class="bg-scan"></div>
     <!-- Fullscreen button -->
     <button class="fullscreen-btn" onclick="toggleFullscreen()">⛶ 全屏</button>
     <!-- Title -->
     <h1>枪战突击</h1>
     <div class="start-subtitle">COMBAT STRIKE</div>
-    <!-- Button grid -->
+    <!-- Bento button grid -->
     <div class="start-btns">
-        <button class="start-btn btn btn--primary" id="level-select-btn"><span class="btn-icon">🎮</span>关卡选择</button>
-        <button class="start-btn btn btn--primary" id="guide-btn"><span class="btn-icon">📖</span>游戏指南</button>
-        <button class="start-btn btn btn--primary" id="monster-codex-btn"><span class="btn-icon">👾</span>怪物图鉴</button>
-        <button class="start-btn btn btn--primary" id="homepage-shop-btn"><span class="btn-icon">🛒</span>商城</button>
-        <button class="start-btn btn btn--primary" id="equip-codex-btn"><span class="btn-icon">🛡️</span>装备图鉴</button>
-        <button class="start-btn btn btn--primary" id="homepage-panel-btn"><span class="btn-icon">👤</span>个人面板</button>
-        <button class="start-btn btn btn--primary" id="homepage-activity-btn"><span class="btn-icon">🎁</span>活动</button>
-        <button class="start-btn btn btn--primary" id="homepage-settings-btn"><span class="btn-icon">⚙️</span>设置</button>
+        <button class="start-btn btn btn--primary" id="level-select-btn"><span class="btn-icon">🎮</span><span class="btn-label">关卡选择</span></button>
+        <button class="start-btn btn btn--primary" id="homepage-shop-btn"><span class="btn-icon">🛒</span><span class="btn-label">商城</span></button>
+        <button class="start-btn btn btn--primary" id="guide-btn"><span class="btn-icon">📖</span><span class="btn-label">游戏指南</span></button>
+        <button class="start-btn btn btn--primary" id="monster-codex-btn"><span class="btn-icon">👾</span><span class="btn-label">怪物图鉴</span></button>
+        <button class="start-btn btn btn--primary" id="equip-codex-btn"><span class="btn-icon">🛡️</span><span class="btn-label">装备图鉴</span></button>
+        <button class="start-btn btn btn--primary" id="homepage-panel-btn"><span class="btn-icon">👤</span><span class="btn-label">个人面板</span></button>
+        <button class="start-btn btn btn--primary" id="homepage-activity-btn"><span class="btn-icon">🎁</span><span class="btn-label">活动</span></button>
+        <button class="start-btn btn btn--primary" id="homepage-settings-btn"><span class="btn-icon">⚙️</span><span class="btn-label">设置</span></button>
     </div>
     <!-- Bottom bar -->
     <div class="start-bottom-bar">v5.0 <span>|</span> CYBERPUNK+ EDITION <span>|</span> &copy; 2025</div>
