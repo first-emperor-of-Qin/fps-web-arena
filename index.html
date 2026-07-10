@@ -1897,6 +1897,527 @@
         .start-subtitle { letter-spacing: 6px !important; }
     }
 
+    /* ============================================================
+       v6 NEXUS REDESIGN — 对局 HUD / 商城 / 个人面板 颠覆重塑
+       单一 scoped 层，!important 击穿既有 v4 + Premium 覆盖。
+       命名空间：#hud / #player-panel / #shop-modal + .rd-* 原子
+       ============================================================ */
+    #hud, #player-panel, #shop-modal, #buy-confirm, .trade-success {
+        --rd-bg: rgba(10, 16, 28, 0.74);
+        --rd-bg-deep: rgba(6, 10, 20, 0.88);
+        --rd-border: rgba(0, 229, 255, 0.22);
+        --rd-border-strong: rgba(0, 229, 255, 0.55);
+        --rd-fg: #e6edf3;
+        --rd-fg-dim: #7d8896;
+        --rd-cyan: #00e5ff;
+        --rd-gold: #ffd740;
+        --rd-red: #ff2d55;
+        --rd-purple: #b388ff;
+        --rd-green: #69f0ae;
+        --rd-orange: #ff9100;
+        --rd-radius: 10px;
+        --rd-gap: 14px;
+    }
+
+    /* 共用：斜切玻璃面板 */
+    .rd-panel {
+        position: relative;
+        background: var(--rd-bg) !important;
+        border: 1px solid var(--rd-border) !important;
+        border-radius: var(--rd-radius) !important;
+        backdrop-filter: blur(14px) saturate(160%) !important;
+        -webkit-backdrop-filter: blur(14px) saturate(160%) !important;
+        box-shadow: 0 8px 28px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.04) !important;
+    }
+    .rd-panel::before {
+        content: ''; position: absolute; top: 0; left: 14px; right: 14px; height: 1px;
+        background: linear-gradient(90deg, transparent, var(--rd-cyan), transparent);
+        opacity: 0.55; pointer-events: none;
+    }
+    .rd-corner { clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px)); }
+
+    .rd-chip {
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 3px 10px; font-size: 11px; font-weight: 700; letter-spacing: 1px;
+        border-radius: 999px; border: 1px solid var(--rd-border);
+        background: rgba(0,229,255,0.06); color: var(--rd-cyan);
+        font-family: var(--cy-font-display);
+    }
+    .rd-num { font-family: var(--cy-font-mono); font-variant-numeric: tabular-nums; }
+
+    /* ============================================================
+       1) 对局 HUD
+       ============================================================ */
+    #hud {
+        font-family: var(--cy-font-display) !important;
+    }
+    #hud .rd-panel { pointer-events: none; }
+    /* 重新归零散落指示器的魔法定位，统一由 .rd-hud-* 容器接管 */
+    #hud > .rd-hud-tl, #hud > .rd-hud-tr, #hud > .rd-hud-tc,
+    #hud > .rd-hud-bl, #hud > .rd-hud-bc, #hud > .rd-hud-br {
+        position: absolute !important;
+    }
+    .rd-hud-tl { top: var(--rd-gap); left: var(--rd-gap); display: flex; flex-direction: column; gap: 8px; max-width: 268px; }
+    .rd-hud-tr { top: var(--rd-gap); right: var(--rd-gap); display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+    .rd-hud-tc { top: var(--rd-gap); left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; width: min(560px, 60vw); }
+    .rd-hud-bl { bottom: var(--rd-gap); left: var(--rd-gap); display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+    .rd-hud-bc { bottom: var(--rd-gap); left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .rd-hud-br { bottom: var(--rd-gap); right: var(--rd-gap); display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+
+    /* —— 生命/护盾/能量 主面板 —— */
+    #health-bar-container.rd-panel {
+        position: relative !important; top: auto !important; left: auto !important;
+        padding: 12px 14px 10px !important; min-width: 252px !important;
+        background: linear-gradient(135deg, rgba(10,16,28,0.86), rgba(6,10,20,0.74)) !important;
+        border: 1px solid rgba(255,45,85,0.28) !important;
+    }
+    #health-bar-container::before { background: linear-gradient(90deg, transparent, var(--rd-red), var(--rd-cyan), transparent) !important; opacity: 0.7 !important; }
+    #health-row, #shield-row, #energy-row, #soulpower-row, #oxygen-row { gap: 8px !important; }
+    #health-icon, #shield-icon, #energy-icon, #soulpower-icon, #oxygen-icon {
+        width: 18px !important; font-size: 12px !important; text-align: center !important;
+    }
+    #health-icon { color: var(--rd-red) !important; text-shadow: 0 0 6px rgba(255,45,85,0.6) !important; }
+    #health-bar-outer {
+        height: 18px !important; border: 1px solid rgba(255,45,85,0.35) !important; border-radius: 4px !important;
+        background: rgba(0,0,0,0.6) !important;
+    }
+    #health-bar-inner { transition: width 0.3s, background 0.3s !important; }
+    #health-text { color: #ffd5da !important; font-size: 12px !important; font-weight: 700 !important; min-width: 86px !important; font-family: var(--cy-font-mono) !important; }
+    #shield-bar-outer, #energy-bar-outer, #soulpower-bar-outer, #oxygen-bar-outer {
+        height: 7px !important; border-radius: 3px !important; background: rgba(0,0,0,0.55) !important;
+    }
+    #shield-bar-inner { background: linear-gradient(90deg, #0277bd, #4fc3f7) !important; }
+    #energy-bar-inner { background: linear-gradient(90deg, #651fff, #b388ff) !important; }
+    #soulpower-bar-inner { background: linear-gradient(90deg, #e65100, #ffab40) !important; }
+    #oxygen-bar-inner { background: linear-gradient(90deg, #00838f, #4dd0e1) !important; }
+    #shield-text, #energy-text, #soulpower-text, #oxygen-text {
+        font-size: 10px !important; min-width: 86px !important; font-family: var(--cy-font-mono) !important;
+        font-weight: 700 !important; text-align: right !important;
+    }
+    #shield-text { color: #b3e5fc !important; }
+    #energy-text { color: #d1c4e9 !important; }
+    #soulpower-text { color: #ffe0b2 !important; }
+    #oxygen-text { color: #b2ebf2 !important; }
+    #shield-icon { color: #4fc3f7 !important; } #energy-icon { color: #b388ff !important; }
+    #soulpower-icon { color: #ff9100 !important; } #oxygen-icon { color: #00bcd4 !important; }
+
+    /* —— 得分 / 金币 —— */
+    #score-display {
+        top: auto !important; right: auto !important; position: relative !important;
+        padding: 10px 16px !important; min-width: 150px !important;
+        background: linear-gradient(135deg, rgba(10,16,28,0.86), rgba(6,10,20,0.74)) !important;
+        border: 1px solid rgba(255,215,64,0.22) !important;
+    }
+    #score-display .label { font-size: 9px !important; color: var(--rd-fg-dim) !important; letter-spacing: 2px !important; }
+    #score-display #score-value { color: var(--rd-gold) !important; font-size: 20px !important; font-weight: 900 !important; font-family: var(--cy-font-mono) !important; text-shadow: 0 0 10px rgba(255,215,64,0.35) !important; }
+    #gold-display {
+        top: auto !important; right: auto !important; position: relative !important;
+        padding: 8px 14px !important;
+        background: rgba(255,215,0,0.06) !important; border: 1px solid rgba(255,215,0,0.22) !important;
+    }
+    #gold-display .gold-icon { font-size: 13px !important; color: var(--rd-gold) !important; }
+    #gold-display .gold-val { font-size: 15px !important; color: var(--rd-gold) !important; font-family: var(--cy-font-mono) !important; }
+
+    /* —— 波次 / 难度 —— */
+    #wave-display {
+        top: auto !important; left: auto !important; transform: none !important; position: relative !important;
+        margin-top: 0 !important; padding: 8px 18px !important;
+        background: linear-gradient(135deg, rgba(10,16,28,0.86), rgba(6,10,20,0.74)) !important;
+        border: 1px solid var(--rd-border) !important;
+    }
+    #wave-display .wave-label { font-size: 9px !important; color: var(--rd-fg-dim) !important; letter-spacing: 2px !important; }
+    #wave-display .wave-num { font-size: 15px !important; color: var(--rd-cyan) !important; font-weight: 900 !important; text-shadow: 0 0 8px rgba(0,229,255,0.5) !important; font-family: var(--cy-font-mono) !important; }
+    #wave-display .wave-progress { font-size: 10px !important; color: #4fc3f7 !important; }
+    #difficulty-display {
+        top: auto !important; left: auto !important; transform: none !important; position: relative !important;
+        padding: 4px 12px !important; border-radius: 999px !important; font-size: 11px !important;
+        font-weight: 800 !important; letter-spacing: 2px !important;
+        backdrop-filter: blur(8px) !important;
+    }
+
+    /* —— BOSS 血条 —— */
+    #boss-bar-container, #boss2-bar-container {
+        top: auto !important; left: auto !important; position: relative !important;
+        width: min(560px, 60vw) !important;
+    }
+    #boss-bar-header, #boss2-bar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+    #boss-label, #boss2-label { color: var(--rd-red) !important; font-size: 11px !important; font-weight: 900 !important; letter-spacing: 3px !important; text-shadow: 0 0 8px rgba(255,45,85,0.6) !important; }
+    #boss-hp-text, #boss2-hp-text { color: #ffb3c0 !important; font-size: 11px !important; font-family: var(--cy-font-mono) !important; font-weight: 700 !important; }
+    #boss-bar-frame, #boss2-bar-frame {
+        height: 14px !important; border-radius: 4px !important; background: rgba(0,0,0,0.65) !important;
+        border: 1px solid rgba(255,45,85,0.3) !important; position: relative; overflow: hidden;
+    }
+    #boss-bar-fill, #boss2-bar-fill { height: 100% !important; transition: width 0.25s !important; }
+    #boss-bar-fill-inner, #boss2-bar-fill-inner { height: 100% !important; transition: background 0.3s !important; }
+    #boss-bar-fill-inner.hp-high, #boss2-bar-fill-inner.hp-high { background: linear-gradient(90deg, #ff2d55, #ff6d8a) !important; }
+    #boss-bar-fill-inner.hp-mid, #boss2-bar-fill-inner.hp-mid { background: linear-gradient(90deg, #ff9100, #ffab40) !important; }
+    #boss-bar-fill-inner.hp-low, #boss2-bar-fill-inner.hp-low { background: linear-gradient(90deg, #ff1744, #d50000) !important; }
+    .boss-bar-divider { width: 1px !important; background: rgba(255,255,255,0.25) !important; }
+
+    /* —— 武器轮 + 弹药 —— */
+    .weapon-slot-container {
+        bottom: auto !important; left: auto !important; transform: none !important; position: relative !important;
+        gap: 6px !important; padding: 6px !important; border-radius: 12px !important;
+        background: linear-gradient(135deg, rgba(10,16,28,0.9), rgba(6,10,20,0.82)) !important;
+        border: 1px solid var(--rd-border) !important;
+    }
+    .weapon-slot {
+        width: 66px !important; height: 50px !important; border-radius: 8px !important;
+        background: rgba(255,255,255,0.02) !important; border: 1px solid rgba(255,255,255,0.06) !important;
+        transition: all 0.2s !important;
+    }
+    .weapon-slot.active {
+        border-color: var(--rd-cyan) !important; background: rgba(0,229,255,0.1) !important;
+        box-shadow: 0 0 16px rgba(0,229,255,0.35), inset 0 0 12px rgba(0,229,255,0.08) !important;
+    }
+    .weapon-slot .weapon-icon { font-size: 18px !important; }
+    .weapon-slot .weapon-key { font-size: 9px !important; color: #5a6473 !important; font-weight: 800 !important; }
+    .weapon-slot .weapon-ammo { font-size: 9px !important; color: #5a6473 !important; font-family: var(--cy-font-mono) !important; }
+    .weapon-slot.active .weapon-key, .weapon-slot.active .weapon-ammo { color: var(--rd-cyan) !important; }
+    #ammo-display {
+        bottom: auto !important; right: auto !important; position: relative !important;
+        padding: 6px 18px !important; border-radius: 8px !important;
+        background: linear-gradient(135deg, rgba(10,16,28,0.86), rgba(6,10,20,0.74)) !important;
+        border: 1px solid var(--rd-border) !important;
+    }
+    #ammo-display .ammo-count { font-family: var(--cy-font-mono) !important; }
+    #ammo-display #ammo-current { font-size: 22px !important; font-weight: 900 !important; color: var(--rd-fg) !important; text-shadow: 0 0 8px rgba(0,229,255,0.3) !important; }
+    #ammo-display .ammo-separator { font-size: 16px !important; color: var(--rd-fg-dim) !important; margin: 0 2px !important; }
+    #ammo-display .ammo-reserve { font-size: 14px !important; color: var(--rd-fg-dim) !important; }
+    #ammo-display.reloading .reload-text { color: var(--rd-orange) !important; font-size: 13px !important; font-weight: 800 !important; letter-spacing: 2px !important; }
+    #ammo-pack-hint {
+        bottom: auto !important; right: auto !important; position: relative !important;
+        color: #4fc3f7 !important; background: rgba(10,16,28,0.86) !important;
+        border: 1px solid rgba(79,195,247,0.4) !important; padding: 5px 12px !important; border-radius: 999px !important;
+    }
+
+    /* —— 技能槽 —— */
+    .skill-slot { gap: 8px !important; }
+    .skill-slot .skill-icon-box {
+        width: 46px !important; height: 46px !important; border-radius: 10px !important; font-size: 20px !important;
+        backdrop-filter: blur(8px) !important;
+    }
+    .skill-slot .skill-label { font-size: 12px !important; font-weight: 800 !important; letter-spacing: 1px !important; }
+    .skill-slot .skill-timer { font-size: 10px !important; font-family: var(--cy-font-mono) !important; }
+    #skill-e { bottom: auto !important; left: auto !important; position: relative !important; }
+    #skill-x { bottom: auto !important; left: auto !important; position: relative !important; }
+    #skill-storm { bottom: auto !important; left: auto !important; position: relative !important; }
+    #weapon-skills-panel { bottom: auto !important; left: auto !important; position: relative !important; gap: 6px !important; }
+    #debuff-bar { bottom: auto !important; left: auto !important; position: relative !important; }
+
+    /* —— 状态指示器群（归位到容器） —— */
+    #heat-warning, #time-effect-indicator, #time-shield-indicator, #cube-amplify-indicator,
+    #damage-stat-panel, #moonbow-charge-bar, #dawnlight-power, #parasite-cannon-indicator,
+    #current-weapon-name, #lock-storm-indicator, #burn-indicator, #shield-indicator,
+    #third-person-indicator, #tumo-shield-indicator, #backpack-hud-indicator {
+        position: relative !important; top: auto !important; left: auto !important;
+        right: auto !important; bottom: auto !important; transform: none !important;
+        margin: 0 !important;
+    }
+    #heat-warning { position: fixed !important; top: 50% !important; left: 50% !important; transform: translate(-50%,-50%) !important; }
+    .rd-hud-bl #lock-storm-indicator, .rd-hud-bl #burn-indicator, .rd-hud-bl #third-person-indicator,
+    .rd-hud-bl #cube-amplify-indicator, .rd-hud-bl #damage-stat-panel, .rd-hud-bl #tumo-shield-indicator,
+    .rd-hud-bl #shield-indicator {
+        display: none; padding: 5px 12px !important; border-radius: 6px !important; font-size: 12px !important;
+        background: rgba(10,16,28,0.82) !important; border: 1px solid rgba(255,255,255,0.1) !important;
+        font-weight: 800 !important; letter-spacing: 1px !important; width: max-content;
+    }
+    #damage-stat-panel { display: block !important; color: #ff6659 !important; border-color: rgba(255,102,89,0.3) !important; }
+    #cube-amplify-indicator { color: var(--rd-cyan) !important; border-color: rgba(0,229,255,0.3) !important; }
+    #lock-storm-indicator { color: var(--rd-orange) !important; border-color: rgba(255,145,0,0.3) !important; }
+    #burn-indicator { color: var(--rd-orange) !important; border-color: rgba(255,109,0,0.3) !important; }
+    #third-person-indicator { color: var(--rd-cyan) !important; border-color: rgba(0,229,255,0.3) !important; }
+    #tumo-shield-indicator { color: var(--rd-red) !important; border-color: rgba(255,23,68,0.3) !important; }
+    #shield-indicator { color: var(--rd-gold) !important; border-color: rgba(255,215,0,0.3) !important; }
+
+    /* —— 右下：充能/武器名 —— */
+    #moonbow-charge-bar {
+        width: 180px !important; height: 24px !important; border-radius: 8px !important;
+        background: rgba(10,16,28,0.86) !important; border: 1px solid rgba(79,195,247,0.4) !important;
+        box-shadow: 0 0 12px rgba(79,195,247,0.15) !important;
+    }
+    #moonbow-charge-fill { border-radius: 6px !important; }
+    #dawnlight-power, #parasite-cannon-indicator {
+        padding: 5px 12px !important; border-radius: 6px !important;
+        background: rgba(10,16,28,0.82) !important; border: 1px solid rgba(255,255,255,0.1) !important;
+        font-weight: 800 !important; letter-spacing: 1px !important;
+    }
+    #current-weapon-name {
+        color: var(--rd-fg) !important; font-size: 14px !important; font-weight: 800 !important;
+        letter-spacing: 2px !important; padding: 5px 12px !important; border-radius: 6px !important;
+        background: rgba(10,16,28,0.82) !important; border: 1px solid var(--rd-border) !important;
+    }
+    #backpack-hud-indicator {
+        bottom: auto !important; left: auto !important; transform: none !important; position: relative !important;
+        padding: 5px 12px !important; border-radius: 999px !important;
+        background: rgba(10,16,28,0.82) !important; border: 1px solid var(--rd-border) !important;
+    }
+
+    /* —— 连杀 / 击杀播报 —— */
+    #streak-counter {
+        bottom: auto !important; left: auto !important; position: relative !important;
+        padding: 6px 12px !important; border-radius: 999px !important;
+        background: rgba(10,16,28,0.82) !important; border: 1px solid rgba(255,145,0,0.25) !important;
+    }
+    #streak-counter .streak-count { font-size: 28px !important; font-family: var(--cy-font-mono) !important; color: #fff !important; text-shadow: 0 0 10px rgba(255,145,0,0.6) !important; }
+    #streak-counter .streak-text { font-size: 11px !important; color: var(--rd-orange) !important; }
+    #kill-feed { top: auto !important; right: auto !important; position: relative !important; align-items: flex-end !important; }
+    #kill-feed .kill-msg, #kill-feed div { background: rgba(10,16,28,0.82) !important; border: 1px solid var(--rd-border) !important; border-radius: 6px !important; padding: 3px 10px !important; }
+
+    /* ============================================================
+       2) 个人面板
+       ============================================================ */
+    #player-panel {
+        background: radial-gradient(ellipse at top, rgba(0,229,255,0.06), transparent 60%), rgba(5,8,16,0.92) !important;
+        backdrop-filter: blur(24px) saturate(160%) !important;
+    }
+    #player-panel.open { display: flex !important; align-items: stretch !important; justify-content: center !important; padding: 24px !important; }
+    #panel-inner {
+        width: 100% !important; max-width: 1180px !important; max-height: calc(100vh - 48px) !important;
+        height: auto !important; border-radius: 16px !important; overflow: hidden !important;
+        background: linear-gradient(160deg, rgba(12,18,32,0.96) 0%, rgba(8,12,22,0.98) 100%) !important;
+        border: 1px solid var(--rd-border) !important;
+        box-shadow: 0 30px 90px rgba(0,0,0,0.8), 0 0 0 1px rgba(0,229,255,0.08), inset 0 1px 0 rgba(0,229,255,0.18) !important;
+        display: grid !important; grid-template-rows: auto 1fr !important;
+    }
+    #panel-header {
+        padding: 16px 24px !important; background: linear-gradient(90deg, rgba(0,229,255,0.08), transparent) !important;
+        border-bottom: 1px solid var(--rd-border) !important; position: relative !important;
+    }
+    #panel-header h2 {
+        color: var(--rd-fg) !important; font-size: 20px !important; letter-spacing: 6px !important;
+        font-family: var(--cy-font-display) !important; font-weight: 800 !important; margin: 0 !important;
+    }
+    #panel-header h2::before { content: '◆ '; color: var(--rd-cyan); }
+    #open-shop-btn {
+        padding: 7px 16px !important; border-radius: 999px !important;
+        border: 1px solid rgba(255,215,64,0.4) !important; background: rgba(255,215,64,0.1) !important;
+        color: var(--rd-gold) !important; font-size: 12px !important; font-weight: 800 !important;
+        letter-spacing: 2px !important; cursor: pointer !important; transition: all 0.2s !important;
+        font-family: var(--cy-font-display) !important;
+    }
+    #open-shop-btn:hover { background: rgba(255,215,64,0.2) !important; box-shadow: 0 0 16px rgba(255,215,64,0.3) !important; }
+    #panel-close {
+        position: absolute !important; top: 14px !important; right: 18px !important; width: 34px !important; height: 34px !important;
+        border-radius: 50% !important; background: rgba(255,255,255,0.04) !important; border: 1px solid rgba(255,255,255,0.12) !important;
+        color: var(--rd-fg-dim) !important; font-size: 20px !important; cursor: pointer !important; z-index: 10 !important;
+    }
+    #panel-close:hover { background: rgba(255,45,85,0.18) !important; color: var(--rd-red) !important; border-color: rgba(255,45,85,0.4) !important; }
+    #panel-body { display: grid !important; grid-template-columns: 300px 1fr !important; min-height: 0 !important; flex: none !important; }
+
+    /* —— 左：角色档案 —— */
+    #panel-left {
+        flex: none !important; padding: 20px !important; overflow-y: auto !important;
+        border-right: 1px solid var(--rd-border) !important;
+        background: linear-gradient(180deg, rgba(0,229,255,0.04), transparent) !important;
+        display: flex; flex-direction: column; gap: 16px;
+    }
+    .rd-profile-card { text-align: center; padding: 18px 12px; border-radius: 12px; background: rgba(0,229,255,0.04); border: 1px solid var(--rd-border); }
+    .rd-profile-avatar { width: 76px; height: 76px; margin: 0 auto 10px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 38px; background: radial-gradient(circle, rgba(0,229,255,0.25), rgba(0,229,255,0.05)); border: 2px solid var(--rd-cyan); box-shadow: 0 0 24px rgba(0,229,255,0.3); }
+    .rd-profile-name { font-family: var(--cy-font-display); font-size: 16px; font-weight: 800; letter-spacing: 3px; color: var(--rd-fg); }
+    .rd-profile-rank { font-size: 11px; color: var(--rd-fg-dim); letter-spacing: 2px; margin-top: 3px; }
+    .rd-wallet { display: flex; gap: 8px; }
+    .rd-wallet > div { flex: 1; padding: 10px; border-radius: 10px; text-align: center; }
+    .rd-wallet .rd-w-gold { background: rgba(255,215,64,0.08); border: 1px solid rgba(255,215,64,0.25); }
+    .rd-wallet .rd-w-score { background: rgba(0,229,255,0.06); border: 1px solid var(--rd-border); }
+    .rd-wallet .rd-w-label { font-size: 9px; color: var(--rd-fg-dim); letter-spacing: 2px; }
+    .rd-wallet .rd-w-val { font-size: 17px; font-weight: 900; font-family: var(--cy-font-mono); margin-top: 2px; }
+    .rd-wallet .rd-w-gold .rd-w-val { color: var(--rd-gold); }
+    .rd-wallet .rd-w-score .rd-w-val { color: var(--rd-cyan); }
+
+    .stat-section { margin: 0 !important; padding: 14px !important; border-radius: 12px !important; background: rgba(255,255,255,0.02) !important; border: 1px solid rgba(255,255,255,0.06) !important; }
+    .stat-section-title {
+        color: var(--rd-cyan) !important; font-size: 11px !important; font-weight: 800 !important; letter-spacing: 3px !important;
+        margin-bottom: 10px !important; padding-bottom: 8px !important; border-bottom: 1px solid var(--rd-border) !important;
+        text-transform: uppercase !important; font-family: var(--cy-font-display) !important;
+    }
+    .stat-row { padding: 5px 0 !important; }
+    .stat-label { color: var(--rd-fg-dim) !important; font-size: 12px !important; }
+    .stat-value { color: var(--rd-fg) !important; font-size: 13px !important; font-weight: 800 !important; font-family: var(--cy-font-mono) !important; }
+    .stat-value.hp { color: var(--rd-red) !important; }
+    .stat-bar-outer { width: 80px !important; height: 5px !important; border-radius: 3px !important; background: rgba(255,255,255,0.06) !important; }
+    .stat-bar-inner.hp-bar { background: linear-gradient(90deg, var(--rd-red), #ff6d8a) !important; }
+    #equipped-weapons-panel {
+        font-size: 12px !important; color: var(--rd-fg-dim) !important; line-height: 2 !important;
+        padding: 4px 2px !important;
+    }
+    #equipped-weapons-panel > div { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; border-bottom: 1px dashed rgba(255,255,255,0.05); }
+    #equipped-weapons-panel > div:last-child { border-bottom: none; }
+    #equipped-weapons-panel span[id^="eq-"] { color: var(--rd-cyan) !important; font-weight: 700 !important; font-family: var(--cy-font-display) !important; }
+
+    /* —— 右：仓库区 —— */
+    #panel-right {
+        flex: none !important; padding: 20px !important; overflow-y: auto !important; border-left: none !important;
+        display: flex; flex-direction: column; gap: 14px;
+    }
+    .rd-tabs { display: flex; gap: 6px; flex-wrap: wrap; padding-bottom: 12px; border-bottom: 1px solid var(--rd-border) !important; }
+    .warehouse-tab-btn {
+        padding: 7px 16px !important; border-radius: 999px !important;
+        border: 1px solid rgba(255,255,255,0.1) !important; background: rgba(255,255,255,0.02) !important;
+        color: var(--rd-fg-dim) !important; font-size: 12px !important; font-weight: 800 !important;
+        cursor: pointer !important; transition: all 0.2s !important; letter-spacing: 1px !important;
+        font-family: var(--cy-font-display) !important;
+    }
+    .warehouse-tab-btn:hover { color: var(--rd-fg) !important; border-color: var(--rd-border) !important; }
+    .warehouse-tab-btn.active {
+        border-color: var(--rd-cyan) !important; background: rgba(0,229,255,0.14) !important;
+        color: var(--rd-cyan) !important; box-shadow: 0 0 14px rgba(0,229,255,0.2) !important;
+    }
+    #backpack-bar { gap: 8px !important; margin-bottom: 0 !important; }
+    .bp-tab { border-radius: 10px !important; background: rgba(10,16,28,0.7) !important; border: 1px solid rgba(255,255,255,0.08) !important; }
+    .bp-tab.active { border-color: var(--rd-cyan) !important; box-shadow: 0 0 14px rgba(0,229,255,0.25) !important; }
+
+    #weapon-filter-bar { gap: 6px !important; margin-bottom: 0 !important; }
+    .weapon-filter-btn {
+        padding: 5px 12px !important; border-radius: 999px !important;
+        border: 1px solid rgba(255,255,255,0.1) !important; background: rgba(255,255,255,0.02) !important;
+        color: var(--rd-fg-dim) !important; font-size: 11px !important; cursor: pointer !important;
+        transition: all 0.2s !important; font-family: var(--cy-font-display) !important; font-weight: 700 !important;
+    }
+    .weapon-filter-btn:hover { color: var(--rd-fg) !important; border-color: var(--rd-border) !important; }
+    .weapon-filter-btn.active {
+        border-color: var(--rd-cyan) !important; background: rgba(0,229,255,0.14) !important;
+        color: var(--rd-cyan) !important;
+    }
+    .weapon-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important; gap: 10px !important; }
+    .weapon-item { border-radius: 12px !important; overflow: hidden; background: rgba(10,16,28,0.78) !important; border: 1px solid rgba(255,255,255,0.07) !important; backdrop-filter: blur(8px) !important; transition: all 0.2s !important; }
+    .weapon-item:hover { border-color: var(--rd-cyan) !important; transform: translateY(-2px) !important; box-shadow: 0 8px 24px rgba(0,229,255,0.15) !important; }
+    .weapon-item.equipped { border-color: var(--rd-cyan) !important; box-shadow: 0 0 16px rgba(0,229,255,0.25) !important; }
+    .wi-quality-bar { height: 4px !important; }
+    .wi-body { padding: 12px !important; }
+    .wi-name { font-family: var(--cy-font-display) !important; font-size: 14px !important; }
+    .wi-stat-label { color: var(--rd-fg-dim) !important; }
+    .wi-stat-value { color: var(--rd-fg) !important; }
+    .wi-btn { border-radius: 6px !important; font-family: var(--cy-font-display) !important; font-weight: 800 !important; letter-spacing: 1px !important; }
+    .wi-bp-badge {
+        margin-top: 8px !important; padding: 4px 10px !important; border-radius: 6px !important;
+        background: rgba(105,240,174,0.1) !important; border: 1px solid rgba(105,240,174,0.35) !important;
+        color: var(--rd-green) !important; font-size: 11px !important; font-weight: 800 !important;
+        letter-spacing: 1px !important; text-align: center !important; font-family: var(--cy-font-display) !important;
+    }
+    .wi-stat-value.wi-lv { color: var(--rd-gold) !important; font-weight: 900 !important; }
+    .wi-xp-track {
+        height: 8px !important; border-radius: 4px !important; overflow: hidden !important; margin: 5px 0 !important;
+        background: rgba(0,0,0,0.4) !important; border: 1px solid rgba(255,215,64,0.22) !important;
+    }
+    .wi-xp-fill { height: 100% !important; background: linear-gradient(90deg, var(--rd-gold), var(--rd-orange)) !important; transition: width 0.3s !important; }
+    .wi-xp-text { text-align: center !important; font-size: 10px !important; color: var(--rd-fg-dim) !important; font-family: var(--cy-font-mono) !important; }
+
+    /* ============================================================
+       3) 商城
+       ============================================================ */
+    #shop-modal { background: rgba(4,7,14,0.86) !important; backdrop-filter: blur(22px) saturate(150%) !important; }
+    #shop-modal > .modal-box {
+        width: min(1080px, 94vw) !important; max-height: 90vh !important; border-radius: 16px !important;
+        background: linear-gradient(160deg, rgba(12,18,32,0.97), rgba(8,12,22,0.98)) !important;
+        border: 1px solid var(--rd-border) !important; padding: 0 !important; overflow: hidden !important;
+        box-shadow: 0 30px 90px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,215,64,0.08) !important;
+    }
+    #shop-modal .rd-shop-head {
+        display: flex; align-items: center; justify-content: space-between; padding: 16px 24px !important;
+        background: linear-gradient(90deg, rgba(255,215,64,0.08), transparent 70%) !important;
+        border-bottom: 1px solid var(--rd-border) !important;
+    }
+    #shop-modal h2 {
+        color: var(--rd-gold) !important; font-size: 20px !important; letter-spacing: 6px !important;
+        font-family: var(--cy-font-display) !important; font-weight: 800 !important; margin: 0 !important;
+    }
+    #shop-modal h2::before { content: '◆ '; color: var(--rd-gold); }
+    #shop-gold-display {
+        color: var(--rd-gold) !important; font-size: 13px !important; font-weight: 800 !important;
+        background: rgba(255,215,64,0.1) !important; padding: 6px 14px !important; border-radius: 999px !important;
+        border: 1px solid rgba(255,215,64,0.3) !important; font-family: var(--cy-font-mono) !important;
+    }
+    #shop-buyall-btn {
+        padding: 7px 16px !important; border-radius: 999px !important; background: rgba(0,229,255,0.1) !important;
+        border: 1px solid var(--rd-cyan) !important; color: var(--rd-cyan) !important; font-size: 12px !important;
+        font-weight: 800 !important; cursor: pointer !important; letter-spacing: 2px !important;
+        font-family: var(--cy-font-display) !important; transition: all 0.2s !important;
+    }
+    #shop-buyall-btn:hover { background: rgba(0,229,255,0.2) !important; box-shadow: 0 0 16px rgba(0,229,255,0.3) !important; }
+    #shop-modal-close {
+        width: 34px !important; height: 34px !important; border-radius: 50% !important;
+        background: rgba(255,255,255,0.04) !important; border: 1px solid rgba(255,255,255,0.12) !important;
+        color: var(--rd-fg-dim) !important; font-size: 20px !important; cursor: pointer !important;
+    }
+    #shop-modal-close:hover { background: rgba(255,45,85,0.18) !important; color: var(--rd-red) !important; }
+    #shop-modal-content { padding: 20px 24px !important; }
+    #shop-filter-bar { gap: 6px !important; margin-bottom: 18px !important; padding-bottom: 14px !important; border-bottom: 1px solid rgba(255,255,255,0.06) !important; }
+    .shop-filter-btn {
+        padding: 6px 14px !important; border-radius: 999px !important;
+        border: 1px solid rgba(255,255,255,0.1) !important; background: rgba(255,255,255,0.02) !important;
+        color: var(--rd-fg-dim) !important; font-size: 11px !important; cursor: pointer !important;
+        transition: all 0.2s !important; font-family: var(--cy-font-display) !important; font-weight: 700 !important;
+    }
+    .shop-filter-btn:hover { color: var(--rd-fg) !important; border-color: var(--rd-border) !important; }
+    .shop-filter-btn.active {
+        border-color: var(--rd-cyan) !important; background: rgba(0,229,255,0.14) !important;
+        color: var(--rd-cyan) !important;
+    }
+    .shop-category { margin-bottom: 20px !important; }
+    .shop-category-header {
+        display: flex; align-items: center; gap: 10px; padding: 10px 14px !important; margin-bottom: 12px !important;
+        background: linear-gradient(90deg, rgba(0,229,255,0.08), transparent) !important;
+        border-left: 3px solid var(--rd-cyan) !important; border-radius: 0 8px 8px 0 !important;
+    }
+    .shop-category-icon { font-size: 18px !important; }
+    .shop-category-title { color: var(--rd-cyan) !important; font-size: 14px !important; font-weight: 800 !important; letter-spacing: 3px !important; font-family: var(--cy-font-display) !important; }
+    .shop-category-count { color: var(--rd-fg-dim) !important; font-size: 11px !important; margin-left: auto !important; font-family: var(--cy-font-mono) !important; }
+
+    .rd-shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+    .shop-item {
+        padding: 14px !important; border-radius: 12px !important; background: rgba(10,16,28,0.78) !important;
+        border: 1px solid rgba(255,255,255,0.07) !important; overflow: hidden; position: relative;
+        backdrop-filter: blur(8px) !important; transition: all 0.25s !important;
+    }
+    .shop-item:hover { border-color: rgba(255,215,64,0.45) !important; transform: translateY(-3px) !important; box-shadow: 0 12px 32px rgba(255,215,64,0.15) !important; }
+    .shop-item::before { width: 4px !important; background: var(--rd-gold) !important; }
+    .shop-header { gap: 12px !important; margin-bottom: 10px !important; }
+    .shop-icon { font-size: 30px !important; filter: drop-shadow(0 0 6px rgba(255,215,64,0.3)); }
+    .shop-name { font-size: 15px !important; font-family: var(--cy-font-display) !important; font-weight: 800 !important; }
+    .shop-price { color: var(--rd-gold) !important; font-size: 13px !important; font-weight: 800 !important; font-family: var(--cy-font-mono) !important; }
+    .shop-desc { color: var(--rd-fg-dim) !important; font-size: 11px !important; margin-bottom: 8px !important; }
+    .shop-feature { font-size: 11px !important; line-height: 1.8 !important; color: #a8b3c1 !important; }
+    .shop-feature li::before { color: var(--rd-cyan) !important; }
+    .hero-tag {
+        font-size: 9px !important; padding: 2px 7px !important; border-radius: 4px !important; letter-spacing: 1px !important;
+        font-family: var(--cy-font-display) !important;
+    }
+    .shop-buy-btn {
+        width: 100% !important; padding: 10px !important; margin-top: 12px !important; border-radius: 8px !important;
+        background: linear-gradient(135deg, rgba(255,215,64,0.18), rgba(255,170,0,0.1)) !important;
+        color: var(--rd-gold) !important; font-size: 13px !important; font-weight: 800 !important;
+        border: 1px solid rgba(255,215,64,0.45) !important; letter-spacing: 2px !important;
+        font-family: var(--cy-font-display) !important; cursor: pointer !important; transition: all 0.2s !important;
+    }
+    .shop-buy-btn:hover:not(.owned-btn) { background: linear-gradient(135deg, rgba(255,215,64,0.3), rgba(255,170,0,0.18)) !important; box-shadow: 0 0 20px rgba(255,215,64,0.35) !important; transform: translateY(-2px) !important; }
+    .shop-buy-btn.owned-btn {
+        background: rgba(105,240,174,0.1) !important; color: var(--rd-green) !important;
+        border-color: rgba(105,240,174,0.35) !important; cursor: default !important;
+    }
+
+    /* —— 购买确认弹窗 —— */
+    #buy-confirm {
+        width: 360px !important; border-radius: 16px !important; padding: 22px !important;
+        background: linear-gradient(160deg, rgba(12,18,32,0.98), rgba(8,12,22,0.98)) !important;
+        border: 1px solid rgba(255,215,64,0.35) !important;
+        box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 30px rgba(255,215,64,0.15) !important;
+    }
+    #buy-confirm h3 { color: var(--rd-gold) !important; font-size: 18px !important; letter-spacing: 3px !important; font-family: var(--cy-font-display) !important; }
+    #buy-confirm .confirm-price { color: var(--rd-gold) !important; font-family: var(--cy-font-mono) !important; }
+    #buy-confirm .confirm-btns button { border-radius: 8px !important; font-family: var(--cy-font-display) !important; font-weight: 800 !important; letter-spacing: 1px !important; }
+    #buy-yes { background: rgba(255,215,64,0.18) !important; color: var(--rd-gold) !important; border: 1px solid rgba(255,215,64,0.45) !important; }
+    #buy-no { background: rgba(255,255,255,0.04) !important; color: var(--rd-fg-dim) !important; }
+
+    /* —— 移动端适配 —— */
+    @media (max-width: 720px) {
+        #panel-body { grid-template-columns: 1fr !important; }
+        #panel-left { border-right: none !important; border-bottom: 1px solid var(--rd-border) !important; }
+        .rd-hud-tc { width: 92vw; }
+        #boss-bar-container, #boss2-bar-container { width: 92vw !important; }
+        .rd-shop-grid { grid-template-columns: 1fr !important; }
+    }
+
 </style>
 </head>
 <body>
@@ -2256,121 +2777,145 @@
 
 <div id="fps-counter" style="position:fixed;top:8px;right:8px;color:#0f0;font-size:12px;z-index:99;font-family:monospace;pointer-events:none;"></div>
 <div id="hud">
-    <div id="health-bar-container">
-        <div id="health-row">
-            <div id="health-icon">+</div>
-            <div id="health-bar-outer"><div id="health-bar-inner"></div></div>
-            <div id="health-text">1000</div>
-        </div>
-        <div id="shield-row">
-            <div id="shield-icon">◆</div>
-            <div id="shield-bar-outer"><div id="shield-bar-inner"></div></div>
-            <div id="shield-text">1000</div>
-        </div>
-        <div id="energy-row">
-            <div id="energy-icon">⚡</div>
-            <div id="energy-bar-outer"><div id="energy-bar-inner"></div></div>
-            <div id="energy-text">200</div>
-        </div>
-        <div id="soulpower-row" style="display:none;">
-            <div id="soulpower-icon">☠</div>
-            <div id="soulpower-bar-outer"><div id="soulpower-bar-inner"></div></div>
-            <div id="soulpower-text">100</div>
-        </div>
-        <div id="oxygen-row" style="display:none;">
-            <div id="oxygen-icon">🫁</div>
-            <div id="oxygen-bar-outer"><div id="oxygen-bar-inner"></div></div>
-            <div id="oxygen-text">100</div>
+    <!-- 顶部左：生命/护盾/能量/魂力/氧气 主面板 -->
+    <div class="rd-hud-tl">
+        <div id="health-bar-container" class="rd-panel">
+            <div id="health-row">
+                <div id="health-icon">+</div>
+                <div id="health-bar-outer"><div id="health-bar-inner"></div></div>
+                <div id="health-text">1000</div>
+            </div>
+            <div id="shield-row">
+                <div id="shield-icon">◆</div>
+                <div id="shield-bar-outer"><div id="shield-bar-inner"></div></div>
+                <div id="shield-text">1000</div>
+            </div>
+            <div id="energy-row">
+                <div id="energy-icon">⚡</div>
+                <div id="energy-bar-outer"><div id="energy-bar-inner"></div></div>
+                <div id="energy-text">200</div>
+            </div>
+            <div id="soulpower-row" style="display:none;">
+                <div id="soulpower-icon">☠</div>
+                <div id="soulpower-bar-outer"><div id="soulpower-bar-inner"></div></div>
+                <div id="soulpower-text">100</div>
+            </div>
+            <div id="oxygen-row" style="display:none;">
+                <div id="oxygen-icon">🫁</div>
+                <div id="oxygen-bar-outer"><div id="oxygen-bar-inner"></div></div>
+                <div id="oxygen-text">100</div>
+            </div>
         </div>
     </div>
-    <div id="heat-warning" class="hud-indicator" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);color:#ff4400;font-size:24px;font-weight:bold;text-shadow:0 0 10px #ff4400,0 0 20px #ff2200;z-index:100;pointer-events:none;">高温区域!</div>
-    <div id="time-effect-indicator" class="hud-indicator" style="display:none;position:fixed;top:80px;left:50%;transform:translateX(-50%);color:#aaccff;font-size:18px;font-weight:bold;text-shadow:0 0 8px rgba(100,150,255,0.8);z-index:100;pointer-events:none;"></div>
-    <div id="time-shield-indicator" class="hud-indicator" style="display:none;position:fixed;top:110px;left:50%;transform:translateX(-50%);color:#ffdd44;font-size:16px;font-weight:bold;text-shadow:0 0 8px rgba(255,220,60,0.8);z-index:100;pointer-events:none;">⏳ 时间庇护</div>
-    <div class="weapon-slot-container">
-        <div class="weapon-slot active" id="weapon-slot-1"><span class="weapon-icon">—</span><span class="weapon-key">1</span><span class="weapon-ammo">空</span></div>
-        <div class="weapon-slot" id="weapon-slot-2"><span class="weapon-icon">—</span><span class="weapon-key">2</span><span class="weapon-ammo">空</span></div>
-        <div class="weapon-slot" id="weapon-slot-3"><span class="weapon-icon">—</span><span class="weapon-key">3</span><span class="weapon-ammo">空</span></div>
-        <div class="weapon-slot" id="weapon-slot-4"><span class="weapon-icon">—</span><span class="weapon-key">4</span><span class="weapon-ammo">空</span></div>
-        <div class="weapon-slot" id="weapon-slot-5"><span class="weapon-icon">—</span><span class="weapon-key">5</span><span class="weapon-ammo">空</span></div>
+
+    <!-- 顶部中：波次/难度/BOSS双血条/时间效果 -->
+    <div class="rd-hud-tc">
+        <div id="wave-display"><span class="wave-label">波次</span><span class="wave-num" id="wave-num">准备中</span><span class="wave-progress" id="wave-progress"></span></div>
+        <div id="difficulty-display" style="display:none;"></div>
+        <div id="boss-bar-container">
+            <div id="boss-bar-header">
+                <div id="boss-label">BOSS</div>
+                <div id="boss-hp-text">1,000,000 / 1,000,000</div>
+            </div>
+            <div id="boss-bar-frame">
+                <div id="boss-bar-fill">
+                    <div id="boss-bar-fill-inner" class="hp-high"></div>
+                </div>
+                <div id="boss-bar-damage" style="width:0%;right:2px;"></div>
+                <div class="boss-bar-divider" style="left:25%;"></div>
+                <div class="boss-bar-divider" style="left:50%;"></div>
+                <div class="boss-bar-divider" style="left:75%;"></div>
+            </div>
+            <div id="boss-bar-ticks"></div>
+        </div>
+        <!-- 双BOSS第二血条 -->
+        <div id="boss2-bar-container">
+            <div id="boss2-bar-header">
+                <div id="boss2-label">BOSS</div>
+                <div id="boss2-hp-text">1,000,000 / 1,000,000</div>
+            </div>
+            <div id="boss2-bar-frame">
+                <div id="boss2-bar-fill">
+                    <div id="boss2-bar-fill-inner" class="hp-high"></div>
+                </div>
+                <div id="boss2-bar-damage" style="width:0%;right:2px;"></div>
+                <div class="boss-bar-divider" style="left:25%;"></div>
+                <div class="boss-bar-divider" style="left:50%;"></div>
+                <div class="boss-bar-divider" style="left:75%;"></div>
+            </div>
+            <div id="boss2-bar-ticks"></div>
+        </div>
+        <div id="time-effect-indicator" class="hud-indicator" style="display:none;"></div>
+        <div id="time-shield-indicator" class="hud-indicator" style="display:none;">⏳ 时间庇护</div>
     </div>
-    <div id="backpack-hud-indicator" style="display:none;"></div>
+
+    <!-- 顶部右：得分/金币/连杀/击杀播报 -->
+    <div class="rd-hud-tr">
+        <div id="score-display" class="rd-panel"><span class="label">得分</span><span id="score-value">0</span></div>
+        <div id="gold-display" style="display:none;"><span class="gold-icon">&#11044;</span><span class="gold-val" id="gold-value">0</span></div>
+        <div id="streak-counter">
+            <span class="streak-count" id="streak-count-num">0</span>
+            <div><div class="streak-text">连杀</div><div class="streak-dots"><div class="streak-dot" id="sd1"></div><div class="streak-dot" id="sd2"></div><div class="streak-dot" id="sd3"></div><div class="streak-dot" id="sd4"></div><div class="streak-dot" id="sd5"></div></div></div>
+        </div>
+        <div id="kill-feed"></div>
+    </div>
+
+    <!-- 底部左：技能槽 + 武器技能 + Debuff + 状态指示器群 -->
+    <div class="rd-hud-bl">
+        <div id="skill-e" class="skill-slot">
+            <div class="skill-icon-box"><div class="skill-overlay" id="skill-e-overlay"></div><div class="skill-text">&#9889;</div></div>
+            <div class="skill-info"><div class="skill-label">闪电链 [E]</div><div class="skill-timer" id="skill-e-timer">就绪</div></div>
+        </div>
+        <div id="skill-x" class="skill-slot">
+            <div class="skill-icon-box"><div class="skill-overlay" id="skill-x-overlay"></div><div class="skill-text">&#9889;</div></div>
+            <div class="skill-info"><div class="skill-label">雷霆万钧 [X]</div><div class="skill-timer" id="skill-x-timer">就绪</div></div>
+        </div>
+        <div id="skill-storm" class="skill-slot">
+            <div class="skill-icon-box"><div class="skill-overlay" id="skill-storm-overlay"></div><div class="skill-text">&#127744;</div></div>
+            <div class="skill-info"><div class="skill-label">锁敌风暴 [E]</div><div class="skill-timer" id="skill-storm-timer">就绪</div></div>
+        </div>
+        <div id="weapon-skills-panel"></div>
+        <div id="debuff-bar"></div>
+        <div id="damage-stat-panel" class="hud-indicator">⚔ 累计伤害 <span id="damage-stat-value">0.0</span></div>
+        <div id="cube-amplify-indicator" class="hud-indicator" style="display:none;">🧊 魔方增幅 0%</div>
+        <div id="third-person-indicator">第三人称视角 [O]</div>
+        <div id="tumo-shield-indicator" class="hud-indicator" style="display:none;">⚔ 屠魔护体 ·90%减伤</div>
+        <div id="lock-storm-indicator">锁敌风暴 激活中</div>
+        <div id="burn-indicator">灼烧中</div>
+        <div id="shield-indicator">无敌金身</div>
+    </div>
+
+    <!-- 底部中：武器轮 + 弹药 + 背包指示 -->
+    <div class="rd-hud-bc">
+        <div class="weapon-slot-container">
+            <div class="weapon-slot active" id="weapon-slot-1"><span class="weapon-icon">—</span><span class="weapon-key">1</span><span class="weapon-ammo">空</span></div>
+            <div class="weapon-slot" id="weapon-slot-2"><span class="weapon-icon">—</span><span class="weapon-key">2</span><span class="weapon-ammo">空</span></div>
+            <div class="weapon-slot" id="weapon-slot-3"><span class="weapon-icon">—</span><span class="weapon-key">3</span><span class="weapon-ammo">空</span></div>
+            <div class="weapon-slot" id="weapon-slot-4"><span class="weapon-icon">—</span><span class="weapon-key">4</span><span class="weapon-ammo">空</span></div>
+            <div class="weapon-slot" id="weapon-slot-5"><span class="weapon-icon">—</span><span class="weapon-key">5</span><span class="weapon-ammo">空</span></div>
+        </div>
+        <div id="ammo-display">
+            <span class="ammo-count"><span id="ammo-current">50</span><span class="ammo-separator">/</span><span class="ammo-reserve">500</span></span>
+            <span class="reload-text">换弹中...</span>
+        </div>
+        <div id="ammo-pack-hint">进入补给区补充弹药!</div>
+        <div id="backpack-hud-indicator" style="display:none;"></div>
+    </div>
+
+    <!-- 底部右：当前武器名 + 充能条 + 模式指示 -->
+    <div class="rd-hud-br">
+        <div id="current-weapon-name" class="hud-indicator" style="display:none;"></div>
+        <div id="moonbow-charge-bar" class="hud-indicator" style="display:none;">
+            <div id="moonbow-charge-fill" style="width:0%;height:100%;background:linear-gradient(90deg,#4fc3f7,#e040fb);transition:width 0.08s linear;"></div>
+            <span id="moonbow-charge-text" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:11px;font-weight:bold;text-shadow:0 1px 3px rgba(0,0,0,0.9);white-space:nowrap;">1 发/秒</span>
+        </div>
+        <div id="dawnlight-power" class="hud-indicator" style="display:none;">黎明之力: +0%</div>
+        <div id="parasite-cannon-indicator" class="hud-indicator" style="display:none;">炮狙模式</div>
+    </div>
+
+    <!-- 独立浮层（不进象限容器） -->
+    <div id="heat-warning" class="hud-indicator" style="display:none;color:#ff4400;font-size:24px;font-weight:bold;text-shadow:0 0 10px #ff4400,0 0 20px #ff2200;z-index:100;pointer-events:none;">高温区域!</div>
     <div id="backpack-switch-overlay"></div>
-    <div id="third-person-indicator">第三人称视角 [O]</div>
-    <div id="cube-amplify-indicator" class="hud-indicator" style="position:absolute;top:120px;left:16px;color:#00e5ff;font-size:13px;font-weight:bold;text-shadow:0 0 8px rgba(0,229,255,0.6);display:none;animation:cubePulse 1s ease-in-out infinite;">🧊 魔方增幅 0%</div>
-    <div id="damage-stat-panel" class="hud-indicator" style="position:absolute;top:148px;left:16px;color:#ff6659;font-size:13px;font-weight:bold;text-shadow:0 0 8px rgba(255,102,89,0.6);">⚔ 累计伤害 <span id="damage-stat-value">0.0</span></div>
-    <!-- [Patch] cubePulse keyframes moved to head -->
-    <div id="boss-bar-container">
-        <div id="boss-bar-header">
-            <div id="boss-label">BOSS</div>
-            <div id="boss-hp-text">1,000,000 / 1,000,000</div>
-        </div>
-        <div id="boss-bar-frame">
-            <div id="boss-bar-fill">
-                <div id="boss-bar-fill-inner" class="hp-high"></div>
-            </div>
-            <div id="boss-bar-damage" style="width:0%;right:2px;"></div>
-            <div class="boss-bar-divider" style="left:25%;"></div>
-            <div class="boss-bar-divider" style="left:50%;"></div>
-            <div class="boss-bar-divider" style="left:75%;"></div>
-        </div>
-        <div id="boss-bar-ticks"></div>
-    </div>
-    <!-- 双BOSS第二血条 -->
-    <div id="boss2-bar-container">
-        <div id="boss2-bar-header">
-            <div id="boss2-label">BOSS</div>
-            <div id="boss2-hp-text">1,000,000 / 1,000,000</div>
-        </div>
-        <div id="boss2-bar-frame">
-            <div id="boss2-bar-fill">
-                <div id="boss2-bar-fill-inner" class="hp-high"></div>
-            </div>
-            <div id="boss2-bar-damage" style="width:0%;right:2px;"></div>
-            <div class="boss-bar-divider" style="left:25%;"></div>
-            <div class="boss-bar-divider" style="left:50%;"></div>
-            <div class="boss-bar-divider" style="left:75%;"></div>
-        </div>
-        <div id="boss2-bar-ticks"></div>
-    </div>
-    <div id="shield-indicator">无敌金身</div>
-    <div id="burn-indicator">灼烧中</div>
-    <div id="score-display"><span class="label">得分</span><span id="score-value">0</span></div>
-    <div id="gold-display" style="display:none;"><span class="gold-icon">&#11044;</span><span class="gold-val" id="gold-value">0</span></div>
-    <div id="wave-display"><span class="wave-label">波次</span><span class="wave-num" id="wave-num">准备中</span><span class="wave-progress" id="wave-progress"></span></div>
-    <div id="difficulty-display" style="display:none;padding:3px 10px;border-radius:4px;font-size:11px;font-weight:bold;letter-spacing:1px;pointer-events:none;"></div>
-    <div id="ammo-display">
-        <span class="ammo-count"><span id="ammo-current">50</span><span class="ammo-separator">/</span><span class="ammo-reserve">500</span></span>
-        <span class="reload-text">换弹中...</span>
-    </div>
-    <div id="ammo-pack-hint">进入补给区补充弹药!</div>
-    <!-- 皓月超速箭充能条 -->
-    <div id="moonbow-charge-bar" class="hud-indicator" style="display:none;position:absolute;bottom:120px;right:16px;width:160px;height:22px;padding:0;background:rgba(8,12,20,0.85);border:1px solid rgba(79,195,247,0.4);border-radius:6px;overflow:hidden;z-index:10;box-shadow:0 0 12px rgba(79,195,247,0.15);">
-        <div id="moonbow-charge-fill" style="width:0%;height:100%;background:linear-gradient(90deg,#4fc3f7,#e040fb);border-radius:5px;transition:width 0.08s linear;"></div>
-        <span id="moonbow-charge-text" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:11px;font-weight:bold;text-shadow:0 1px 3px rgba(0,0,0,0.9);white-space:nowrap;">1 发/秒</span>
-    </div>
-    <div id="dawnlight-power" class="hud-indicator" style="display:none;position:absolute;bottom:120px;left:50%;transform:translateX(-50%);color:#00ffff;font-size:13px;font-weight:bold;text-shadow:0 0 8px #00ffff;z-index:10;">黎明之力: +0%</div>
-    <div id="parasite-cannon-indicator" class="hud-indicator" style="display:none;position:absolute;bottom:140px;left:50%;transform:translateX(-50%);color:#ffd700;font-size:13px;font-weight:bold;text-shadow:0 0 8px #ffd700;z-index:10;">炮狙模式</div>
-    <div id="skill-e" class="skill-slot">
-        <div class="skill-icon-box"><div class="skill-overlay" id="skill-e-overlay"></div><div class="skill-text">&#9889;</div></div>
-        <div class="skill-info"><div class="skill-label">闪电链 [E]</div><div class="skill-timer" id="skill-e-timer">就绪</div></div>
-    </div>
-    <div id="skill-x" class="skill-slot">
-        <div class="skill-icon-box"><div class="skill-overlay" id="skill-x-overlay"></div><div class="skill-text">&#9889;</div></div>
-        <div class="skill-info"><div class="skill-label">雷霆万钧 [X]</div><div class="skill-timer" id="skill-x-timer">就绪</div></div>
-    </div>
-    <div id="skill-storm" class="skill-slot">
-        <div class="skill-icon-box"><div class="skill-overlay" id="skill-storm-overlay"></div><div class="skill-text">&#127744;</div></div>
-        <div class="skill-info"><div class="skill-label">锁敌风暴 [E]</div><div class="skill-timer" id="skill-storm-timer">就绪</div></div>
-    </div>
-    <div id="debuff-bar" style="position:absolute;bottom:70px;left:70px;display:flex;gap:6px;pointer-events:none;z-index:95;"></div>
-    <div id="weapon-skills-panel"></div>
-    <div id="current-weapon-name" class="hud-indicator" style="position:absolute;bottom:155px;right:16px;color:#e6edf3;font-size:14px;font-weight:bold;text-shadow:0 0 8px rgba(0,229,255,0.4);display:none;pointer-events:none;letter-spacing:1px;z-index:95;"></div>
-    <div id="lock-storm-indicator">锁敌风暴 激活中</div>
-    <div id="kill-feed"></div>
-    <div id="streak-counter">
-        <span class="streak-count" id="streak-count-num">0</span>
-        <div><div class="streak-text">连杀</div><div class="streak-dots"><div class="streak-dot" id="sd1"></div><div class="streak-dot" id="sd2"></div><div class="streak-dot" id="sd3"></div><div class="streak-dot" id="sd4"></div><div class="streak-dot" id="sd5"></div></div></div>
-    </div>
 </div>
 
 <div id="streak-popup"><div class="streak-icon" id="streak-icon-text"></div><div class="streak-label" id="streak-label-text"></div></div>
@@ -2394,8 +2939,6 @@
 <div id="acid-overlay"></div>
 <div id="invincible-overlay"></div>
 <div id="invincible-indicator">🛡️ 无敌护盾</div>
-<div id="tumo-shield-indicator" class="hud-indicator" style="position:absolute;top:80px;right:25px;color:#ff1744;font-size:14px;font-weight:bold;text-shadow:0 0 10px rgba(255,23,68,0.8);display:none;animation:tumoShieldPulse 1s ease-in-out infinite;">⚔ 屠魔护体 ·90%减伤</div>
-<!-- [Patch] tumoShieldPulse keyframes moved to head -->
 <div id="invincible-bar-container"><span id="invincible-bar-label">无敌</span><div id="invincible-bar-outer"><div id="invincible-bar-inner"></div></div></div>
 <div id="pocket-dim-overlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse at center,rgba(0,80,0,0.4),rgba(0,20,0,0.8));display:none;z-index:86;pointer-events:none;"></div>
 <div id="pocket-dim-hud" style="position:fixed;bottom:120px;left:50%;transform:translateX(-50%);display:none;z-index:160;text-align:center;color:#00ff44;pointer-events:none;">
@@ -2461,56 +3004,65 @@
         <div id="panel-header">
             <div style="display:flex;align-items:center;gap:12px;">
                 <h2>个人面板</h2>
-                <button id="open-shop-btn" style="padding:6px 14px;border-radius:6px;border:1px solid rgba(255,215,0,0.3);background:rgba(255,215,0,0.08);color:var(--cy-gold);font-size:12px;font-weight:bold;cursor:pointer;letter-spacing:1px;transition:all 0.2s;">商城</button>
+                <button id="open-shop-btn">商城</button>
             </div>
             <button id="panel-close">&times;</button>
         </div>
         <div id="panel-body">
-            <!-- 左侧：属性 & 已装备武器 -->
+            <!-- 左侧：角色档案 + 钱包 + 属性 + 已装备 -->
             <div id="panel-left">
+                <div class="rd-profile-card">
+                    <div class="rd-profile-avatar">⚔</div>
+                    <div class="rd-profile-name">突击者</div>
+                    <div class="rd-profile-rank">COMBAT OPERATIVE</div>
+                </div>
+                <div class="rd-wallet">
+                    <div class="rd-w-gold"><div class="rd-w-label">金币</div><div class="rd-w-val" id="panel-gold">0</div></div>
+                    <div class="rd-w-score"><div class="rd-w-label">累计得分</div><div class="rd-w-val" id="panel-score">0</div></div>
+                </div>
                 <div class="stat-section">
                     <div class="stat-section-title">角色属性</div>
                     <div class="stat-row"><span class="stat-label">生命值</span><span class="stat-value hp" id="panel-hp">1000/1000</span><div class="stat-bar-outer"><div class="stat-bar-inner hp-bar" id="panel-hp-bar" style="width:100%"></div></div></div>
-                    <div class="stat-row"><span class="stat-label">护盾值</span><span class="stat-value" id="panel-shield" style="color:#4fc3f7;">1000</span></div>
-                    <div class="stat-row"><span class="stat-label">能量值</span><span class="stat-value" id="panel-energy" style="color:#b388ff;">200</span></div>
-                    <div class="stat-row"><span class="stat-label">魂力值</span><span class="stat-value" id="panel-soulpower" style="color:#ff6d00;">100</span></div>
-                    <div class="stat-row"><span class="stat-label">移速值</span><span class="stat-value" id="panel-movespeed" style="color:#69f0ae;">8</span></div>
-                    <div class="stat-row"><span class="stat-label">暴击率</span><span class="stat-value" id="panel-critchance" style="color:#ffd740;">5%</span></div>
-                    <div class="stat-row"><span class="stat-label">每秒回复生命</span><span class="stat-value" id="panel-hpregen" style="color:#ff8a80;">0</span></div>
-                    <div class="stat-row"><span class="stat-label">每秒回复护盾</span><span class="stat-value" id="panel-shieldregen" style="color:#80d8ff;">10</span></div>
-                    <div class="stat-row"><span class="stat-label">每秒回复能量</span><span class="stat-value" id="panel-energyregen" style="color:#ea80fc;">1</span></div>
+                    <div class="stat-row"><span class="stat-label">护盾值</span><span class="stat-value" id="panel-shield">1000</span></div>
+                    <div class="stat-row"><span class="stat-label">能量值</span><span class="stat-value" id="panel-energy">200</span></div>
+                    <div class="stat-row"><span class="stat-label">魂力值</span><span class="stat-value" id="panel-soulpower">100</span></div>
+                    <div class="stat-row"><span class="stat-label">移速值</span><span class="stat-value" id="panel-movespeed">8</span></div>
+                    <div class="stat-row"><span class="stat-label">暴击率</span><span class="stat-value" id="panel-critchance">5%</span></div>
+                    <div class="stat-row"><span class="stat-label">每秒回复生命</span><span class="stat-value" id="panel-hpregen">0</span></div>
+                    <div class="stat-row"><span class="stat-label">每秒回复护盾</span><span class="stat-value" id="panel-shieldregen">10</span></div>
+                    <div class="stat-row"><span class="stat-label">每秒回复能量</span><span class="stat-value" id="panel-energyregen">1</span></div>
                 </div>
                 <div class="stat-section">
                     <div class="stat-section-title">已装备武器</div>
-                    <div id="equipped-weapons-panel" style="font-size:11px;color:#aaa;line-height:1.8;">
-                        <div>主武器：<span id="eq-primary" style="color:#fff;">雷霆之怒</span></div>
-                        <div>副武器：<span id="eq-secondary" style="color:#fff;">幽影双枪</span></div>
-                        <div>近战武器：<span id="eq-melee" style="color:#fff;">雷霆战刃</span></div>
-                        <div>投掷武器：<span id="eq-grenade" style="color:#fff;">爆炎手雷</span></div>
-                        <div>战术武器：<span id="eq-tactical" style="color:#fff;">无</span></div>
+                    <div id="equipped-weapons-panel">
+                        <div>主武器：<span id="eq-primary">雷霆之怒</span></div>
+                        <div>副武器：<span id="eq-secondary">幽影双枪</span></div>
+                        <div>近战武器：<span id="eq-melee">雷霆战刃</span></div>
+                        <div>投掷武器：<span id="eq-grenade">爆炎手雷</span></div>
+                        <div>战术武器：<span id="eq-tactical">无</span></div>
                     </div>
                 </div>
             </div>
-            <!-- 右侧：武器仓库 / 材料仓库 -->
+            <!-- 右侧：武器仓库 / 材料仓库 / 天赋 / 成就 / 统计 -->
             <div id="panel-right">
                 <!-- 仓库切换标签 -->
-                <div style="display:flex;align-items:center;margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:10px;gap:4px;flex-wrap:wrap;">
-                    <button class="warehouse-tab-btn active btn btn--sm btn--ghost" data-tab="weapon" style="padding:4px 14px;border-radius:4px;border:1px solid rgba(0,229,255,0.3);background:rgba(0,229,255,0.15);color:#00e5ff;font-size:12px;font-weight:bold;cursor:pointer;transition:all 0.2s;letter-spacing:1px;">武器仓库</button>
-                    <button class="warehouse-tab-btn btn btn--sm btn--ghost" data-tab="material" style="padding:4px 14px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:12px;font-weight:bold;cursor:pointer;transition:all 0.2s;letter-spacing:1px;">材料仓库</button>
-                    <button class="warehouse-tab-btn btn btn--sm btn--ghost" data-tab="talent" style="padding:4px 14px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:12px;font-weight:bold;cursor:pointer;transition:all 0.2s;letter-spacing:1px;">天赋</button>
-                    <button class="warehouse-tab-btn btn btn--sm btn--ghost" data-tab="achievement" style="padding:4px 14px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:12px;font-weight:bold;cursor:pointer;transition:all 0.2s;letter-spacing:1px;">成就</button>
-                    <button class="warehouse-tab-btn btn btn--sm btn--ghost" data-tab="stats" style="padding:4px 14px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:12px;font-weight:bold;cursor:pointer;transition:all 0.2s;letter-spacing:1px;">统计</button>
+                <div class="rd-tabs">
+                    <button class="warehouse-tab-btn active" data-tab="weapon">武器仓库</button>
+                    <button class="warehouse-tab-btn" data-tab="material">材料仓库</button>
+                    <button class="warehouse-tab-btn" data-tab="talent">天赋</button>
+                    <button class="warehouse-tab-btn" data-tab="achievement">成就</button>
+                    <button class="warehouse-tab-btn" data-tab="stats">统计</button>
                 </div>
                 <!-- 武器仓库内容 -->
                 <div id="tab-weapon-content">
                     <div id="backpack-bar"></div>
-                    <div id="weapon-filter-bar" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
-                        <button class="weapon-filter-btn active" data-filter="all" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(0,229,255,0.3);background:rgba(0,229,255,0.15);color:#00e5ff;font-size:11px;cursor:pointer;transition:all 0.2s;">全部</button>
-                        <button class="weapon-filter-btn" data-filter="primary" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:11px;cursor:pointer;transition:all 0.2s;">主武器</button>
-                        <button class="weapon-filter-btn" data-filter="secondary" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:11px;cursor:pointer;transition:all 0.2s;">副武器</button>
-                        <button class="weapon-filter-btn" data-filter="melee" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:11px;cursor:pointer;transition:all 0.2s;">近战武器</button>
-                        <button class="weapon-filter-btn" data-filter="grenade" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:11px;cursor:pointer;transition:all 0.2s;">投掷武器</button>
-                        <button class="weapon-filter-btn" data-filter="tactical" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:11px;cursor:pointer;transition:all 0.2s;">战术武器</button>
+                    <div id="weapon-filter-bar">
+                        <button class="weapon-filter-btn active" data-filter="all">全部</button>
+                        <button class="weapon-filter-btn" data-filter="primary">主武器</button>
+                        <button class="weapon-filter-btn" data-filter="secondary">副武器</button>
+                        <button class="weapon-filter-btn" data-filter="melee">近战武器</button>
+                        <button class="weapon-filter-btn" data-filter="grenade">投掷武器</button>
+                        <button class="weapon-filter-btn" data-filter="tactical">战术武器</button>
                     </div>
                     <div id="tab-warehouse">
                         <div class="weapon-grid" id="weapon-grid">
@@ -2578,27 +3130,27 @@
 
 <!-- ====== 商城弹窗 ====== -->
 <div id="shop-modal" class="modal-overlay" style="display:none;">
-    <div class="modal-box" style="width:min(960px,92vw);max-height:88vh;display:flex;flex-direction:column;border-radius:var(--cy-radius);overflow:hidden;padding:0;">
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 22px;background:rgba(0,229,255,0.04);border-bottom:1px solid rgba(0,229,255,0.1);">
+    <div class="modal-box" style="display:flex;flex-direction:column;">
+        <div class="rd-shop-head">
             <div style="display:flex;align-items:center;gap:12px;">
-                <h2 style="color:#ffd700;font-size:18px;letter-spacing:3px;font-weight:600;margin:0;">商城</h2>
-                <span id="shop-gold-display" style="color:#ffd740;font-size:13px;font-weight:bold;background:rgba(255,215,0,0.08);padding:4px 10px;border-radius:5px;border:1px solid rgba(255,215,0,0.2);">0 金币</span>
+                <h2>商城</h2>
+                <span id="shop-gold-display">0 金币</span>
             </div>
             <div style="display:flex;align-items:center;gap:8px;">
-                <button id="shop-buyall-btn" style="padding:6px 14px;border-radius:6px;background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.3);color:#00e5ff;font-size:12px;font-weight:bold;cursor:pointer;transition:all 0.2s;letter-spacing:1px;">一键购买</button>
-                <button id="shop-modal-close" style="width:32px;height:32px;border-radius:6px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:#8b949e;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;line-height:1;">&times;</button>
+                <button id="shop-buyall-btn">一键购买</button>
+                <button id="shop-modal-close">&times;</button>
             </div>
         </div>
-        <div style="flex:1;overflow-y:auto;padding:20px;" id="shop-modal-content">
+        <div id="shop-modal-content" style="flex:1;overflow-y:auto;">
                     <!-- 商城分类筛选 -->
-                    <div id="shop-filter-bar" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;">
-                        <button class="shop-filter-btn" data-filter="all" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(0,229,255,0.3);background:rgba(0,229,255,0.15);color:#00e5ff;font-size:11px;cursor:pointer;transition:all 0.2s;">全部</button>
-                        <button class="shop-filter-btn" data-filter="primary" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:11px;cursor:pointer;transition:all 0.2s;">主武器</button>
-                        <button class="shop-filter-btn" data-filter="secondary" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:11px;cursor:pointer;transition:all 0.2s;">副武器</button>
-                        <button class="shop-filter-btn" data-filter="melee" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:11px;cursor:pointer;transition:all 0.2s;">近战武器</button>
-                        <button class="shop-filter-btn" data-filter="grenade" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:11px;cursor:pointer;transition:all 0.2s;">投掷武器</button>
-                        <button class="shop-filter-btn" data-filter="tactical" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:11px;cursor:pointer;transition:all 0.2s;">战术武器</button>
-                        <button class="shop-filter-btn" data-filter="material" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:11px;cursor:pointer;transition:all 0.2s;">材料</button>
+                    <div id="shop-filter-bar">
+                        <button class="shop-filter-btn active" data-filter="all">全部</button>
+                        <button class="shop-filter-btn" data-filter="primary">主武器</button>
+                        <button class="shop-filter-btn" data-filter="secondary">副武器</button>
+                        <button class="shop-filter-btn" data-filter="melee">近战武器</button>
+                        <button class="shop-filter-btn" data-filter="grenade">投掷武器</button>
+                        <button class="shop-filter-btn" data-filter="tactical">战术武器</button>
+                        <button class="shop-filter-btn" data-filter="material">材料</button>
                     </div>
                     <div id="shop-items-container"></div>
                     <!-- 材料分区已移除 -->
@@ -2733,7 +3285,7 @@ function buildShop() {
     const WF = window.WEAPON_FULL_DESC;
     const gwd = window.getWeaponBaseDmg;
     if (!WD) return;
-    const qualityColors = {'神级':'#ff1744','传说级':'#e040fb','英雄级':'#ffd700'};
+    const qualityColors = {'神级':'#ff2d55','传说级':'#b388ff','英雄级':'#ffd740'};
     // 按 slotType 分组渲染（与筛选栏 data-filter 一致）
     const groupConfig = [
         { slotType:'primary',   icon:'⚔',  title:'主武器',    filter:'primary'   },
@@ -2756,12 +3308,13 @@ function buildShop() {
         html += '<div class="shop-category-header">';
         html += '<span class="shop-category-icon">' + g.icon + '</span>';
         html += '<span class="shop-category-title">' + g.title + '</span>';
-        html += '<span class="shop-category-count">' + keys.length + '件商品</span>';
+        html += '<span class="shop-category-count">' + keys.length + ' 件</span>';
         html += '</div>';
+        html += '<div class="rd-shop-grid">';
         for (const key of keys) {
             const d = WD[key];
             const desc = (WF && WF[key]) || { tagline:'', typeLabel:d.category, bonus:'无', passives:['无'], actives:['无'], price:0 };
-            const qColor = qualityColors[d.qualityLabel] || '#ffd700';
+            const qColor = qualityColors[d.qualityLabel] || '#ffd740';
             // 基础伤害从 getWeaponBaseDmg() 读取
             const baseDmgDisplay = (typeof gwd === 'function') ? gwd(key) : d.baseDmg;
             const fireRateDisplay = d.fireRate || '无';
@@ -2769,17 +3322,12 @@ function buildShop() {
             const priceText = desc.price.toLocaleString() + ' 金币';
             const passives = Array.isArray(desc.passives) ? desc.passives : [desc.passives];
             const actives = Array.isArray(desc.actives) ? desc.actives : [desc.actives];
-            // 品质标签样式：神级/传说级用对应色，英雄级用默认 hero-tag
-            let heroTagStyle = '';
-            if (d.qualityLabel === '神级') {
-                heroTagStyle = ' style="color:#ff1744;border-color:#ff1744;background:rgba(255,23,68,0.08);"';
-            } else if (d.qualityLabel === '传说级') {
-                heroTagStyle = ' style="color:#e040fb;border-color:#e040fb;background:rgba(224,64,251,0.08);"';
-            }
+            // 品质标签样式：神级/传说级/英雄级 各用对应身份色
+            let heroTagStyle = ' style="color:' + qColor + ';border:1px solid ' + qColor + ';background:' + qColor + '14;"';
             html += '<div class="shop-item" id="shop-' + key + '" data-category="' + g.filter + '">';
             html += '<div class="shop-header">';
             html += '<span class="shop-icon">' + d.icon + '</span>';
-            html += '<div>';
+            html += '<div class="shop-head-text">';
             html += '<div class="shop-name" style="color:' + qColor + '">' + d.name + ' <span class="hero-tag"' + heroTagStyle + '>' + d.qualityLabel + '</span></div>';
             html += '<div class="shop-price">&#11044; ' + priceText + '</div>';
             html += '</div>';
@@ -2787,23 +3335,24 @@ function buildShop() {
             html += '<div class="shop-desc">' + desc.tagline + '</div>';
             html += '<ul class="shop-feature">';
             html += '<li>类型：<b style="color:' + qColor + '">' + desc.typeLabel + '</b></li>';
-            html += '<li>弹匣' + magazineDisplay + ' | 射速' + fireRateDisplay + ' | 基础伤害<b style="color:#ff6659">' + baseDmgDisplay + '</b></li>';
+            html += '<li>弹匣 ' + magazineDisplay + ' · 射速 ' + fireRateDisplay + ' · 基础伤害 <b style="color:#ff6659">' + baseDmgDisplay + '</b></li>';
             html += '<li>装备加成：' + desc.bonus + '</li>';
             // 主动技能 bullets
             for (const a of actives) {
                 if (a === '无') continue;
-                html += '<li>主动·' + a + '</li>';
+                html += '<li>主动 · ' + a + '</li>';
             }
             // 被动技能 bullets
             for (const p of passives) {
                 if (p === '无') continue;
-                html += '<li>被动·' + p + '</li>';
+                html += '<li>被动 · ' + p + '</li>';
             }
             html += '</ul>';
-            html += '<button class="shop-buy-btn" id="buy-' + key + '-btn">购买 ' + priceText + '</button>';
+            html += '<button class="shop-buy-btn" id="buy-' + key + '-btn">购买 · ' + priceText + '</button>';
             html += '</div>';
         }
-        html += '</div>';
+        html += '</div>'; // .rd-shop-grid
+        html += '</div>'; // .shop-category
     }
     container.innerHTML = html;
 }
@@ -29286,7 +29835,7 @@ break;
         let cls = 'weapon-item' + (owned ? ' owned' : '') + (equipped ? ' equipped' : '');
         // 装备状态标注：已装备于某背包时显示「已装备于背包X」，否则不显示
         const equippedBpHtml = (typeof equippedBpNum === 'number' && equippedBpNum > 0)
-            ? '<div style="margin-top:6px;padding:3px 8px;background:rgba(0,230,118,0.1);border:1px solid rgba(0,230,118,0.3);border-radius:4px;color:#00e676;font-size:11px;font-weight:bold;letter-spacing:1px;text-align:center;">已装备于背包' + equippedBpNum + '</div>'
+            ? '<div class="wi-bp-badge">已装备于背包' + equippedBpNum + '</div>'
             : '';
         // 构建装备属性加成文本
         let bonusParts = [];
@@ -29313,11 +29862,9 @@ break;
             const lvText = lv >= WEAPON_UPGRADE_MAX_LEVEL ? 'Lv MAX' : 'Lv ' + lv;
             const xpText = lv >= WEAPON_UPGRADE_MAX_LEVEL ? '已满级' : ('XP ' + curXp + '/' + nextXp);
             upgradeHtml = `<div class="wi-divider gold"></div>
-                <div class="wi-stat-row"><span class="wi-stat-label">武器等级</span><span class="wi-stat-value" style="color:#ffd700;font-weight:bold;">${lvText}</span></div>
-                <div style="background:rgba(0,0,0,0.3);border-radius:3px;height:8px;overflow:hidden;margin:4px 0;border:1px solid rgba(255,215,0,0.2);">
-                    <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,#ffd700,#ff9100);transition:width 0.3s;"></div>
-                </div>
-                <div style="text-align:center;font-size:10px;color:#8b949e;">${xpText}</div>`;
+                <div class="wi-stat-row"><span class="wi-stat-label">武器等级</span><span class="wi-stat-value wi-lv">${lvText}</span></div>
+                <div class="wi-xp-track"><div class="wi-xp-fill" style="width:${pct}%;"></div></div>
+                <div class="wi-xp-text">${xpText}</div>`;
         }
         // 操作按钮
         let actionHtml = '';
@@ -29356,18 +29903,10 @@ break;
             const cat = item.dataset.category || 'other';
             item.style.display = (filter === 'all' || cat === filter) ? '' : 'none';
         });
-        // 更新筛选按钮样式
+        // 更新筛选按钮样式（.active 类由 NEXUS CSS 提供视觉）
         const btns = document.querySelectorAll('#weapon-filter-bar .weapon-filter-btn');
         btns.forEach(btn => {
-            if (btn.dataset.filter === filter) {
-                btn.style.border = '1px solid rgba(0,229,255,0.3)';
-                btn.style.background = 'rgba(0,229,255,0.15)';
-                btn.style.color = '#00e5ff';
-            } else {
-                btn.style.border = '1px solid rgba(255,255,255,0.1)';
-                btn.style.background = 'rgba(255,255,255,0.03)';
-                btn.style.color = '#8b949e';
-            }
+            btn.classList.toggle('active', btn.dataset.filter === filter);
         });
     }
 
@@ -29553,18 +30092,10 @@ break;
             const cat = item.dataset.category || 'other';
             item.style.display = (filter === 'all' || cat === filter) ? '' : 'none';
         });
-        // 更新筛选按钮样式
+        // 更新筛选按钮样式（.active 类由 NEXUS CSS 提供视觉）
         const btns = document.querySelectorAll('#shop-filter-bar .shop-filter-btn');
         btns.forEach(btn => {
-            if (btn.dataset.filter === filter) {
-                btn.style.border = '1px solid rgba(0,229,255,0.3)';
-                btn.style.background = 'rgba(0,229,255,0.15)';
-                btn.style.color = '#00e5ff';
-            } else {
-                btn.style.border = '1px solid rgba(255,255,255,0.1)';
-                btn.style.background = 'rgba(255,255,255,0.03)';
-                btn.style.color = '#8b949e';
-            }
+            btn.classList.toggle('active', btn.dataset.filter === filter);
         });
     }
 
@@ -30421,17 +30952,9 @@ break;
     document.querySelectorAll('.warehouse-tab-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const tab = btn.dataset.tab;
-            // 更新标签按钮样式
+            // 更新标签按钮样式（.active 类由 NEXUS CSS 提供视觉）
             document.querySelectorAll('.warehouse-tab-btn').forEach(b => {
-                if (b.dataset.tab === tab) {
-                    b.style.border = '1px solid rgba(0,229,255,0.3)';
-                    b.style.background = 'rgba(0,229,255,0.15)';
-                    b.style.color = '#00e5ff';
-                } else {
-                    b.style.border = '1px solid rgba(255,255,255,0.1)';
-                    b.style.background = 'rgba(255,255,255,0.03)';
-                    b.style.color = '#8b949e';
-                }
+                b.classList.toggle('active', b.dataset.tab === tab);
             });
             // 切换内容
             const weaponContent = document.getElementById('tab-weapon-content');
