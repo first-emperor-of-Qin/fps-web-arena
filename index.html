@@ -1724,6 +1724,54 @@
         letter-spacing: 1px;
     }
 
+    /* ==================== 背包系统 UI ==================== */
+    /* 个人面板：背包选择栏 */
+    #backpack-bar { display:flex; gap:6px; margin-bottom:12px; }
+    .bp-tab { flex:1; min-width:0; padding:8px 4px 7px; border-radius:8px; cursor:pointer; text-align:center;
+        background:linear-gradient(135deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));
+        border:1px solid rgba(255,255,255,0.08); transition:all .18s; position:relative; overflow:hidden; }
+    .bp-tab::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(0,229,255,0.12),rgba(179,136,255,0.10)); opacity:0; transition:opacity .18s; }
+    .bp-tab:hover { border-color:rgba(0,229,255,0.35); transform:translateY(-1px); box-shadow:0 4px 14px rgba(0,0,0,0.35); }
+    .bp-tab:hover::before { opacity:.5; }
+    .bp-tab.active { border-color:rgba(0,229,255,0.6); box-shadow:0 0 14px rgba(0,229,255,0.25), inset 0 0 16px rgba(0,229,255,0.06); }
+    .bp-tab.active::before { opacity:1; }
+    .bp-tab.active .bp-tab-num { color:#00e5ff; text-shadow:0 0 8px rgba(0,229,255,0.7); }
+    .bp-tab > * { position:relative; z-index:1; }
+    .bp-tab-num { font-size:18px; font-weight:900; color:#e6edf3; line-height:1; letter-spacing:1px; }
+    .bp-tab-name { font-size:10px; color:#8b949e; margin-top:3px; letter-spacing:1px; }
+    .bp-tab.active .bp-tab-name { color:#c9d1d9; }
+    .bp-tab-cnt { font-size:9px; color:#6e7681; margin-top:2px; font-variant-numeric:tabular-nums; }
+    .bp-tab.active .bp-tab-cnt { color:#69f0ae; }
+
+    /* 局内 HUD：当前背包指示器 */
+    #backpack-hud-indicator { position:absolute; bottom:62px; left:50%; transform:translateX(-50%);
+        display:flex; align-items:center; gap:7px; padding:4px 12px; border-radius:18px;
+        background:linear-gradient(135deg,rgba(8,12,20,0.85),rgba(14,20,32,0.8));
+        border:1px solid rgba(0,229,255,0.25); box-shadow:0 2px 10px rgba(0,0,0,0.4);
+        z-index:94; pointer-events:none; backdrop-filter:blur(6px); transition:all .2s; }
+    .bp-hud-badge { font-size:13px; font-weight:900; color:#00e5ff; text-shadow:0 0 6px rgba(0,229,255,0.6); letter-spacing:1px; }
+    .bp-hud-name { font-size:11px; color:#c9d1d9; letter-spacing:1px; max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    #backpack-hud-indicator.flash { animation:bpFlash .45s ease-out; }
+    @keyframes bpFlash { 0%{ box-shadow:0 0 0 rgba(0,229,255,0); transform:translateX(-50%) scale(1);} 30%{ box-shadow:0 0 24px rgba(0,229,255,0.6); transform:translateX(-50%) scale(1.08);} 100%{ box-shadow:0 2px 10px rgba(0,0,0,0.4); transform:translateX(-50%) scale(1);} }
+
+    /* B键背包切换浮层 */
+    #backpack-switch-overlay { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+        display:none; flex-direction:column; align-items:center; gap:14px; z-index:200; pointer-events:none;
+        background:radial-gradient(circle at center,rgba(0,229,255,0.08),rgba(0,0,0,0.55) 70%);
+        padding:26px 40px 22px; border-radius:16px; border:1px solid rgba(0,229,255,0.3);
+        backdrop-filter:blur(8px); box-shadow:0 0 40px rgba(0,229,255,0.15); animation:bpOvIn .15s ease-out; }
+    @keyframes bpOvIn { from{ opacity:0; transform:translate(-50%,-50%) scale(.94);} to{ opacity:1; transform:translate(-50%,-50%) scale(1);} }
+    .bp-ov-title { font-size:16px; font-weight:900; color:#00e5ff; letter-spacing:4px; text-shadow:0 0 10px rgba(0,229,255,0.6); }
+    .bp-ov-grid { display:flex; gap:10px; }
+    .bp-ov-item { display:flex; flex-direction:column; align-items:center; gap:4px; min-width:84px; padding:10px 8px;
+        border-radius:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); }
+    .bp-ov-item.cur { border-color:rgba(0,229,255,0.6); background:rgba(0,229,255,0.1); box-shadow:0 0 14px rgba(0,229,255,0.25); }
+    .bp-ov-key { width:24px; height:24px; line-height:24px; text-align:center; border-radius:50%;
+        background:rgba(0,229,255,0.15); color:#00e5ff; font-weight:900; font-size:13px; border:1px solid rgba(0,229,255,0.4); }
+    .bp-ov-main { font-size:11px; color:#c9d1d9; letter-spacing:1px; max-width:88px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .bp-ov-item.cur .bp-ov-main { color:#fff; }
+    .bp-ov-hint { font-size:11px; color:#8b949e; letter-spacing:2px; }
+
 </style>
 </head>
 <body>
@@ -2134,6 +2182,8 @@
         <div class="weapon-slot" id="weapon-slot-4"><span class="weapon-icon">—</span><span class="weapon-key">4</span><span class="weapon-ammo">空</span></div>
         <div class="weapon-slot" id="weapon-slot-5"><span class="weapon-icon">—</span><span class="weapon-key">5</span><span class="weapon-ammo">空</span></div>
     </div>
+    <div id="backpack-hud-indicator" style="display:none;"></div>
+    <div id="backpack-switch-overlay"></div>
     <div id="third-person-indicator">第三人称视角 [O]</div>
     <div id="cube-amplify-indicator" class="hud-indicator" style="position:absolute;top:120px;left:16px;color:#00e5ff;font-size:13px;font-weight:bold;text-shadow:0 0 8px rgba(0,229,255,0.6);display:none;animation:cubePulse 1s ease-in-out infinite;">🧊 魔方增幅 0%</div>
     <div id="damage-stat-panel" class="hud-indicator" style="position:absolute;top:148px;left:16px;color:#ff6659;font-size:13px;font-weight:bold;text-shadow:0 0 8px rgba(255,102,89,0.6);">⚔ 累计伤害 <span id="damage-stat-value">0.0</span></div>
@@ -2342,6 +2392,7 @@
                 </div>
                 <!-- 武器仓库内容 -->
                 <div id="tab-weapon-content">
+                    <div id="backpack-bar"></div>
                     <div id="weapon-filter-bar" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
                         <button class="weapon-filter-btn active" data-filter="all" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(0,229,255,0.3);background:rgba(0,229,255,0.15);color:#00e5ff;font-size:11px;cursor:pointer;transition:all 0.2s;">全部</button>
                         <button class="weapon-filter-btn" data-filter="primary" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#8b949e;font-size:11px;cursor:pointer;transition:all 0.2s;">主武器</button>
@@ -2901,7 +2952,8 @@ function registerStartScreenButtons() {
         moveForward: '向前移动', moveBackward: '向后移动', moveLeft: '向左移动', moveRight: '向右移动',
         jump: '跳跃', reload: '换弹', weaponSkill: '武器技能(E)', weaponSpecial: '武器特殊(X)',
         panel: '个人面板(Q)', thirdPerson: '第三人称(O)', skipBoss: '跳至BOSS(M)', pause: '暂停',
-        slot1: '武器槽1', slot2: '武器槽2', slot3: '武器槽3', slot4: '武器槽4', slot5: '武器槽5'
+        slot1: '武器槽1', slot2: '武器槽2', slot3: '武器槽3', slot4: '武器槽4', slot5: '武器槽5',
+        backpack: '背包切换(B)'
     };
     // 当前正在捕获按键的动作名（null 表示未在捕获模式）
     var _keybindCaptureAction = null;
@@ -3333,6 +3385,8 @@ function initAll() {
     // [Patch] 存档系统：从 localStorage 读取金币、已购武器、已装备武器
     let _loadedOwnedWeapons = null;
     let _loadedEquipped = null;
+    let _loadedBackpacks = null;
+    let _loadedCurrentBackpack = 0;
     let activityRewardClaimed = false; // 活动中心奖励领取状态
     try {
         const saved = localStorage.getItem('cs_save_v2');
@@ -3341,6 +3395,8 @@ function initAll() {
             if (typeof data.gold === 'number' && data.gold > gold) gold = data.gold;
             if (data.ownedWeapons && typeof data.ownedWeapons === 'object') _loadedOwnedWeapons = data.ownedWeapons;
             if (data.equipped && typeof data.equipped === 'object') _loadedEquipped = data.equipped;
+            if (data.backpacks && Array.isArray(data.backpacks)) _loadedBackpacks = data.backpacks;
+            if (typeof data.currentBackpack === 'number') _loadedCurrentBackpack = data.currentBackpack;
             if (data.activityRewardClaimed) activityRewardClaimed = true;
         }
     } catch(e) { console.warn('loadGameState error:', e); }
@@ -3430,6 +3486,12 @@ function initAll() {
                 grenadeType: equippedGrenadeType || 'none',
                 tactical: typeof equippedTactical !== 'undefined' ? equippedTactical : 'none'
             },
+            // [背包系统] 5 个背包配置 + 当前背包索引
+            backpacks: (typeof backpacks !== 'undefined' && Array.isArray(backpacks)) ? backpacks.map(b => ({
+                primary: b.primary, secondary: b.secondary, melee: b.melee,
+                grenade: b.grenade, tactical: b.tactical
+            })) : null,
+            currentBackpack: (typeof currentBackpackIndex !== 'undefined') ? currentBackpackIndex : 0,
             weaponXP: weaponXP,                     // [P2] 武器养成经验
             weaponLevel: weaponLevel,               // [P2] 武器养成等级
             unlockedTalents: unlockedTalents,       // [P2] 天赋解锁状态
@@ -3468,6 +3530,9 @@ function initAll() {
             if (typeof merged.gold !== 'number') merged.gold = cur.gold;
             if (!merged.ownedWeapons || typeof merged.ownedWeapons !== 'object') merged.ownedWeapons = cur.ownedWeapons;
             if (!merged.equipped || typeof merged.equipped !== 'object') merged.equipped = cur.equipped;
+            // [背包系统] 导入数据若无背包字段则保留当前背包配置
+            if (!merged.backpacks || !Array.isArray(merged.backpacks)) merged.backpacks = cur.backpacks;
+            if (typeof merged.currentBackpack !== 'number') merged.currentBackpack = cur.currentBackpack;
             merged.ts = Date.now();
             localStorage.setItem('cs_save_v2', JSON.stringify(merged));
             return true;
@@ -4569,6 +4634,236 @@ function initAll() {
     // ====== 地狱魔镰 ======
     let equippedMelee = (_loadedEquipped && _loadedEquipped.melee && _loadedEquipped.melee !== 'none') ? _loadedEquipped.melee : 'none'; // [Patch] 从存档恢复已装备近战武器
     let equippedTactical = (_loadedEquipped && _loadedEquipped.tactical && _loadedEquipped.tactical !== 'none') ? _loadedEquipped.tactical : 'none'; // [Patch] 从存档恢复已装备战术武器
+
+    // ==================== 背包系统 ====================
+    // 5 个独立背包，每个背包 = 一套 {primary, secondary, melee, grenade, tactical} 配置。
+    // 武器在背包间互斥：同一把武器同时只能存在于一个背包中。
+    // grenade 字段统一使用规范 id（'normalgrenade' 而非 'normal'），与 WEAPON_DISPLAY_DATA 一致。
+    const BACKPACK_SLOT_MAP = {
+        '1t':{id:'thunder',type:'primary'}, '1m':{id:'tumo',type:'primary'},
+        '1k':{id:'dragonlyknight',type:'primary'}, '1dl':{id:'dawnlight',type:'primary'},
+        '1z':{id:'zeushand',type:'primary'}, '1pw':{id:'phasewalker',type:'primary'},
+        '1p':{id:'parasite',type:'primary'},
+        '2s':{id:'shadow',type:'secondary'}, '2m':{id:'metalstorm',type:'secondary'},
+        '2w':{id:'whitenight',type:'secondary'}, '2b':{id:'moonbow',type:'secondary'},
+        '3t':{id:'thunderblade',type:'melee'}, '3h':{id:'hellscythe',type:'melee'},
+        '3u':{id:'thousandumbrella',type:'melee'},
+        '4n':{id:'normalgrenade',type:'grenade'}, '4d':{id:'deathlight',type:'grenade'},
+        '4f':{id:'froststar',type:'grenade'}, '4tl':{id:'tanglotus',type:'grenade'},
+        '5d':{id:'datacube',type:'tactical'}
+    };
+    // 投掷武器 id 规范化：equippedGrenadeType 用 'normal'，背包内统一存 'normalgrenade'
+    function _bpCanonGrenade(g){ return g === 'normal' ? 'normalgrenade' : (g || 'none'); }
+    function _bpEquipGrenade(g){ return g === 'normalgrenade' ? 'normal' : (g || 'none'); }
+    function _bpDefaultLoadout(){ return {primary:'thunder',secondary:'shadow',melee:'thunderblade',grenade:'normalgrenade',tactical:'none'}; }
+    function _bpEmptyLoadout(){ return {primary:'none',secondary:'none',melee:'none',grenade:'none',tactical:'none'}; }
+
+    let currentBackpackIndex = 0;
+    let backpacks = [_bpDefaultLoadout(), _bpEmptyLoadout(), _bpEmptyLoadout(), _bpEmptyLoadout(), _bpEmptyLoadout()];
+    // 从存档恢复背包配置
+    if (_loadedBackpacks && Array.isArray(_loadedBackpacks)) {
+        for (let i = 0; i < 5; i++) {
+            const b = _loadedBackpacks[i];
+            if (b && typeof b === 'object') {
+                backpacks[i] = {
+                    primary: b.primary || 'none', secondary: b.secondary || 'none',
+                    melee: b.melee || 'none', grenade: _bpCanonGrenade(b.grenade),
+                    tactical: b.tactical || 'none'
+                };
+            }
+        }
+    } else {
+        // 旧存档兼容：用当前 equipped* 初始化背包1，其余空
+        backpacks[0] = {
+            primary: equippedPrimary, secondary: equippedSecondary,
+            melee: equippedMelee, grenade: _bpCanonGrenade(equippedGrenadeType),
+            tactical: equippedTactical
+        };
+    }
+    if (typeof _loadedCurrentBackpack === 'number' && _loadedCurrentBackpack >= 0 && _loadedCurrentBackpack < 5) {
+        currentBackpackIndex = _loadedCurrentBackpack;
+    }
+    // 初始同步：当前背包 → equipped*（仅赋值字符串变量，3D 模型在场景初始化后处理）
+    (function _bpInitSync(){
+        const b = backpacks[currentBackpackIndex];
+        equippedPrimary = b.primary; equippedSecondary = b.secondary;
+        equippedMelee = b.melee; equippedGrenadeType = _bpEquipGrenade(b.grenade);
+        equippedTactical = b.tactical;
+    })();
+
+    // 捕获当前 equipped* 为 loadout 对象
+    function _bpCaptureLoadout(){
+        return {
+            primary: equippedPrimary, secondary: equippedSecondary,
+            melee: equippedMelee, grenade: _bpCanonGrenade(equippedGrenadeType),
+            tactical: equippedTactical
+        };
+    }
+    // 确保当前 equipped 武器的 3D 模型已创建（背包切换后模型可能缺失）
+    function _bpEnsureModels(){
+        try {
+            if (equippedPrimary === 'tumo' && !tumoWeaponGroup) createTumoModel();
+            else if (equippedPrimary === 'dragonlyknight' && !dragonKnightWeaponGroup) createDragonKnightModel();
+            else if (equippedPrimary === 'dawnlight' && !dawnlightWeaponGroup) createDawnlightModel();
+            else if (equippedPrimary === 'parasite' && !parasiteWeaponGroup) createParasiteModel();
+            else if (equippedPrimary === 'zeushand' && !zeusHandWeaponGroup) createZeusHandModel();
+            else if (equippedPrimary === 'phasewalker' && !phaseWalkerWeaponGroup) createPhaseWalkerModel();
+            if (equippedSecondary === 'metalstorm' && !metalStormWeaponGroup) createMetalStormModel();
+            else if (equippedSecondary === 'whitenight' && !whitenightWeaponGroup) createWhiteNightModel();
+            else if (equippedSecondary === 'moonbow' && !moonbowWeaponGroup) createMoonbowModel();
+            if (equippedMelee === 'hellscythe' && !hellScytheWeaponGroup) createHellScytheModel();
+            else if (equippedMelee === 'thousandumbrella' && !thousandUmbrellaWeaponGroup) createThousandUmbrellaModel();
+            if (equippedGrenadeType !== 'none') createGrenadeHandModel();
+            if (equippedTactical === 'datacube' && !datacubeWeaponGroup) createDatacubeModel();
+        } catch(e){ console.warn('_bpEnsureModels error:', e); }
+    }
+    // 武器互斥：从除 keepIdx 外的所有背包中移除 weaponId
+    function _bpEnforceExclusivity(weaponId, keepIdx){
+        if (!weaponId || weaponId === 'none') return false;
+        let removed = false;
+        for (let i = 0; i < backpacks.length; i++) {
+            if (i === keepIdx) continue;
+            const b = backpacks[i];
+            if (b.primary === weaponId){ b.primary = 'none'; removed = true; }
+            else if (b.secondary === weaponId){ b.secondary = 'none'; removed = true; }
+            else if (b.melee === weaponId){ b.melee = 'none'; removed = true; }
+            else if (b.grenade === weaponId){ b.grenade = 'none'; removed = true; }
+            else if (b.tactical === weaponId){ b.tactical = 'none'; removed = true; }
+        }
+        return removed;
+    }
+    // 切换背包（局内/面板通用）。idx: 0-4
+    function switchBackpack(idx){
+        if (idx < 0 || idx >= backpacks.length) return;
+        if (idx === currentBackpackIndex) { _bpRenderBar(); _bpUpdateHud(); return; }
+        // 1. 保存当前 equipped* 到当前背包
+        backpacks[currentBackpackIndex] = _bpCaptureLoadout();
+        // 2. 加载目标背包到 equipped*
+        currentBackpackIndex = idx;
+        const b = backpacks[idx];
+        equippedPrimary = b.primary;
+        equippedSecondary = b.secondary;
+        equippedMelee = b.melee;
+        equippedGrenadeType = _bpEquipGrenade(b.grenade);
+        equippedTactical = b.tactical;
+        // 3. 投掷武器数量复位
+        if (equippedGrenadeType === 'normal') grenadeCount = 3;
+        else if (equippedGrenadeType === 'deathlight') grenadeCount = DEATHLIGHT_CARRY_COUNT;
+        else if (equippedGrenadeType === 'froststar') grenadeCount = FROSTSTAR_CARRY_COUNT;
+        else if (equippedGrenadeType === 'tanglotus') grenadeCount = TANGLOTUS_CARRY_COUNT;
+        else grenadeCount = 0;
+        // 4. 清理前背包的临时状态（狙击镜/护体/龙威/寄生炮狙/幻影等）
+        if (typeof isTumoScoped !== 'undefined' && isTumoScoped) isTumoScoped = false;
+        if (typeof tumoShieldActive !== 'undefined' && tumoShieldActive) { tumoShieldActive = false; removeTumoShieldEffect(); }
+        if (typeof dragonWrathActive !== 'undefined' && dragonWrathActive) { dragonWrathActive = false; removeDragonWrathAura(); }
+        if (typeof parasiteCannonMode !== 'undefined' && parasiteCannonMode) { parasiteCannonMode = false; removeParasiteCannonAura(); }
+        clearZeusPhantomsIfNotZeus();
+        // 5. 选择首个非空槽位作为当前武器
+        let newSlot = 0;
+        if (equippedPrimary !== 'none') newSlot = 1;
+        else if (equippedSecondary !== 'none') newSlot = 2;
+        else if (equippedMelee !== 'none') newSlot = 3;
+        else if (equippedGrenadeType !== 'none') newSlot = 4;
+        else if (equippedTactical === 'datacube' && ownedWeapons['datacube']) newSlot = 5;
+        currentWeaponSlot = newSlot;
+        // 6. 确保模型存在并显示
+        _bpEnsureModels();
+        if (newSlot === 0) hideAllWeapons(); else showCurrentWeapon();
+        // 7. 重算属性加成（核心：自动应用当前背包武器加成）
+        recalcWeaponBonuses();
+        updateHealthUI(); updateSoulPowerUI();
+        updateWeaponUI(); updateAmmoUI();
+        playWeaponSwitchSound();
+        // 8. 刷新 UI
+        try { _bpRenderBar(); } catch(e){}
+        try { _bpUpdateHud(true); } catch(e){}
+        try { if (isPanelOpen) { buildWeaponGrid(); updatePanelStats(); } } catch(e){}
+        try { if (previewScene) buildPreviewCharacter(); } catch(e){}
+        // 9. 持久化
+        try { saveGameState(); } catch(e){}
+    }
+    window._switchBackpack = switchBackpack;
+
+    // 渲染个人面板中的背包选择栏
+    function _bpRenderBar(){
+        const bar = document.getElementById('backpack-bar');
+        if (!bar) return;
+        let html = '';
+        for (let i = 0; i < 5; i++) {
+            const b = backpacks[i];
+            const isCur = i === currentBackpackIndex;
+            let cnt = 0;
+            if (b.primary !== 'none') cnt++;
+            if (b.secondary !== 'none') cnt++;
+            if (b.melee !== 'none') cnt++;
+            if (b.grenade !== 'none') cnt++;
+            if (b.tactical !== 'none') cnt++;
+            html += `<div class="bp-tab${isCur ? ' active' : ''}" data-bp="${i}">`
+                + `<div class="bp-tab-num">${i+1}</div>`
+                + `<div class="bp-tab-name">背包${i+1}</div>`
+                + `<div class="bp-tab-cnt">${cnt}/5</div>`
+                + `</div>`;
+        }
+        bar.innerHTML = html;
+        bar.querySelectorAll('.bp-tab').forEach(el => {
+            el.addEventListener('click', () => {
+                playUIClickSound();
+                switchBackpack(parseInt(el.dataset.bp));
+            });
+        });
+    }
+    // 更新局内 HUD 背包指示器
+    function _bpUpdateHud(flash){
+        const ind = document.getElementById('backpack-hud-indicator');
+        if (!ind) return;
+        if (typeof gameStarted === 'undefined' || !gameStarted || isDead || levelComplete) { ind.style.display = 'none'; return; }
+        const i = currentBackpackIndex;
+        const b = backpacks[i];
+        let mainName = '空手';
+        if (b.primary !== 'none' && WEAPON_DISPLAY_DATA[b.primary]) mainName = WEAPON_DISPLAY_DATA[b.primary].name;
+        ind.innerHTML = `<span class="bp-hud-badge">🎒${i+1}</span><span class="bp-hud-name">${mainName}</span>`;
+        ind.style.display = 'flex';
+        if (flash) {
+            ind.classList.remove('flash');
+            void ind.offsetWidth; // 触发重绘以重启动画
+            ind.classList.add('flash');
+        }
+    }
+    // B键切换浮层
+    let backpackSwitchMode = false;
+    let backpackSwitchTimer = null;
+    function _bpShowSwitchOverlay(){
+        const ov = document.getElementById('backpack-switch-overlay');
+        if (!ov) return;
+        let html = '<div class="bp-ov-title">选择背包</div><div class="bp-ov-grid">';
+        for (let i = 0; i < 5; i++) {
+            const b = backpacks[i];
+            const isCur = i === currentBackpackIndex;
+            let mainName = '空';
+            if (b.primary !== 'none' && WEAPON_DISPLAY_DATA[b.primary]) mainName = WEAPON_DISPLAY_DATA[b.primary].name;
+            html += `<div class="bp-ov-item${isCur?' cur':''}"><span class="bp-ov-key">${i+1}</span><span class="bp-ov-main">${mainName}</span></div>`;
+        }
+        html += '</div><div class="bp-ov-hint">按 1-5 切换 · 其它键取消</div>';
+        ov.innerHTML = html;
+        ov.style.display = 'flex';
+    }
+    function _bpHideSwitchOverlay(){
+        const ov = document.getElementById('backpack-switch-overlay');
+        if (ov) ov.style.display = 'none';
+    }
+    function _bpEnterSwitchMode(){
+        if (!gameStarted || isDead || levelComplete) return;
+        backpackSwitchMode = true;
+        _bpShowSwitchOverlay();
+        if (backpackSwitchTimer) clearTimeout(backpackSwitchTimer);
+        backpackSwitchTimer = setTimeout(() => { backpackSwitchMode = false; _bpHideSwitchOverlay(); }, 2500);
+    }
+    function _bpExitSwitchMode(){
+        backpackSwitchMode = false;
+        if (backpackSwitchTimer) { clearTimeout(backpackSwitchTimer); backpackSwitchTimer = null; }
+        _bpHideSwitchOverlay();
+    }
+
     let hellScytheWeaponGroup = null;
     let hellScytheWindCooldown = 0; // 普通狂风冷却
     const HELLSCYTHE_WIND_CD = 0; // 普通狂风无CD
@@ -5609,7 +5904,8 @@ function initAll() {
         moveForward: 'KeyW', moveBackward: 'KeyS', moveLeft: 'KeyA', moveRight: 'KeyD',
         jump: 'Space', reload: 'KeyR', weaponSkill: 'KeyE', weaponSpecial: 'KeyX',
         panel: 'KeyQ', thirdPerson: 'KeyO', skipBoss: 'KeyM', pause: 'Escape',
-        slot1: 'Digit1', slot2: 'Digit2', slot3: 'Digit3', slot4: 'Digit4', slot5: 'Digit5'
+        slot1: 'Digit1', slot2: 'Digit2', slot3: 'Digit3', slot4: 'Digit4', slot5: 'Digit5',
+        backpack: 'KeyB'
     };
     // 当前按键映射（从存档加载并与默认合并，保证新动作在旧存档上获得默认值）
     let keymap = Object.assign({}, DEFAULT_KEYMAP);
@@ -7636,6 +7932,15 @@ function initAll() {
         if (isPanelOpen) closePanel();
         updateGoldUI();
         updateWeaponUI(); updateAmmoUI();
+        // [背包系统] 关卡开始：同步当前背包配置、确保模型、重算加成、显示HUD指示器
+        try {
+            backpacks[currentBackpackIndex] = _bpCaptureLoadout();
+            _bpEnsureModels();
+            if (currentWeaponSlot !== 0) showCurrentWeapon(); else hideAllWeapons();
+            recalcWeaponBonuses();
+            updateHealthUI(); updateSoulPowerUI();
+            _bpUpdateHud();
+        } catch(e){ console.warn('backpack level-init error:', e); }
         headshotPopup.classList.remove('show'); headshotPopupTimer = 0;
         trueDmgPopup.classList.remove('show'); trueDmgPopupTimer = 0;
     }
@@ -7656,6 +7961,10 @@ function initAll() {
         crosshairEl.classList.remove('ch-hit', 'ch-sustain'); crosshairConsecutiveHits = 0; crosshairHitTimer = 0; crosshairSustainTimer = 0;
         const cubeAmpInd = document.getElementById('cube-amplify-indicator');
         if (cubeAmpInd) cubeAmpInd.style.display = 'none';
+        // [背包系统] 返回主页时隐藏 HUD 指示器与切换浮层
+        _bpExitSwitchMode();
+        const _bpHud = document.getElementById('backpack-hud-indicator');
+        if (_bpHud) _bpHud.style.display = 'none';
         pauseMenu.style.display = 'none';
         pauseHint.style.display = 'none';
         document.getElementById('loading-screen').classList.remove('show');
@@ -20962,6 +21271,8 @@ function initAll() {
 
     function playerDie() {
         isDead = true; isFiring = false; killStreak = 0; killStreakTimer = 0; burnTimer = 0;
+        // [背包系统] 死亡时退出背包切换模式
+        try { _bpExitSwitchMode(); } catch(e){}
         // [P3·Task21] 累计死亡次数，并持久化（含累计游戏时长一并落盘）
         stats.totalDeaths = (stats.totalDeaths || 0) + 1;
         try { saveGameState(); } catch(e) {}
@@ -23053,6 +23364,10 @@ function initAll() {
             const _act = _actionForKey(e.code);
             // 死亡时仅允许 reload 动作通过（保持原 e.code!=='KeyR' 语义，随重绑定生效）
             if(isDead && _act !== 'reload')return;if(levelComplete)return;
+            // [背包系统] B键进入背包切换模式后，非数字键(1-5)自动退出该模式
+            if (backpackSwitchMode && _act && _act!=='slot1' && _act!=='slot2' && _act!=='slot3' && _act!=='slot4' && _act!=='slot5') {
+                _bpExitSwitchMode();
+            }
             switch(_act){
                 case'moveForward':if(!isPaused&&!boss?.isDevouring)keys.w=true;break;case'moveLeft':if(!isPaused&&!boss?.isDevouring)keys.a=true;break;
                 case'moveBackward':if(!isPaused&&!boss?.isDevouring)keys.s=true;break;case'moveRight':if(!isPaused&&!boss?.isDevouring)keys.d=true;break;
@@ -23067,11 +23382,14 @@ else if(currentWeaponSlot===3 && equippedMelee==='hellscythe'){hellScytheHellWin
 break;
                 case'weaponSpecial':if(window._playerSilenced)break;if(currentWeaponSlot===3 && equippedMelee==='thousandumbrella'){switchUmbrellaForm();}else{activateThunderBeamSkill();}break;
 
-                case'slot1':switchWeapon(1);break;
-                case'slot2':switchWeapon(2);break;
-                case'slot3':switchWeapon(3);break;
-                case'slot4':switchWeapon(4);break;
-                case'slot5':switchWeapon(5);break;
+                // [背包系统] B键：进入背包切换模式
+                case'backpack':_bpEnterSwitchMode();break;
+                // [背包系统] 数字键1-5：若处于背包切换模式则切换背包，否则切换武器槽
+                case'slot1':if(backpackSwitchMode){switchBackpack(0);_bpExitSwitchMode();}else{switchWeapon(1);}break;
+                case'slot2':if(backpackSwitchMode){switchBackpack(1);_bpExitSwitchMode();}else{switchWeapon(2);}break;
+                case'slot3':if(backpackSwitchMode){switchBackpack(2);_bpExitSwitchMode();}else{switchWeapon(3);}break;
+                case'slot4':if(backpackSwitchMode){switchBackpack(3);_bpExitSwitchMode();}else{switchWeapon(4);}break;
+                case'slot5':if(backpackSwitchMode){switchBackpack(4);_bpExitSwitchMode();}else{switchWeapon(5);}break;
                 case'thirdPerson':toggleThirdPerson();break;
                 case'panel':togglePanel();break;
                 case'skipBoss':skipToBossWave();break;
@@ -23520,6 +23838,15 @@ break;
         if (isPanelOpen) closePanel();
         updateGoldUI();
         updateWeaponUI(); updateAmmoUI();
+        // [背包系统] 关卡开始：同步当前背包配置、确保模型、重算加成、显示HUD指示器
+        try {
+            backpacks[currentBackpackIndex] = _bpCaptureLoadout();
+            _bpEnsureModels();
+            if (currentWeaponSlot !== 0) showCurrentWeapon(); else hideAllWeapons();
+            recalcWeaponBonuses();
+            updateHealthUI(); updateSoulPowerUI();
+            _bpUpdateHud();
+        } catch(e){ console.warn('backpack level-init error:', e); }
         headshotPopup.classList.remove('show'); headshotPopupTimer = 0;
         trueDmgPopup.classList.remove('show'); trueDmgPopupTimer = 0;
         updateShopState();
@@ -28526,6 +28853,7 @@ break;
         document.exitPointerLock();
         try { updatePanelStats(); } catch(e) { console.warn('openPanel: updatePanelStats error:', e); }
         try { buildWeaponGrid(); } catch(e) { console.warn('openPanel: buildWeaponGrid error:', e); }
+        try { _bpRenderBar(); } catch(e){}
         updateShopState();
         updateGoldUI();
     }
@@ -28537,6 +28865,7 @@ break;
         playerPanel.classList.add('open');
         try { updatePanelStats(); } catch(e) { console.warn('homepagePanel: updatePanelStats error:', e); }
         try { buildWeaponGrid(); } catch(e) { console.warn('homepagePanel: buildWeaponGrid error:', e); }
+        try { _bpRenderBar(); } catch(e){}
         try { updateShopState(); } catch(e) {}
         try { updateGoldUI(); } catch(e) {}
     };
@@ -29295,9 +29624,15 @@ break;
         // 重新计算装备属性加成
         recalcWeaponBonuses();
         updateHealthUI(); updateSoulPowerUI();
+        // [背包系统] 同步当前装备到当前背包，并执行跨背包互斥（同一武器仅存于一个背包）
+        backpacks[currentBackpackIndex] = _bpCaptureLoadout();
+        const _eqMap = BACKPACK_SLOT_MAP[slot];
+        if (_eqMap && _eqMap.id) _bpEnforceExclusivity(_eqMap.id, currentBackpackIndex);
         // 刷新面板
         try { buildWeaponGrid(); } catch(e) { console.warn('equipFromPanel: buildWeaponGrid error:', e); }
         try { updatePanelStats(); } catch(e) { console.warn('equipFromPanel: updatePanelStats error:', e); }
+        try { _bpRenderBar(); } catch(e){}
+        try { _bpUpdateHud(); } catch(e){}
         // [Patch] 持久化装备状态
         if (typeof saveGameState === 'function') saveGameState();
         // 重建3D预览角色
@@ -29414,8 +29749,12 @@ break;
         }
         recalcWeaponBonuses();
         updateHealthUI(); updateSoulPowerUI();
+        // [背包系统] 同步当前装备到当前背包（卸下不触发互斥）
+        backpacks[currentBackpackIndex] = _bpCaptureLoadout();
         try { buildWeaponGrid(); } catch(e) { console.warn('unequipFromPanel: buildWeaponGrid error:', e); }
         try { updatePanelStats(); } catch(e) { console.warn('unequipFromPanel: updatePanelStats error:', e); }
+        try { _bpRenderBar(); } catch(e){}
+        try { _bpUpdateHud(); } catch(e){}
         // [Patch] 持久化装备状态
         if (typeof saveGameState === 'function') saveGameState();
         if (previewScene) buildPreviewCharacter();
