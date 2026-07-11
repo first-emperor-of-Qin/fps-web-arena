@@ -4607,7 +4607,7 @@ function initAll() {
     const DRAGON_KNIGHT_MAG_SIZE = 50;
     const DRAGON_KNIGHT_RESERVE_MAX = 1000;
     const DRAGON_KNIGHT_FIRE_RATE = 0.0833; // 12发/秒 = 0.0833秒间隔
-    const DRAGON_KNIGHT_BASE_DMG = 17; // 基础伤害17（传说级 deriveBaseDmg(300,15,0.85)）
+    const DRAGON_KNIGHT_BASE_DMG = 50; // 魔龙骑士：10发/秒，50/发，弹匣80/800 // 基础伤害17（传说级 deriveBaseDmg(300,15,0.85)）
     const DRAGON_KNIGHT_RELOAD_TIME = 2.0;
     let dragonKnightAmmo = DRAGON_KNIGHT_MAG_SIZE;
     let dragonKnightReserve = DRAGON_KNIGHT_RESERVE_MAX;
@@ -4632,7 +4632,7 @@ function initAll() {
     let dragonScaleInvincibleTimer = 0;
 
     // ====== 黎明之光激光枪系统 ======
-    const DAWNLIGHT_BASE_DMG = 26; // 基础伤害26（传说级 deriveBaseDmg(300,10,0.85)）
+    const DAWNLIGHT_BASE_DMG = 40; // 黎明之光：20发/秒，40/发，无限弹匣 // 基础伤害26（传说级 deriveBaseDmg(300,10,0.85)）
     const DAWNLIGHT_FIRE_RATE = 0.1;
     const DAWNLIGHT_MAG_SIZE = Infinity;
     const DAWNLIGHT_SLOW_EFFECT = 0.5;
@@ -4656,7 +4656,7 @@ function initAll() {
     const DAWNLIGHT_PRICE = 10000;
 
     // ====== 寄生者神级狙击枪系统 ======
-    const PARASITE_BASE_DMG = 208; // 基础伤害208（神级 deriveBaseDmg(800,5,1.3)）
+    const PARASITE_BASE_DMG = 250; // 寄生者普攻：2发/秒，250/发，弹匣20/200 // 基础伤害208（神级 deriveBaseDmg(800,5,1.3)）
     const PARASITE_FIRE_RATE = 0.25; // 4发/秒 = 0.25秒间隔
     const PARASITE_MAG_SIZE = Infinity; // 无限弹匣
     const PARASITE_PRICE = 20000;
@@ -4677,13 +4677,13 @@ function initAll() {
 
     // ====== 宙斯之手能量枪系统 ======
     let zeusHandWeaponGroup = null;
-    const ZEUS_HAND_BASE_DMG = 173; // 基础伤害173（神级 deriveBaseDmg(800,6,1.3)）
+    const ZEUS_HAND_BASE_DMG = 180; // 宙斯之手：5发/秒，180/发，弹匣150/1500 // 基础伤害173（神级 deriveBaseDmg(800,6,1.3)）
     const ZEUS_HAND_FIRE_RATE = 0.125; // 8发/秒（射速提升100%，原4发/秒）
     const ZEUS_HAND_MAG_SIZE = Infinity;
     let zeusHandShootCooldown = 0;
 
     // ====== 相位行者 ======
-    const PHASE_WALKER_DAMAGE = 46; // 基础伤害46（神级 deriveBaseDmg(800,20,1.15)）
+    const PHASE_WALKER_DAMAGE = 60; // 相位行者：12发/秒，60/发，弹匣120/1200 // 基础伤害46（神级 deriveBaseDmg(800,20,1.15)）
     const PHASE_WALKER_FIRE_RATE = 0.0625; // 16发/秒
     const PHASE_WALKER_PRICE = 100000;
     let phaseWalkerWeaponGroup = null;
@@ -4725,7 +4725,7 @@ function initAll() {
 
     // ====== 皓月神弓系统 ======
     let moonbowWeaponGroup = null;
-    const MOONBOW_BASE_DMG = 92; // 基础伤害92（神级 deriveBaseDmg(800,10,1.15)）
+    const MOONBOW_BASE_DMG = 150; // 皓月神弓：4发/秒，150/发，弹匣80/800 // 基础伤害92（神级 deriveBaseDmg(800,10,1.15)）
     let moonbowChargeLevel = 0; // deprecated (charge removed)
     let moonbowIsCharging = false; // deprecated (charge removed)
     let moonbowArrowRainActive = false;
@@ -5651,33 +5651,33 @@ function initAll() {
 
     // ====== 魂力伤害体系 ======
     // 最终伤害 = 魂力 × 武器基础伤害 × 养成 × 天赋 × 魔方增幅（calcDamage 公式链路不变）
-    const BULLET_BASE_DMG = 9;           // 雷霆之怒: deriveBaseDmg(100,10,0.85)=8.5→9（英雄级，原普通级）
-    const TUMO_BASE_DMG = 104;            // 屠魔: deriveBaseDmg(800,10,1.3)=104（神级）
-    const SECONDARY_BASE_DMG = 8;          // 幽影双枪: deriveBaseDmg(100,12.5,1.0)=8（英雄级，原普通级）
-    const METALSTORM_BASE_DMG = 5;           // 金属风暴: deriveBaseDmg(100,16.7,0.85)=5（英雄级）
+    const BULLET_BASE_DMG = 250; // 寄生者：2发/秒，250/发，弹匣20/200           // 雷霆之怒: deriveBaseDmg(100,10,0.85)=8.5→9（英雄级，原普通级）
+    const TUMO_BASE_DMG = 200; // 屠魔：3发/秒，200/发，弹匣30/300            // 屠魔: deriveBaseDmg(800,10,1.3)=104（神级）
+    const SECONDARY_BASE_DMG = 10; // 幽影双枪：15发/秒，10/发          // 幽影双枪: deriveBaseDmg(100,12.5,1.0)=8（英雄级，原普通级）
+    const METALSTORM_BASE_DMG = 50; // 金属风暴：20发/秒，50/发           // 金属风暴: deriveBaseDmg(100,16.7,0.85)=5（英雄级）
     const LOCK_STORM_BASE_DMG = 6;      // 锁敌风暴: 金属风暴技能，基础伤害6/发（英雄级，随主武器）
     const MELEE_LIGHT_BASE_DMG = 43;    // 雷霆战刃轻击: deriveBaseDmg(100,2,0.85)=43（英雄级，原普通级）
     const MELEE_HEAVY_BASE_DMG = 130;   // 雷霆战刃重击: deriveBaseDmg(100,1,1.3)=130（英雄级，原普通级）
     const MELEE_GUNBUTT_BASE_DMG = 50;  // 枪托: 基础伤害50（英雄级通用近战）
-    const HELLSCYTHE_WIND_BASE_DMG = 9;   // 普通狂风: deriveBaseDmg(100,10,0.85)=9（英雄级）
-    const HELLSCYTHE_HELL_BASE_DMG = 9;   // 地狱狂风: 同上（英雄级技能，3×命中数提升 DPS）
-    const GRENADE_BASE_DMG = 240;          // 爆炎手雷: deriveBaseDmg(100,0.5,1.2)=240（英雄级，原普通级）
-    const GRENADE_BURN_BASE_DPS = 24;    // 投掷武器灼烧: 基础DPS 24/3秒（英雄级，爆炸10%/s）
-    const DEATHLIGHT_BASE_DMG = 120;      // 死神之光爆炸: 基础伤害120（英雄级 AoE）
-    const DEATHLIGHT_ROCKET_BASE_DMG = 12; // 死神之光火箭: 每枚基础伤害12（英雄级）
-    const FROSTSTAR_FIRST_BASE_DMG = 120; // 急冻霜星首爆: 基础伤害120（英雄级 AoE）
-    const FROSTSTAR_SECOND_BASE_DMG = 120;// 急冻霜星二段: 基础伤害120（英雄级 AoE）
+    const HELLSCYTHE_WIND_BASE_DMG = 100; // 地狱魔镰普通狂风：3击/秒，100/击   // 普通狂风: deriveBaseDmg(100,10,0.85)=9（英雄级）
+    const HELLSCYTHE_HELL_BASE_DMG = 100; // 地狱魔镰地狱狂风：3击/秒，100/击（300%系数）   // 地狱狂风: 同上（英雄级技能，3×命中数提升 DPS）
+    const GRENADE_BASE_DMG = 250; // 爆炎手雷：爆炸250，灼烧200%系数          // 爆炎手雷: deriveBaseDmg(100,0.5,1.2)=240（英雄级，原普通级）
+    const GRENADE_BURN_BASE_DPS = 500; // 爆炎手雷灼烧DPS（200%系数）    // 投掷武器灼烧: 基础DPS 24/3秒（英雄级，爆炸10%/s）
+    const DEATHLIGHT_BASE_DMG = 500; // 死神之光爆炸：500，火箭弹100%系数      // 死神之光爆炸: 基础伤害120（英雄级 AoE）
+    const DEATHLIGHT_ROCKET_BASE_DMG = 500; // 死神之光火箭：500/枚（100%系数） // 死神之光火箭: 每枚基础伤害12（英雄级）
+    const FROSTSTAR_FIRST_BASE_DMG = 300; // 急冻霜星首爆：300，二段1000%系数 // 急冻霜星首爆: 基础伤害120（英雄级 AoE）
+    const FROSTSTAR_SECOND_BASE_DMG = 3000; // 急冻霜星二段：3000（1000%系数）// 急冻霜星二段: 基础伤害120（英雄级 AoE）
     const THUNDER_BEAM_BASE_DMG = 45;   // 雷霆万钧: 基础伤害45（英雄级技能，5×雷霆基础）
     const CHAIN_BASE_DMG_RATIO = 0.1;    // 闪电链: 原baseDamage*0.1（比例不变）
     const DEATHLIGHT_BURN_BASE_DPS = 12;  // 死神之光灼烧: 基础DPS 12（英雄级）
-    const WHITENIGHT_BASE_DMG = 78;        // 白夜铳刃: deriveBaseDmg(300,5,1.3)=78（传说级）
+    const WHITENIGHT_BASE_DMG = 100; // 白夜铳刃：10发/秒，100/发        // 白夜铳刃: deriveBaseDmg(300,5,1.3)=78（传说级）
     const WHITENIGHT_SKILL_BASE_DMG = 18;  // 白夜铳刃技能: deriveBaseDmg(300,20,1.2)=18（传说级 AoE 20tick/s）
     const PARASITE_CANNON_BASE_DMG = 208;  // 寄生者炮狙模式: 与普攻基础一致（神级，内脏暴击叠加提升）
-    const THOUSAND_UMBRELLA_BASE_DMG = 520; // 千机伞: deriveBaseDmg(800,2,1.3)=520（神级）
+    const THOUSAND_UMBRELLA_BASE_DMG = 300; // 千机伞：3击/秒，300/击 // 千机伞: deriveBaseDmg(800,2,1.3)=520（神级）
 
     // ====== 佛怒唐莲投掷武器系统 ======
-    const TANGLOTUS_BASE_DMG = 800;          // 佛怒唐莲: 爆炸基础伤害800（神级 AoE，deriveBaseDmg 800×1.2 一次性）
-    const TANGLOTUS_PETAL_DMG = 8;           // 每朵花瓣8（1000朵×8=8000 总花瓣伤害 ≈ 神级800DPS×10s）
+    const TANGLOTUS_BASE_DMG = 1000; // 佛怒唐莲爆炸：1000，花瓣10%系数          // 佛怒唐莲: 爆炸基础伤害800（神级 AoE，deriveBaseDmg 800×1.2 一次性）
+    const TANGLOTUS_PETAL_DMG = 100; // 佛怒唐莲花瓣：100/片（10%系数）           // 每朵花瓣8（1000朵×8=8000 总花瓣伤害 ≈ 神级800DPS×10s）
     const TANGLOTUS_PETALS_PER_SEC = 100;       // 每秒释放100朵花瓣
     const TANGLOTUS_DURATION = 10;              // 龙卷持续10秒
     const TANGLOTUS_TOTAL_PETALS = 1000;        // 总计1000朵花瓣
