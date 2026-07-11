@@ -8,6 +8,7 @@
 [![Levels](https://img.shields.io/badge/levels-20-green)]()
 [![Weapons](https://img.shields.io/badge/weapons-33-orange)]()
 [![Chapters](https://img.shields.io/badge/chapters-4-purple)]()
+[![Play Online](https://img.shields.io/badge/play-online-success)](https://first-emperor-of-qin.github.io/fps-web-arena/)
 
 </div>
 
@@ -61,6 +62,16 @@ wrangler login
 wrangler pages deploy .
 ```
 
+### GitHub Pages 部署（自动）
+
+本项目已配置 GitHub Actions 工作流（`.github/workflows/deploy-pages.yml`），推送 `main` 分支即可自动部署到 GitHub Pages，无需手动操作。
+
+- **线上地址**：https://first-emperor-of-qin.github.io/fps-web-arena/
+- **触发条件**：修改 `index.html` 或 `assets/**` 并推送到 `main` 分支
+- **手动触发**：仓库 `Actions` 页面 → `Deploy to GitHub Pages` → `Run workflow`
+
+> 说明：GitHub Pages 免费版要求仓库为**公开（public）**状态。如需自定义域名，在仓库根目录添加 `CNAME` 文件（内容为你的域名），并在域名服务商处添加 CNAME 解析指向 `first-emperor-of-qin.github.io`，随后在仓库 `Settings → Pages` 中开启 `Enforce HTTPS` 即可。
+
 ---
 
 ## 🎯 游戏特性
@@ -107,10 +118,14 @@ wrangler pages deploy .
 
 ```
 fps-web-arena/
-├── index.html          # 主游戏文件（包含所有 HTML/CSS/JS）
-├── wrangler.jsonc      # Cloudflare Workers 配置
-├── .gitignore          # Git 忽略配置
-└── README.md           # 本文件
+├── index.html                      # 主游戏文件（包含所有 HTML/CSS/JS）
+├── .github/
+│   └── workflows/
+│       └── deploy-pages.yml        # GitHub Pages 自动部署工作流
+├── .nojekyll                       # 禁用 Jekyll 处理，以静态文件原样托管
+├── wrangler.jsonc                  # Cloudflare Workers 配置
+├── .gitignore                      # Git 忽略配置
+└── README.md                       # 本文件
 ```
 
 ---
