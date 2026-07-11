@@ -1,1 +1,5 @@
-Nothing needs to be ignored since only a README.md file was added, which is a source/config file and not a build artifact, dependency, or temporary file.
+# macOS 系统文件
+.DS_Store
+
+# Node 依赖（本项目为纯静态站点，无需提交）
+node_modules/
