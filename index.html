@@ -910,7 +910,6 @@
     }
     /* ====== 武器强化系统 CSS 已移除 ====== */
 
-
     /* ============================================================
        [PATCH] CYBERPUNK+ PREMIUM ENHANCEMENT LAYER v5.0
        ============================================================
@@ -1637,7 +1636,6 @@
         text-shadow: 0 0 20px currentColor, 0 4px 12px rgba(0, 0, 0, 0.9) !important;
     }
 
-
     /* ----- Smooth Scrollbar ----- */
     /* [Bugfix] 全局隐藏滚动条改为仅在游戏界面隐藏，模态框中显示滚动条 */
     *::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -1661,67 +1659,6 @@
             animation-iteration-count: 1 !important;
             transition-duration: 0.01ms !important;
         }
-    }
-
-    /* ----- Mobile responsive tweaks ----- */
-    /* [Bugfix] 移除所有改变尺寸的 !important 覆盖，避免影响桌面端布局 */
-    @media (max-width: 768px) {
-        #start-screen h1 { font-size: 48px !important; letter-spacing: 8px !important; }
-        .start-btns { grid-template-columns: 1fr !important; gap: 10px !important; }
-    }
-
-    /* ====== [P3·Task19] 移动端触控 overlay ====== */
-    /* 默认隐藏；仅触控设备由 JS 设置 .touch-active 显示。桌面完全不受影响。 */
-    #touch-overlay {
-        position: fixed; inset: 0; z-index: 5000;
-        display: none; pointer-events: none;
-        touch-action: none; user-select: none; -webkit-user-select: none;
-        font-family: 'Orbitron', 'Microsoft YaHei', sans-serif;
-    }
-    #touch-overlay.touch-active { display: block; }
-    #touch-joystick {
-        position: absolute; left: 30px; bottom: 30px;
-        width: 130px; height: 130px; border-radius: 50%;
-        background: rgba(0, 229, 255, 0.08);
-        border: 2px solid rgba(0, 229, 255, 0.35);
-        pointer-events: auto; touch-action: none;
-        box-shadow: 0 0 20px rgba(0,229,255,0.15) inset;
-    }
-    #touch-joystick-thumb {
-        position: absolute; left: 50%; top: 50%;
-        width: 56px; height: 56px; margin: -28px 0 0 -28px;
-        border-radius: 50%;
-        background: rgba(0, 229, 255, 0.45);
-        border: 2px solid rgba(0, 229, 255, 0.8);
-        box-shadow: 0 0 12px rgba(0,229,255,0.5);
-    }
-    #touch-aim-area {
-        position: absolute; right: 0; top: 0;
-        width: 55%; height: 100%;
-        pointer-events: auto; touch-action: none;
-    }
-    .touch-btn {
-        position: absolute; border-radius: 50%;
-        background: rgba(0,0,0,0.45);
-        border: 2px solid rgba(0,229,255,0.55);
-        color: #00e5ff; font-size: 22px; font-weight: bold;
-        display: flex; align-items: center; justify-content: center;
-        pointer-events: auto; touch-action: none;
-        backdrop-filter: blur(4px);
-    }
-    .touch-btn:active { background: rgba(0,229,255,0.35); }
-    #touch-fire-btn   { right: 130px; bottom: 40px; width: 92px; height: 92px; font-size: 26px; }
-    #touch-jump-btn   { right: 40px;  bottom: 150px; width: 64px; height: 64px; }
-    #touch-reload-btn { right: 120px; bottom: 150px; width: 64px; height: 64px; font-size: 18px; }
-    #touch-skill-btn  { right: 40px;  bottom: 230px; width: 64px; height: 64px; font-size: 18px; }
-    #touch-special-btn{ right: 120px; bottom: 230px; width: 64px; height: 64px; font-size: 18px; }
-    #touch-switch-btn { right: 40px;  bottom: 310px; width: 64px; height: 64px; font-size: 18px; }
-    #touch-beta-note {
-        position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
-        background: rgba(0,0,0,0.6); color: #ffc107;
-        padding: 4px 12px; border-radius: 6px; font-size: 11px;
-        border: 1px solid rgba(255,193,7,0.4); pointer-events: none;
-        letter-spacing: 1px;
     }
 
     /* ==================== 背包系统 UI ==================== */
@@ -1880,22 +1817,6 @@
     #homepage-activity-btn:hover { border-color: #69f0ae !important; box-shadow: 0 12px 40px rgba(105,240,174,0.3), inset 0 0 25px rgba(105,240,174,0.06) !important; }
     #homepage-settings-btn:hover { border-color: #c9d1d9 !important; box-shadow: 0 12px 40px rgba(255,255,255,0.18), inset 0 0 25px rgba(255,255,255,0.05) !important; }
     #homepage-shop-btn:hover { border-color: #ffd740 !important; box-shadow: 0 14px 50px rgba(255,215,64,0.4), inset 0 0 30px rgba(255,215,64,0.08) !important; }
-
-    /* Responsive collapse */
-    @media (max-width: 720px) {
-        .start-btns {
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            grid-template-rows: none !important; grid-auto-rows: 78px !important;
-            grid-template-areas:
-                "level level"
-                "shop shop"
-                "guide monster"
-                "equip panel"
-                "activity settings" !important;
-        }
-        #start-screen h1 { font-size: 50px !important; letter-spacing: 10px !important; }
-        .start-subtitle { letter-spacing: 6px !important; }
-    }
 
     /* ============================================================
        v6 NEXUS REDESIGN — 对局 HUD / 商城 / 个人面板 颠覆重塑
@@ -2409,15 +2330,6 @@
     #buy-yes { background: rgba(255,215,64,0.18) !important; color: var(--rd-gold) !important; border: 1px solid rgba(255,215,64,0.45) !important; }
     #buy-no { background: rgba(255,255,255,0.04) !important; color: var(--rd-fg-dim) !important; }
 
-    /* —— 移动端适配 —— */
-    @media (max-width: 720px) {
-        #panel-body { grid-template-columns: 1fr !important; }
-        #panel-left { border-right: none !important; border-bottom: 1px solid var(--rd-border) !important; }
-        .rd-hud-tc { width: 92vw; }
-        #boss-bar-container, #boss2-bar-container { width: 92vw !important; }
-        .rd-shop-grid { grid-template-columns: 1fr !important; }
-    }
-
 /* ============================================================
    电影级 UI 重制 · 王者乱斗（新增样式，不改动原有结构与游戏数据）
    ============================================================ */
@@ -2583,12 +2495,6 @@
 .wzlb-result-btn.ghost { border-color:rgba(255,90,50,0.5); background:linear-gradient(180deg, rgba(60,14,10,0.9), rgba(30,8,6,0.9)); box-shadow:0 0 18px rgba(255,80,40,0.25); }
 .wzlb-result-btn.ghost:hover { box-shadow:0 0 28px rgba(255,80,40,0.5); }
 
-@media (max-width:720px){
-    #start-screen h1 { font-size:56px; letter-spacing:12px; }
-    .wzlb-maps { grid-template-columns:repeat(2,1fr); }
-    .wzlb-box { padding:22px 16px; }
-}
-
 </style>
 
 <!-- ===================== 王者乱斗 / 全局 电影级战术 UI 重设计层 ===================== -->
@@ -2613,7 +2519,7 @@ body{ font-family:'Rajdhani','Microsoft YaHei',Arial,sans-serif; }
     radial-gradient(900px 600px at 8% 112%, rgba(63,191,160,0.08), transparent 60%),
     linear-gradient(180deg,#070a0c 0%, #0b0f12 50%, #060809 100%) !important;
   display:flex; flex-direction:column; align-items:stretch; justify-content:flex-start;
-  overflow-y:auto;
+  overflow:hidden; height:100vh; max-height:100vh;
 }
 #start-screen::before{ content:''; position:absolute; inset:0; z-index:0;
   background-image:repeating-linear-gradient(0deg, rgba(255,255,255,0.014) 0 1px, transparent 1px 3px);
@@ -2670,16 +2576,7 @@ body{ font-family:'Rajdhani','Microsoft YaHei',Arial,sans-serif; }
 .v-mode-card.locked{ opacity:.45; cursor:not-allowed; }
 .v-mode-card.locked:hover{ transform:none; box-shadow:none; border-color:var(--line); }
 
-/* 右侧功能模块栏 */
-.v-rail{ width:300px; flex-shrink:0; border-left:1px solid var(--line); padding:6px 0 6px 22px; display:flex; flex-direction:column; gap:12px; align-self:stretch; }
-.v-rail-title{ font-size:12px; letter-spacing:4px; color:var(--txt-dim); text-transform:uppercase; margin-bottom:2px; }
-.v-module{ display:flex; align-items:center; gap:12px; border:1px solid var(--line); border-radius:10px; padding:13px 15px;
-  background:linear-gradient(120deg, rgba(22,28,30,0.7), rgba(14,18,19,0.5)); cursor:pointer; transition:.18s; color:inherit; font:inherit; text-align:left; width:100%; }
-.v-module:hover{ border-color:var(--line-strong); background:rgba(40,48,46,0.6); transform:translateX(3px); }
-.v-mi{ font-size:20px; width:26px; text-align:center; }
-.v-mt{ font-weight:600; font-size:15px; letter-spacing:.5px; color:var(--txt-bright); }
-.v-ms{ font-size:11.5px; color:var(--txt-dim); }
-.v-mright{ margin-left:auto; color:var(--txt-dim); font-size:12px; }
+/* （右侧功能模块栏的旧样式已废弃，相关 .v-rail/.v-module 类不再使用，移至底部功能坞 .v-dock） */
 
 .v-footer{ position:relative; z-index:3; display:flex; align-items:center; gap:18px; padding:12px 34px; border-top:1px solid var(--line); font-size:12px; color:var(--txt-dim); letter-spacing:1px; }
 .v-footer .spacer{ flex:1; }
@@ -2822,30 +2719,289 @@ body{ font-family:'Rajdhani','Microsoft YaHei',Arial,sans-serif; }
 #damage-overlay{ background:radial-gradient(ellipse at center, transparent 30%, rgba(180,30,20,0.5) 100%) !important; }
 #low-health-overlay{ background:radial-gradient(ellipse at center, transparent 50%, rgba(150,10,10,0.55) 100%) !important; }
 
-/* 窄屏自适应 */
-@media (max-width:920px){
-  .v-body{ flex-direction:column; }
-  .v-rail{ width:100%; border-left:none; border-top:1px solid var(--line); padding:18px 0 0; flex-direction:row; flex-wrap:wrap; gap:10px; }
-  .v-rail-title{ width:100%; }
-  .v-module{ width:calc(50% - 5px); }
-  .v-h1{ font-size:42px; }
-  .v-mode-grid{ grid-template-columns:1fr; }
+/* （旧窄屏自适应 media 已合并至下方 [v5.3] 响应式区块） */
+
+/* ============================================================= */
+/* =====  [v5.3] 首页布局重构 · 作战大厅（清晰三区 + 底部功能坞） ===== */
+/* ============================================================= */
+
+/* 首页严格固定一屏，禁止滚动（注意：display 不可加 !important，否则会压过 JS 隐藏首页的内联 style.display='none'） */
+#start-screen{ overflow:hidden !important; height:100vh !important; max-height:100vh !important;
+  flex-direction:column !important; }
+
+/* ---------- 顶栏 ---------- */
+.v-topbar{ display:flex; align-items:center; gap:18px; padding:clamp(10px,1.8vh,18px) 30px !important;
+  flex:0 0 auto; border-bottom:1px solid var(--line); background:rgba(8,11,13,0.55); }
+.v-brand{ display:flex; align-items:center; gap:12px; }
+.v-logo{ width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+  font-family:'Orbitron'; font-weight:900; font-size:20px; color:#0a0d0f;
+  background:linear-gradient(135deg,var(--amber),#ff9d2f); box-shadow:0 0 18px rgba(232,179,64,0.35); }
+.v-name{ font-family:'Orbitron'; font-weight:700; font-size:19px; letter-spacing:1px; color:var(--txt-bright); line-height:1.1; }
+.v-name b{ color:var(--amber); }
+.v-sub{ font-size:10px; letter-spacing:3px; color:var(--txt-dim); margin-top:2px; text-transform:uppercase; }
+.v-topbar .spacer{ flex:1; }
+.v-actions{ display:flex; align-items:center; gap:10px; }
+.v-gold{ display:flex; align-items:center; gap:7px; height:38px; padding:0 15px; border-radius:10px;
+  border:1px solid rgba(232,179,64,0.35); background:rgba(232,179,64,0.08);
+  font-family:'Orbitron'; font-weight:700; font-size:14px; color:var(--amber); letter-spacing:.5px; }
+.v-gold i{ font-style:normal; font-size:15px; }
+.v-icon-btn{ width:38px; height:38px; border-radius:10px; border:1px solid var(--line);
+  background:rgba(255,255,255,0.03); color:var(--txt-bright); font-size:17px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; transition:.18s; padding:0; }
+.v-icon-btn:hover{ border-color:var(--line-strong); background:rgba(255,255,255,0.09); transform:translateY(-2px); }
+#start-screen .fullscreen-btn{ position:static !important; width:38px; height:38px; border-radius:10px; border:1px solid var(--line);
+  background:rgba(255,255,255,0.03); color:var(--txt-dim); font-size:15px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; transition:.18s; padding:0; }
+#start-screen .fullscreen-btn:hover{ color:var(--txt-bright); border-color:var(--line-strong); }
+
+/* ---------- 主体：左作战入口 + 右作战单位 ---------- */
+.v-body{ flex:1 1 auto !important; min-height:0 !important; display:flex !important;
+  gap:clamp(18px,2.4vw,36px) !important; padding:clamp(18px,3vh,34px) 30px !important; align-items:stretch !important; }
+
+/* 左栏 */
+.v-main{ flex:1 1 auto; min-width:0; display:flex !important; flex-direction:column !important;
+  justify-content:center !important; gap:clamp(14px,2.6vh,28px) !important; }
+
+/* hero 文案（紧凑） */
+.v-hero{ position:relative; }
+.v-eyebrow{ font-size:clamp(10px,1.3vh,13px) !important; letter-spacing:5px !important; color:var(--amber);
+  text-transform:uppercase; margin-bottom:8px !important; font-weight:600; }
+.v-h1{ font-family:'Orbitron'; font-weight:900; font-size:clamp(30px,4.8vh,56px) !important; line-height:1.04 !important;
+  letter-spacing:2px; color:var(--txt-bright); text-shadow:0 4px 30px rgba(0,0,0,0.6); }
+.v-h1 span{ color:var(--amber); text-shadow:0 0 30px rgba(232,179,64,0.4); }
+.v-desc{ max-width:620px; margin-top:clamp(8px,1.4vh,16px) !important; color:var(--txt-dim);
+  font-size:clamp(12px,1.55vh,15px) !important; line-height:1.6 !important;
+  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+
+/* 模式卡片：双列紧凑磁贴 */
+.v-modes{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(12px,1.6vw,18px); }
+.v-mode-card{ position:relative; overflow:hidden; display:flex !important; flex-direction:column !important; justify-content:space-between !important;
+  gap:14px; border:1px solid var(--line); border-radius:14px; padding:clamp(14px,1.9vh,20px) !important;
+  min-height:clamp(120px,15.5vh,156px) !important; cursor:pointer; transition:.22s; color:inherit; text-align:left; font:inherit;
+  background:linear-gradient(150deg, rgba(20,26,28,0.7), rgba(12,16,17,0.5)); }
+.v-mode-card::before{ content:''; position:absolute; left:0; top:0; bottom:0; width:3px; transition:.22s; }
+.v-mode-card.wzlb-entry::before{ background:linear-gradient(180deg,var(--amber),#ff7a2f); box-shadow:0 0 14px rgba(232,179,64,0.5); }
+.v-mode-card#level-select-btn::before{ background:linear-gradient(180deg,#00e5ff,#0091ff); box-shadow:0 0 14px rgba(0,229,255,0.4); }
+.v-mode-card:hover{ transform:translateY(-3px); border-color:var(--line-strong); box-shadow:var(--shadow); }
+.v-mc-top{ display:flex; align-items:center; gap:12px; }
+.v-mc-icon{ font-size:clamp(24px,3vh,30px); filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5)); flex:0 0 auto; }
+.v-mc-body{ flex:1 1 auto; min-width:0; }
+.v-mc-title{ font-family:'Orbitron'; font-weight:700; font-size:clamp(16px,2vh,20px); color:var(--txt-bright); letter-spacing:1px; margin:0; }
+.v-mc-desc{ font-size:clamp(11px,1.3vh,12.5px); color:var(--txt-dim); line-height:1.45; margin-top:3px; }
+.v-mc-foot{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.v-mc-tag{ font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--amber); border:1px solid rgba(232,179,64,0.3); padding:2px 9px; border-radius:20px; }
+.v-mode-card#level-select-btn .v-mc-tag{ color:#7fd7ff; border-color:rgba(127,215,255,0.35); }
+.v-mc-go{ font-family:'Rajdhani'; font-weight:700; letter-spacing:2px; font-size:13px; color:var(--amber); display:flex; align-items:center; gap:5px; opacity:.7; transition:.2s; white-space:nowrap; }
+.v-mode-card#level-select-btn .v-mc-go{ color:#7fd7ff; }
+.v-mode-card:hover .v-mc-go{ opacity:1; transform:translateX(4px); }
+
+/* 右栏：当前作战单位展示卡（填满整列高度） */
+.v-side{ flex:0 0 clamp(260px,24vw,320px); display:flex !important; min-width:0; }
+.v-charshow{ flex:1 1 auto; width:100%; border:1px solid var(--line); border-radius:16px;
+  background:linear-gradient(165deg, rgba(24,30,34,0.85), rgba(12,16,18,0.65));
+  position:relative; overflow:hidden; display:flex; flex-direction:column; align-items:center;
+  padding:clamp(14px,2.2vh,22px); box-shadow:inset 0 0 40px rgba(0,0,0,0.4); }
+.v-charshow::before{ content:''; position:absolute; inset:0;
+  background:radial-gradient(circle at 50% 30%, rgba(232,179,64,0.14), transparent 62%); pointer-events:none; }
+.v-cs-label{ position:relative; z-index:2; font-size:11px; letter-spacing:4px; color:var(--txt-dim); text-transform:uppercase; }
+.v-cs-model{ position:relative; z-index:2; flex:1 1 auto; display:flex; align-items:center; justify-content:center; width:100%; min-height:0; margin:6px 0; }
+.v-cs-model svg{ height:100%; width:auto; max-height:min(46vh,420px); filter:drop-shadow(0 8px 22px rgba(0,0,0,0.55)); }
+.v-cs-name{ position:relative; z-index:2; font-family:'Orbitron'; font-weight:700; font-size:clamp(16px,2.1vh,21px); color:var(--txt-bright); letter-spacing:1px; text-align:center; }
+.v-cs-stars{ position:relative; z-index:2; font-size:14px; letter-spacing:3px; margin:5px 0 10px; text-align:center; }
+.v-cs-btn{ position:relative; z-index:2; width:100%; padding:10px; border-radius:10px; cursor:pointer;
+  font-family:'Rajdhani'; font-weight:700; letter-spacing:2px; font-size:13px;
+  border:1px solid rgba(232,179,64,0.5); color:var(--amber); background:rgba(232,179,64,0.1); transition:.18s; }
+.v-cs-btn:hover{ background:rgba(232,179,64,0.2); box-shadow:0 0 18px rgba(232,179,64,0.25); }
+
+/* ---------- 底部功能坞 ---------- */
+.v-dock{ flex:0 0 auto; display:flex !important; align-items:center; justify-content:center;
+  gap:clamp(8px,1.4vw,18px); padding:clamp(10px,1.6vh,16px) 30px; border-top:1px solid var(--line); background:rgba(8,11,13,0.55); }
+.v-dock-item{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px;
+  min-width:clamp(72px,8vw,104px); padding:8px 6px; border-radius:12px; cursor:pointer; transition:.18s;
+  border:1px solid transparent; background:transparent; color:inherit; font:inherit; }
+.v-dock-item:hover{ background:rgba(255,255,255,0.05); border-color:var(--line); transform:translateY(-2px); }
+.v-dock-item .di{ font-size:clamp(20px,2.6vh,26px); line-height:1; filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5)); }
+.v-dock-item .dl{ font-family:'Rajdhani'; font-weight:700; font-size:clamp(12px,1.5vh,14px); letter-spacing:2px; color:var(--txt-bright); }
+.v-dock-item.accent-cyan{ background:linear-gradient(160deg, rgba(12,30,34,0.5), rgba(12,16,18,0.3)); border-color:rgba(0,229,255,0.3); }
+.v-dock-item.accent-cyan .di{ filter:drop-shadow(0 0 10px rgba(0,229,255,0.5)); }
+.v-dock-item.accent-cyan:hover{ border-color:#00e5ff; box-shadow:0 8px 22px rgba(0,229,255,0.2); }
+.v-dock-item.accent-gold{ background:linear-gradient(160deg, rgba(40,33,16,0.5), rgba(18,16,12,0.3)); border-color:rgba(232,179,64,0.35); }
+.v-dock-item.accent-gold .di{ filter:drop-shadow(0 0 10px rgba(232,179,64,0.5)); }
+.v-dock-item.accent-gold:hover{ border-color:var(--amber); box-shadow:0 8px 22px rgba(232,179,64,0.22); }
+
+/* ---------- 底栏 ---------- */
+.v-footer{ flex:0 0 auto; display:flex; align-items:center; gap:14px; padding:8px 30px;
+  border-top:1px solid rgba(255,255,255,0.05); font-size:11px; color:var(--txt-dim); letter-spacing:1px; }
+.v-footer .spacer{ flex:1; }
+.v-footer b{ color:var(--amber); }
+
+/* ---------- 全屏化：所有按钮打开的功能页 ---------- */
+#shop-modal > .modal-box,
+#settings-modal .modal-box,
+#guide-modal .modal-box,
+#monster-codex-modal .modal-box,
+#equip-codex-modal .modal-box,
+#levelselect-modal .modal-box,
+#difficulty-select-modal .modal-box,
+.wzlb-box{
+  width:100% !important; max-width:100% !important; height:100vh !important; max-height:100vh !important;
+  border-radius:0 !important; border:none !important; overflow-y:auto !important;
+  display:flex !important; flex-direction:column !important;
 }
-@media (max-width:560px){
-  .v-topbar{ flex-wrap:wrap; gap:10px; padding:14px 18px; }
-  .v-nav{ display:none; }
-  .v-body{ padding:20px 18px; }
-  .v-module{ width:100%; }
-  .v-h1{ font-size:34px; }
+/* 让内容在全屏中居中限宽，观感更好 */
+#settings-modal .modal-box{ padding:0 !important; }
+#settings-modal .modal-box > *{ width:min(920px,94vw); margin-left:auto; margin-right:auto; }
+#settings-modal .modal-box{ align-items:center; padding-top:clamp(40px,6vh,90px) !important; padding-bottom:60px !important; }
+#settings-modal .modal-box > .modal-close{ position:fixed; top:22px; right:26px; width:auto; }
+.wzlb-box{ position:relative; padding:clamp(24px,4vh,48px) clamp(20px,6vw,90px) !important; align-items:stretch; }
+.wzlb-box > .modal-close{ position:absolute !important; top:18px; right:18px; width:42px; height:42px; font-size:26px; line-height:1; border-radius:10px; z-index:6; }
+.wzlb-box > *{ width:min(1100px,94vw); margin-left:auto; margin-right:auto; }
+#guide-modal .modal-box{ padding:clamp(30px,5vh,60px) clamp(24px,7vw,110px) !important; }
+#guide-modal .modal-box > *{ width:min(1000px,92vw); margin-left:auto; margin-right:auto; }
+
+/* ---------- 角色系统：星级配色 ---------- */
+:root{
+  --star1:#9aa6b2; --star2:#4fc3f7; --star3:#ab7bff; --star4:#ffb347; --star5:#ff5252;
 }
+.rarity-1{ --rc:var(--star1); }
+.rarity-2{ --rc:var(--star2); }
+.rarity-3{ --rc:var(--star3); }
+.rarity-4{ --rc:var(--star4); }
+.rarity-5{ --rc:var(--star5); }
+
+/* 角色面板（全屏） */
+#character-modal .cm-wrap{ width:100%; height:100vh; display:flex; flex-direction:column; }
+.cm-head{ flex:0 0 auto; display:flex; align-items:center; gap:16px; padding:18px clamp(20px,4vw,48px);
+  border-bottom:1px solid var(--line); }
+.cm-head h2{ font-family:'Orbitron'; font-size:24px; letter-spacing:3px; color:var(--txt-bright); margin:0; }
+.cm-frag{ display:flex; align-items:center; gap:7px; font-family:'Orbitron'; color:#7fd7ff; font-size:15px;
+  background:rgba(79,195,247,0.1); border:1px solid rgba(79,195,247,0.35); border-radius:20px; padding:6px 14px; }
+.cm-gold{ display:flex; align-items:center; gap:7px; font-family:'Orbitron'; color:var(--amber); font-size:15px;
+  background:rgba(232,179,64,0.1); border:1px solid rgba(232,179,64,0.35); border-radius:20px; padding:6px 14px; }
+.cm-tabs{ display:flex; gap:10px; margin-left:8px; }
+.cm-tab{ font-family:'Rajdhani'; font-weight:700; letter-spacing:2px; font-size:14px; padding:8px 18px; border-radius:9px;
+  border:1px solid var(--line); background:rgba(255,255,255,0.03); color:var(--txt-dim); cursor:pointer; transition:.16s; }
+.cm-tab:hover{ color:var(--txt-bright); }
+.cm-tab.active{ border-color:rgba(232,179,64,0.55); color:var(--amber); background:rgba(232,179,64,0.1); }
+.cm-close{ margin-left:auto; width:40px; height:40px; border-radius:9px; border:1px solid var(--line);
+  background:rgba(255,255,255,0.03); color:var(--txt-dim); font-size:22px; cursor:pointer; transition:.16s; }
+.cm-close:hover{ color:var(--red-2); border-color:rgba(216,71,58,0.4); background:rgba(216,71,58,0.1); }
+.cm-body{ flex:1 1 auto; min-height:0; overflow-y:auto; padding:22px clamp(20px,4vw,48px) 40px; }
+
+/* 角色卡片网格 */
+.cm-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:18px; }
+.cm-card{ position:relative; border:1px solid var(--rc); border-radius:14px; overflow:hidden; cursor:pointer;
+  background:linear-gradient(180deg, color-mix(in srgb, var(--rc) 12%, #0c1012), rgba(10,13,15,0.9));
+  transition:.2s; display:flex; flex-direction:column; }
+.cm-card:hover{ transform:translateY(-5px); box-shadow:0 12px 34px color-mix(in srgb, var(--rc) 35%, transparent); }
+.cm-card.selected{ box-shadow:0 0 0 2px var(--rc), 0 0 30px color-mix(in srgb, var(--rc) 45%, transparent); }
+.cm-card.locked{ filter:grayscale(0.55) brightness(0.72); }
+.cm-card-badge{ position:absolute; top:9px; left:9px; z-index:3; font-family:'Orbitron'; font-size:10px; letter-spacing:1px;
+  padding:3px 8px; border-radius:6px; background:var(--rc); color:#0a0d0f; font-weight:700; }
+.cm-card-sel{ position:absolute; top:9px; right:9px; z-index:3; font-size:11px; letter-spacing:1px; padding:3px 8px; border-radius:6px;
+  background:rgba(105,240,174,0.15); border:1px solid rgba(105,240,174,0.5); color:#69f0ae; display:none; }
+.cm-card.selected .cm-card-sel{ display:block; }
+.cm-card-art{ position:relative; height:190px; display:flex; align-items:center; justify-content:center;
+  background:radial-gradient(circle at 50% 38%, color-mix(in srgb, var(--rc) 22%, transparent), transparent 65%); }
+.cm-card-art svg{ height:170px; width:auto; filter:drop-shadow(0 6px 16px rgba(0,0,0,0.6)); }
+.cm-card-lock{ position:absolute; inset:0; display:none; align-items:center; justify-content:center; font-size:40px; color:rgba(255,255,255,0.6);
+  background:rgba(0,0,0,0.35); }
+.cm-card.locked .cm-card-lock{ display:flex; }
+.cm-card-info{ padding:10px 12px 12px; border-top:1px solid color-mix(in srgb, var(--rc) 30%, transparent); }
+.cm-card-name{ font-family:'Orbitron'; font-weight:700; font-size:15px; color:var(--txt-bright); }
+.cm-card-en{ font-size:10px; letter-spacing:2px; color:var(--txt-dim); text-transform:uppercase; margin-top:1px; }
+.cm-card-stars{ margin-top:6px; font-size:13px; letter-spacing:1px; color:var(--rc); }
+.cm-card-bonus{ margin-top:7px; font-size:11px; color:var(--txt-dim); line-height:1.6; }
+.cm-card-bonus b{ color:var(--teal); font-family:'JetBrains Mono',monospace; }
+
+/* 卡片底部操作 */
+.cm-card-act{ margin-top:9px; display:flex; gap:6px; }
+.cm-btn{ flex:1; padding:8px 6px; border-radius:8px; cursor:pointer; font-family:'Rajdhani'; font-weight:700; font-size:12px;
+  letter-spacing:1px; border:1px solid var(--line); background:rgba(255,255,255,0.03); color:var(--txt); transition:.16s; text-align:center; }
+.cm-btn:hover{ border-color:var(--line-strong); background:rgba(255,255,255,0.08); }
+.cm-btn.primary{ border-color:rgba(232,179,64,0.55); color:var(--amber); background:rgba(232,179,64,0.1); }
+.cm-btn.primary:hover{ background:rgba(232,179,64,0.2); }
+.cm-btn.buy{ border-color:rgba(79,195,247,0.55); color:#7fd7ff; background:rgba(79,195,247,0.1); }
+.cm-btn.buy:hover{ background:rgba(79,195,247,0.2); }
+.cm-btn.ok{ border-color:rgba(105,240,174,0.5); color:#69f0ae; background:rgba(105,240,174,0.08); cursor:default; }
+.cm-btn:disabled{ opacity:.45; cursor:not-allowed; }
+.cm-btn .sub{ display:block; font-size:10px; opacity:.85; font-weight:600; }
+
+/* 碎片包 */
+.cm-fragshop{ display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:18px; }
+.cm-frag-card{ border:1px solid rgba(79,195,247,0.35); border-radius:14px; padding:20px 16px; text-align:center;
+  background:linear-gradient(180deg, rgba(79,195,247,0.08), rgba(10,13,15,0.85)); }
+.cm-frag-ico{ font-size:44px; filter:drop-shadow(0 4px 12px rgba(79,195,247,0.5)); }
+.cm-frag-amt{ font-family:'Orbitron'; font-size:22px; color:#7fd7ff; margin-top:8px; }
+.cm-frag-amt small{ font-size:12px; color:var(--txt-dim); letter-spacing:1px; }
+.cm-frag-buy{ margin-top:14px; width:100%; padding:10px; border-radius:9px; cursor:pointer; font-family:'Rajdhani'; font-weight:700;
+  letter-spacing:1px; border:1px solid rgba(232,179,64,0.5); color:var(--amber); background:rgba(232,179,64,0.1); transition:.16s; }
+.cm-frag-buy:hover{ background:rgba(232,179,64,0.2); }
+.cm-frag-buy:disabled{ opacity:.45; cursor:not-allowed; }
+
+.cm-hint{ color:var(--txt-dim); font-size:13px; line-height:1.7; margin-bottom:18px;
+  border-left:3px solid var(--amber); padding:8px 14px; background:rgba(232,179,64,0.05); border-radius:0 8px 8px 0; }
+
+/* 商城入口按钮（武器商城头部注入） */
+#shop-char-entry{ font-family:'Rajdhani'; font-weight:700; letter-spacing:1px; font-size:13px; cursor:pointer;
+  border:1px solid rgba(171,123,255,0.5); color:#c9a6ff; background:rgba(171,123,255,0.12); border-radius:8px; padding:7px 14px; transition:.16s; }
+#shop-char-entry:hover{ background:rgba(171,123,255,0.24); box-shadow:0 0 16px rgba(171,123,255,0.3); }
+
+/* ---------- 对局抽奖 ---------- */
+#gacha-overlay{ position:fixed; inset:0; z-index:4000; display:none; align-items:center; justify-content:center;
+  background:radial-gradient(ellipse at center, rgba(10,14,20,0.86), rgba(2,4,6,0.96)); backdrop-filter:blur(10px); }
+#gacha-overlay.show{ display:flex; }
+.gacha-box{ width:min(760px,94vw); text-align:center; padding:clamp(24px,4vh,44px); }
+.gacha-title{ font-family:'Orbitron'; font-weight:900; font-size:clamp(26px,4.4vh,42px); letter-spacing:4px; color:var(--amber);
+  text-shadow:0 0 30px rgba(232,179,64,0.4); }
+.gacha-sub{ color:var(--txt-dim); letter-spacing:3px; font-size:13px; margin-top:8px; text-transform:uppercase; }
+.gacha-wheel{ position:relative; width:min(560px,82vw); aspect-ratio:1/1; margin:clamp(16px,3vh,30px) auto; }
+.gacha-grid{ position:absolute; inset:0; display:grid; grid-template-columns:repeat(5,1fr); grid-template-rows:repeat(5,1fr); gap:clamp(6px,1vw,11px); }
+.gacha-cell{ border:1px solid var(--line); border-radius:11px; background:linear-gradient(160deg, rgba(20,26,28,0.7), rgba(12,16,17,0.55));
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; position:relative; overflow:hidden; }
+.gacha-cell::after{ content:''; position:absolute; inset:0; background:radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--gc,#9aa6b2) 18%, transparent), transparent 70%); opacity:0; transition:.2s; }
+.gacha-cell .gc-amt{ font-family:'Orbitron'; font-weight:900; font-size:clamp(15px,2.3vh,21px); color:var(--gc,#9aa6b2); text-shadow:0 0 12px color-mix(in srgb,var(--gc,#9aa6b2) 50%, transparent); }
+.gacha-cell .gc-lbl{ font-size:10px; letter-spacing:1px; color:var(--txt-dim); }
+.gacha-cell.hot{ border-color:var(--amber); box-shadow:0 0 26px rgba(232,179,64,0.55); background:linear-gradient(160deg, rgba(60,48,20,0.9), rgba(28,22,12,0.85)); transform:scale(1.07); z-index:4; }
+.gacha-cell.hot::after{ opacity:1; }
+.gacha-core{ position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:clamp(150px,30%,230px); height:clamp(150px,30%,230px); border-radius:50%;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; cursor:pointer;
+  background:radial-gradient(circle, rgba(46,38,18,0.96), rgba(14,12,8,0.96)); border:2px solid rgba(232,179,64,0.55);
+  box-shadow:0 0 44px rgba(232,179,64,0.28), inset 0 0 32px rgba(232,179,64,0.15); transition:.2s; }
+.gacha-core:hover{ box-shadow:0 0 60px rgba(232,179,64,0.45), inset 0 0 32px rgba(232,179,64,0.22); transform:translate(-50%,-50%) scale(1.04); }
+.gacha-core.disabled{ cursor:default; opacity:.85; }
+.gacha-core.disabled:hover{ box-shadow:0 0 44px rgba(232,179,64,0.28), inset 0 0 32px rgba(232,179,64,0.15); transform:translate(-50%,-50%) scale(1); }
+.gacha-core .gc-crystal{ font-size:clamp(26px,4vh,34px); filter:drop-shadow(0 0 14px rgba(232,179,64,0.7)); animation:gachaPulse 1.6s ease-in-out infinite; }
+.gacha-core .gc-hint{ font-family:'Orbitron'; font-weight:700; letter-spacing:3px; font-size:clamp(13px,1.8vh,16px); color:var(--amber); }
+@keyframes gachaPulse{ 0%,100%{ transform:scale(1); opacity:.85; } 50%{ transform:scale(1.12); opacity:1; } }
+.gacha-tip{ color:var(--txt); letter-spacing:2px; font-size:14px; min-height:20px; }
+.gacha-continue{ margin-top:clamp(14px,2.6vh,26px); padding:13px 40px; font-family:'Orbitron'; font-weight:700; letter-spacing:3px; font-size:15px;
+  border-radius:10px; cursor:pointer; border:1px solid rgba(232,179,64,0.55); color:var(--amber); background:rgba(232,179,64,0.12);
+  transition:.2s; display:none; }
+.gacha-continue.show{ display:inline-block; }
+.gacha-continue:hover{ background:rgba(232,179,64,0.22); box-shadow:0 0 24px rgba(232,179,64,0.3); }
+
+/* ---------- PC 端比例检测遮罩 ---------- */
+#pc-guard{ position:fixed; inset:0; z-index:999999; display:none; flex-direction:column; align-items:center; justify-content:center; gap:20px;
+  background:radial-gradient(ellipse at center, #0b0f14, #05070a); color:var(--txt-bright); text-align:center; padding:30px; }
+#pc-guard.show{ display:flex; }
+#pc-guard .pc-ico{ font-size:clamp(56px,9vh,84px); filter:drop-shadow(0 0 22px rgba(232,179,64,0.5)); }
+#pc-guard .pc-title{ font-family:'Orbitron'; font-weight:900; font-size:clamp(26px,4.4vh,42px); letter-spacing:4px; color:var(--amber); text-shadow:0 0 30px rgba(232,179,64,0.4); }
+#pc-guard .pc-sub{ color:var(--txt-dim); letter-spacing:2px; font-size:clamp(13px,1.7vh,15px); max-width:520px; line-height:1.8; }
+
+/* 通用提示气泡 */
+#cs-toast{ position:fixed; top:26px; left:50%; transform:translateX(-50%) translateY(-24px); z-index:6000;
+  padding:12px 26px; border-radius:10px; font-family:'Rajdhani'; font-weight:700; letter-spacing:1px; font-size:15px;
+  background:linear-gradient(180deg, rgba(20,26,30,0.96), rgba(12,16,18,0.96)); border:1px solid var(--line-strong);
+  color:var(--txt-bright); box-shadow:0 10px 40px rgba(0,0,0,0.5); opacity:0; pointer-events:none; transition:.3s; }
+#cs-toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+#cs-toast.ok{ border-color:rgba(105,240,174,0.5); color:#69f0ae; }
+#cs-toast.err{ border-color:rgba(216,71,58,0.5); color:var(--red-2); }
 </style>
 </head>
 <body>
 
 <div id="start-screen">
-    <!-- Fullscreen button -->
-    <button class="fullscreen-btn" onclick="toggleFullscreen()">⛶ 全屏</button>
-
     <!-- 顶栏 / 品牌 -->
     <div class="v-topbar">
         <div class="v-brand">
@@ -2856,65 +3012,81 @@ body{ font-family:'Rajdhani','Microsoft YaHei',Arial,sans-serif; }
             </div>
         </div>
         <div class="spacer"></div>
-        <nav class="v-nav">
-            <a>首页</a>
-            <a>模式</a>
-            <a>军械库</a>
-            <a>战令</a>
-        </nav>
+        <div class="v-actions">
+            <div class="v-gold" title="金币"><i>🪙</i><span id="home-gold-val">0</span></div>
+            <button class="v-icon-btn" id="homepage-panel-btn" title="个人面板">👤</button>
+            <button class="v-icon-btn" id="homepage-settings-btn" title="设置">⚙️</button>
+            <button class="fullscreen-btn" onclick="toggleFullscreen()" title="全屏">⛶</button>
+        </div>
     </div>
 
     <!-- 主体 -->
     <div class="v-body">
+        <!-- 左：作战入口 -->
         <div class="v-main">
             <div class="v-hero">
                 <div class="v-eyebrow">战术第一人称射击 · TACTICAL FPS</div>
-                <div class="v-h1">踏入 <span>战域</span><br>决胜于毫秒之间</div>
+                <div class="v-h1">踏入 <span>战域</span><br>决胜毫秒之间</div>
                 <div class="v-desc">真实光照 · 体积雾 · 枪口火焰 · 爆炸与破坏。于废弃港口、军事检查站、城市废墟等电影级战场中，与 AI 指挥的精英小队展开生死对决。</div>
-                <div class="v-stats">
-                    <div class="v-st"><b>5</b><span>战场</span></div>
-                    <div class="v-st"><b>3v3</b><span>对战规模</span></div>
-                    <div class="v-st"><b>∞</b><span>军械库</span></div>
-                </div>
             </div>
 
-            <!-- 模式卡片 -->
-            <div class="v-mode-grid">
-                <button class="v-mode-card primary wzlb-entry" id="wzlb-entry-btn">
-                    <div class="v-mc-icon">⚔️</div>
-                    <div>
-                        <div class="v-mc-title">王者乱斗</div>
-                        <div class="v-mc-desc">PVP 竞技 · 随机军械 · 三次复活</div>
+            <div class="v-modes">
+                <button class="v-mode-card wzlb-entry" id="wzlb-entry-btn">
+                    <div class="v-mc-top">
+                        <div class="v-mc-icon">⚔️</div>
+                        <div class="v-mc-body">
+                            <div class="v-mc-title">王者乱斗</div>
+                            <div class="v-mc-desc">PVP 竞技 · 随机军械 · 三次复活</div>
+                        </div>
+                    </div>
+                    <div class="v-mc-foot">
                         <span class="v-mc-tag">NEW · PVP</span>
+                        <span class="v-mc-go">开始 ▸</span>
                     </div>
                 </button>
                 <button class="v-mode-card" id="level-select-btn">
-                    <div class="v-mc-icon">🎮</div>
-                    <div>
-                        <div class="v-mc-title">关卡选择</div>
-                        <div class="v-mc-desc">PVE 战役 · 多难度挑战</div>
+                    <div class="v-mc-top">
+                        <div class="v-mc-icon">🎮</div>
+                        <div class="v-mc-body">
+                            <div class="v-mc-title">关卡选择</div>
+                            <div class="v-mc-desc">PVE 战役 · 多难度挑战</div>
+                        </div>
+                    </div>
+                    <div class="v-mc-foot">
                         <span class="v-mc-tag">CAMPAIGN</span>
+                        <span class="v-mc-go">开始 ▸</span>
                     </div>
                 </button>
             </div>
         </div>
 
-        <!-- 右侧功能模块栏 -->
-        <div class="v-rail">
-            <div class="v-rail-title">功能模块</div>
-            <button class="v-module" id="homepage-shop-btn"><span class="v-mi">🛒</span><div><div class="v-mt">商城</div><div class="v-ms">武器 · 装备 · 涂装</div></div><span class="v-mright">›</span></button>
-            <button class="v-module" id="guide-btn"><span class="v-mi">📖</span><div><div class="v-mt">游戏指南</div><div class="v-ms">操作 · 设定 · 武器</div></div><span class="v-mright">›</span></button>
-            <button class="v-module" id="monster-codex-btn"><span class="v-mi">👾</span><div><div class="v-mt">怪物图鉴</div><div class="v-ms">敌人档案</div></div><span class="v-mright">›</span></button>
-            <button class="v-module" id="equip-codex-btn"><span class="v-mi">🛡️</span><div><div class="v-mt">装备图鉴</div><div class="v-ms">武器数据库</div></div><span class="v-mright">›</span></button>
-            <button class="v-module" id="homepage-panel-btn"><span class="v-mi">👤</span><div><div class="v-mt">个人面板</div><div class="v-ms">战绩 · 仓库</div></div><span class="v-mright">›</span></button>
-            <button class="v-module" id="homepage-activity-btn"><span class="v-mi">🎁</span><div><div class="v-mt">活动</div><div class="v-ms">限时福利</div></div><span class="v-mright">›</span></button>
-            <button class="v-module" id="homepage-settings-btn"><span class="v-mi">⚙️</span><div><div class="v-mt">设置</div><div class="v-ms">音画 · 控制</div></div><span class="v-mright">›</span></button>
-        </div>
+        <!-- 右：当前作战单位 -->
+        <aside class="v-side">
+            <div class="v-charshow" id="home-charshow">
+                <div class="v-cs-label">当前出战</div>
+                <div class="v-cs-model" id="home-cs-model"></div>
+                <div class="v-cs-name" id="home-cs-name">突击者</div>
+                <div class="v-cs-stars" id="home-cs-stars">★</div>
+                <button class="v-cs-btn" id="home-char-btn">切换 / 获取角色</button>
+            </div>
+        </aside>
+    </div>
+
+    <!-- 底部功能坞 -->
+    <div class="v-dock">
+        <button class="v-dock-item accent-cyan" id="homepage-char-btn"><span class="di">🦸</span><span class="dl">角色</span></button>
+        <button class="v-dock-item accent-gold" id="homepage-shop-btn"><span class="di">🛒</span><span class="dl">商城</span></button>
+        <button class="v-dock-item" id="equip-codex-btn"><span class="di">🛡️</span><span class="dl">装备</span></button>
+        <button class="v-dock-item" id="monster-codex-btn"><span class="di">👾</span><span class="dl">怪物</span></button>
+        <button class="v-dock-item" id="guide-btn"><span class="di">📖</span><span class="dl">指南</span></button>
+        <button class="v-dock-item" id="homepage-activity-btn"><span class="di">🎁</span><span class="dl">活动</span></button>
     </div>
 
     <!-- 底栏 -->
     <div class="v-footer">
         <span>v5.0 · 战域 ARENA</span>
+        <div class="spacer"></div>
+        <span>10 角色 · 5★ 最高品级 · ∞ 军械库</span>
         <div class="spacer"></div>
         <span>© 2025 <b>VANGUARD</b> STUDIO</span>
     </div>
@@ -3121,8 +3293,6 @@ body{ font-family:'Rajdhani','Microsoft YaHei',Arial,sans-serif; }
     </div>
 </div>
 
-
-
 <!-- ====== 设置面板 ====== -->
 <div class="modal-overlay" id="settings-modal">
     <div class="modal-box" style="max-width:600px;width:92%;">
@@ -3240,19 +3410,6 @@ body{ font-family:'Rajdhani','Microsoft YaHei',Arial,sans-serif; }
             </div>
         </div>
     </div>
-</div>
-
-<!-- ====== [P3·Task19] 移动端触控 overlay ====== -->
-<div id="touch-overlay">
-    <div id="touch-beta-note">📱 移动端触控（Beta）</div>
-    <div id="touch-joystick"><div id="touch-joystick-thumb"></div></div>
-    <div id="touch-aim-area"></div>
-    <div id="touch-switch-btn" class="touch-btn" title="切换武器">🔁</div>
-    <div id="touch-skill-btn" class="touch-btn" title="武器技能(E)">E</div>
-    <div id="touch-special-btn" class="touch-btn" title="武器特殊(X)">X</div>
-    <div id="touch-reload-btn" class="touch-btn" title="换弹(R)">R</div>
-    <div id="touch-jump-btn" class="touch-btn" title="跳跃">⤴</div>
-    <div id="touch-fire-btn" class="touch-btn" title="射击">🔥</div>
 </div>
 
 <!-- Monster Codex Modal -->
@@ -3506,7 +3663,6 @@ body{ font-family:'Rajdhani','Microsoft YaHei',Arial,sans-serif; }
         <button class="btn btn--gold" id="victory-next-btn" style="display:none;min-width:200px;pointer-events:auto;">进入下一关</button>
     </div>
 </div>
-
 
 <!-- ====== Q键交互面板 ====== -->
 <div id="player-panel">
@@ -5011,6 +5167,11 @@ function initAll() {
         PLAYER_MAX_HP_EFFECTIVE = Math.round(PLAYER_MAX_HP_EFFECTIVE * (1 + (talentBonuses.maxHPPct || 0)));
         PLAYER_MAX_SHIELD_EFFECTIVE += (talentBonuses.maxShield || 0);
         PLAYER_MAX_ENERGY_EFFECTIVE += (talentBonuses.energy || 0);
+        // [v5.1] 角色加成：生命/护盾/能量百分比
+        var _cb = window.characterBonuses || {};
+        PLAYER_MAX_HP_EFFECTIVE = Math.round(PLAYER_MAX_HP_EFFECTIVE * (1 + (_cb.hpPct || 0)));
+        PLAYER_MAX_SHIELD_EFFECTIVE = Math.round(PLAYER_MAX_SHIELD_EFFECTIVE * (1 + (_cb.shieldPct || 0)));
+        PLAYER_MAX_ENERGY_EFFECTIVE = Math.round(PLAYER_MAX_ENERGY_EFFECTIVE * (1 + (_cb.energyPct || 0)));
         // 同步当前值
         if (gameStarted && !isDead) {
             // 关卡内：当前实际值绝对不变，仅更新上限；防止通过切换装备"回血"
@@ -5037,15 +5198,28 @@ function initAll() {
         if (umbrellaFlying && equippedMelee === 'thousandumbrella') speed *= 2.0; // 羽形态移速+100%
         // [P2] 天赋移速加成
         speed *= (talentBonuses.moveSpeedMult || 1);
+        // [v5.1] 角色移速加成
+        speed *= (1 + ((window.characterBonuses && window.characterBonuses.moveSpeedPct) || 0));
         return speed;
     }
-    // 获取有效魂力（基础+装备加成）
-    function getEffectiveSoulPower() { return soulPower + equippedWeaponBonuses.soulPower; }
+    // 获取有效魂力（基础+装备加成+角色加成）
+    function getEffectiveSoulPower() {
+        var sp = soulPower + equippedWeaponBonuses.soulPower;
+        sp = Math.round(sp * (1 + ((window.characterBonuses && window.characterBonuses.soulPowerPct) || 0)));
+        return sp;
+    }
     // 获取有效暴击率
     function getEffectiveCritChance() {
         const _wId = getCurrentEquippedWeaponId();
-        return CRIT_CHANCE + (equippedWeaponBonuses.critRate || 0) / 100 + getWeaponCritBonus(_wId) + (talentBonuses.critAdd || 0);
+        var _cCrit = (window.characterBonuses && window.characterBonuses.critAdd) || 0;
+        return CRIT_CHANCE + (equippedWeaponBonuses.critRate || 0) / 100 + getWeaponCritBonus(_wId) + (talentBonuses.critAdd || 0) + _cCrit;
     }
+    // [v5.1] 供角色系统调用：重算属性并刷新面板
+    window._applyCharacterStats = function() {
+        try { recalcWeaponBonuses(); } catch(e) {}
+        try { if (typeof updatePanelStats === 'function') updatePanelStats(); } catch(e) {}
+        try { if (typeof updateGoldUI === 'function') updateGoldUI(); } catch(e) {}
+    };
 
     // 近战
     let meleeCooldown = 0;
@@ -7861,8 +8035,141 @@ function initAll() {
         if (!audioCtx) return;
         try { fn(audioCtx); } catch(e) {}
     }
-    function playShootSound() { withAudioCtx(ctx => { const t = ctx.currentTime; const s = ctx.createBufferSource(); s.buffer = getNoiseBuffer(0.06, 5); const g = ctx.createGain(); g.gain.setValueAtTime(0.25, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.06); const f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.setValueAtTime(4000, t); f.frequency.exponentialRampToValueAtTime(800, t + 0.06); s.connect(f); f.connect(g); g.connect(masterGainNode); s.start(t); s.stop(t + 0.08); const o = ctx.createOscillator(); const og = ctx.createGain(); o.type = 'square'; o.frequency.setValueAtTime(1800, t); o.frequency.exponentialRampToValueAtTime(200, t + 0.04); og.gain.setValueAtTime(0.08, t); og.gain.exponentialRampToValueAtTime(0.001, t + 0.05); o.connect(og); og.connect(masterGainNode); o.start(t); o.stop(t + 0.06); /* 雷霆之怒电流声 */ if (currentWeaponSlot === 1) { const eOsc = ctx.createOscillator(); const eGain = ctx.createGain(); eOsc.type = 'sawtooth'; eOsc.frequency.setValueAtTime(3000 + Math.random() * 1000, t); eOsc.frequency.exponentialRampToValueAtTime(800, t + 0.04); eGain.gain.setValueAtTime(0.04, t); eGain.gain.exponentialRampToValueAtTime(0.001, t + 0.06); eOsc.connect(eGain); eGain.connect(masterGainNode); eOsc.start(t); eOsc.stop(t + 0.07); /* 微弱电弧噼啪 */ const eNoise = ctx.createBufferSource(); eNoise.buffer = getNoiseBuffer(0.03, 8); const eNG = ctx.createGain(); eNG.gain.setValueAtTime(0.06, t + 0.01); eNG.gain.exponentialRampToValueAtTime(0.001, t + 0.04); const eNF = ctx.createBiquadFilter(); eNF.type = 'highpass'; eNF.frequency.value = 5000; eNoise.connect(eNF); eNF.connect(eNG); eNG.connect(masterGainNode); eNoise.start(t + 0.01); eNoise.stop(t + 0.05); } }); }
-    function playReloadSound() { withAudioCtx(ctx => { const t = ctx.currentTime; const o1 = ctx.createOscillator(); const g1 = ctx.createGain(); o1.type='square'; o1.frequency.setValueAtTime(400,t); o1.frequency.setValueAtTime(300,t+0.05); g1.gain.setValueAtTime(0.12,t); g1.gain.exponentialRampToValueAtTime(0.001,t+0.1); o1.connect(g1);g1.connect(masterGainNode);o1.start(t);o1.stop(t+0.12); const o2 = ctx.createOscillator(); const g2 = ctx.createGain(); o2.type='square'; o2.frequency.setValueAtTime(600,t+0.8); o2.frequency.setValueAtTime(1000,t+0.85); g2.gain.setValueAtTime(0.12,t+0.8); g2.gain.exponentialRampToValueAtTime(0.001,t+0.9); o2.connect(g2);g2.connect(masterGainNode);o2.start(t+0.8);o2.stop(t+0.92); const o3 = ctx.createOscillator(); const g3 = ctx.createGain(); o3.type='sawtooth'; o3.frequency.setValueAtTime(1200,t+1.3); o3.frequency.setValueAtTime(800,t+1.35); o3.frequency.setValueAtTime(1400,t+1.4); g3.gain.setValueAtTime(0.08,t+1.3); g3.gain.exponentialRampToValueAtTime(0.001,t+1.5); o3.connect(g3);g3.connect(masterGainNode);o3.start(t+1.3);o3.stop(t+1.52); const o4 = ctx.createOscillator(); const g4 = ctx.createGain(); o4.type='sine'; o4.frequency.setValueAtTime(880,t+1.7); o4.frequency.setValueAtTime(1100,t+1.75); g4.gain.setValueAtTime(0.15,t+1.7); g4.gain.exponentialRampToValueAtTime(0.001,t+1.8); o4.connect(g4);g4.connect(masterGainNode);o4.start(t+1.7);o4.stop(t+1.82); }); }
+    // ==================== [武器专属音效引擎] 每把武器独立射击/换弹音色 ====================
+    const WEAPON_SFX = {
+        // ===== 主武器 =====
+        thunder: {  // 雷霆之怒 · 突击步枪（全自动）
+            shoot: { kind:'gun', noise:0.07, nGain:0.30, lpS:5500, lpE:800, bodyType:'square', bodyF:1400, bodyFE:200, bodyG:0.10, bodyDur:0.05, subF:95, subFE:50, subG:0.12, subDur:0.06, ring:3200, ringG:0.05 },
+            reload:{ kind:'rifle' }
+        },
+        dragonlyknight: { shoot:null, reload:{ kind:'ak' } },   // 魔龙骑士 · AK47（保留专属函数）
+        tumo: { shoot:null, reload:{ kind:'sniper' } },         // 屠魔 · 狙击（无限弹，极少换弹）
+        dawnlight: {  // 黎明之光 · 激光枪
+            shoot: { kind:'laser', sweepS:2000, sweepE:380, dur:0.20, g:0.20, hiss:0.06, whine:true },
+            reload:{ kind:'energy' }
+        },
+        zeushand: { shoot:null, reload:{ kind:'energy' } },     // 宙斯之手 · 能量枪
+        phasewalker: {  // 相位行者 · 相位步枪
+            shoot: { kind:'phase', whoosh:0.12, whooshG:0.12, ping:1800, pingE:2600, pingG:0.10, sub:900, subE:300, subG:0.05 },
+            reload:{ kind:'energy' }
+        },
+        parasite: { shoot:null, reload:{ kind:'energy' } },     // 寄生者 · 狙击
+        // ===== 副武器 =====
+        shadow: {  // 幽影双枪 · 双持手枪
+            shoot: { kind:'pistol', noise:0.04, nGain:0.20, hp:2500, bodyF:2200, bodyFE:400, bodyG:0.07, bodyDur:0.03, ring:3000, ringG:0.03 },
+            reload:{ kind:'pistol' }
+        },
+        metalstorm: { shoot:null, reload:{ kind:'pistol_fast' } }, // 金属风暴 · 双持手枪
+        whitenight: { shoot:null, reload:{ kind:'blade_pistol' } }, // 白夜铳刃
+        moonbow: {  // 皓月神弓 · 神弓
+            shoot: { kind:'bow', string:520, stringE:180, stringG:0.22, harm:1040, harmE:360, harmG:0.08, hiss:0.05 },
+            reload:{ kind:'none' }
+        }
+    };
+    // 通用合成原语
+    function _sfxNoise(ctx, t, dur, gain, type, freq, q, sweepTo) {
+        const s = ctx.createBufferSource(); s.buffer = getNoiseBuffer(dur, type === 'highpass' ? 7 : (type === 'bandpass' ? 3 : 5));
+        const g = ctx.createGain(); g.gain.setValueAtTime(gain, t); g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+        const f = ctx.createBiquadFilter(); f.type = type; f.frequency.setValueAtTime(freq, t);
+        if (sweepTo) f.frequency.exponentialRampToValueAtTime(sweepTo, t + dur); if (q) f.Q.value = q;
+        s.connect(f); f.connect(g); g.connect(masterGainNode); s.start(t); s.stop(t + dur + 0.02);
+    }
+    function _sfxTone(ctx, t, type, f0, f1, dur, gain, lp) {
+        const o = ctx.createOscillator(); o.type = type; o.frequency.setValueAtTime(f0, t);
+        if (f1 && f1 !== f0) o.frequency.exponentialRampToValueAtTime(f1, t + dur);
+        const g = ctx.createGain(); g.gain.setValueAtTime(gain, t); g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+        let node = o;
+        if (lp) { const f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = lp; o.connect(f); node = f; }
+        node.connect(g); g.connect(masterGainNode); o.start(t); o.stop(t + dur + 0.02);
+    }
+    // 射击音色渲染
+    function _sfxShoot(ctx, spec) {
+        const t = ctx.currentTime;
+        if (spec.kind === 'gun') {
+            _sfxNoise(ctx, t, spec.noise, spec.nGain, 'lowpass', spec.lpS, null, spec.lpE);
+            _sfxTone(ctx, t, spec.bodyType, spec.bodyF, spec.bodyFE, spec.bodyDur, spec.bodyG, 5000);
+            _sfxTone(ctx, t, 'sine', spec.subF, spec.subFE, spec.subDur, spec.subG, null);
+            if (spec.ring) _sfxTone(ctx, t, 'triangle', spec.ring, spec.ring * 0.85, 0.045, spec.ringG, 6000);
+        } else if (spec.kind === 'pistol') {
+            _sfxNoise(ctx, t, spec.noise, spec.nGain, 'highpass', spec.hp, null, null);
+            _sfxTone(ctx, t, 'square', spec.bodyF, spec.bodyFE, spec.bodyDur, spec.bodyG, 5000);
+            if (spec.ring) _sfxTone(ctx, t, 'triangle', spec.ring, spec.ring * 0.8, 0.035, spec.ringG, 6000);
+        } else if (spec.kind === 'laser') {
+            _sfxTone(ctx, t, 'sawtooth', spec.sweepS, spec.sweepE, spec.dur, spec.g, 4500);
+            if (spec.hiss) _sfxNoise(ctx, t, spec.dur * 0.5, spec.hiss, 'highpass', 6000, null, null);
+            if (spec.whine) _sfxTone(ctx, t, 'sine', 600, 1200, spec.dur * 0.6, 0.05, 3000);
+        } else if (spec.kind === 'phase') {
+            _sfxNoise(ctx, t, spec.whoosh, spec.whooshG, 'bandpass', 1200, 1.2, 400);
+            _sfxTone(ctx, t, 'sine', spec.ping, spec.pingE, 0.10, spec.pingG, 4000);
+            _sfxTone(ctx, t, 'square', spec.sub, spec.subE, 0.05, spec.subG, 3000);
+        } else if (spec.kind === 'bow') {
+            _sfxTone(ctx, t, 'triangle', spec.string, spec.stringE, 0.18, spec.stringG, 3000);
+            _sfxTone(ctx, t, 'sine', spec.harm, spec.harmE, 0.12, spec.harmG, 3000);
+            _sfxNoise(ctx, t, 0.05, spec.hiss, 'bandpass', 3000, 1, null);
+        }
+    }
+    // 换弹音色渲染
+    function _sfxReload(ctx, spec) {
+        const t = ctx.currentTime;
+        const click = (at, freq, gain, dur, type) => { _sfxTone(ctx, at, type || 'square', freq, freq * 0.7, dur, gain, 6000); _sfxNoise(ctx, at, dur, gain * 0.6, 'highpass', 4000, null, null); };
+        if (spec.kind === 'rifle') {
+            _sfxTone(ctx, t, 'sine', 140, 70, 0.09, 0.14, null); _sfxNoise(ctx, t, 0.05, 0.10, 'lowpass', 600, null, null);
+            click(t + 0.28, 900, 0.12, 0.04);
+            click(t + 0.55, 1500, 0.10, 0.03);
+        } else if (spec.kind === 'ak') {
+            _sfxTone(ctx, t, 'sine', 120, 60, 0.10, 0.16, null); _sfxNoise(ctx, t, 0.06, 0.12, 'lowpass', 500, null, null);
+            click(t + 0.30, 800, 0.13, 0.05);
+            click(t + 0.60, 1100, 0.11, 0.04);
+            click(t + 0.78, 1600, 0.09, 0.03);
+        } else if (spec.kind === 'sniper') {
+            _sfxTone(ctx, t, 'sine', 90, 45, 0.12, 0.18, null); _sfxNoise(ctx, t, 0.07, 0.14, 'lowpass', 400, null, null);
+            click(t + 0.35, 700, 0.14, 0.05);
+            click(t + 0.70, 1300, 0.12, 0.04);
+            click(t + 0.95, 1800, 0.10, 0.04);
+            click(t + 1.15, 1500, 0.10, 0.03);
+        } else if (spec.kind === 'pistol') {
+            click(t + 0.05, 1000, 0.10, 0.03);
+            click(t + 0.30, 1200, 0.12, 0.04);
+            click(t + 0.55, 1600, 0.10, 0.03);
+        } else if (spec.kind === 'pistol_fast') {
+            click(t + 0.04, 1200, 0.10, 0.025);
+            click(t + 0.18, 1500, 0.11, 0.025);
+            click(t + 0.34, 1700, 0.09, 0.02);
+        } else if (spec.kind === 'blade_pistol') {
+            click(t + 0.05, 1100, 0.11, 0.03);
+            click(t + 0.30, 1400, 0.12, 0.04);
+            _sfxTone(ctx, t + 0.55, 'triangle', 2600, 2100, 0.18, 0.06, 6000);
+        } else if (spec.kind === 'energy') {
+            _sfxTone(ctx, t, 'sawtooth', 200, 800, 0.6, 0.10, 1500);
+            _sfxTone(ctx, t + 0.6, 'sine', 600, 1200, 0.3, 0.06, 3000);
+            click(t + 0.95, 1400, 0.10, 0.04);
+        } else {
+            click(t, 1400, 0.05, 0.03);
+        }
+    }
+    function playShootSound() {
+        withAudioCtx(ctx => {
+            const wid = (typeof getCurrentEquippedWeaponId === 'function') ? getCurrentEquippedWeaponId() : null;
+            const spec = wid && WEAPON_SFX[wid] ? WEAPON_SFX[wid].shoot : null;
+            if (spec) { _sfxShoot(ctx, spec); return; }
+            if (wid === 'tumo') { playTumoShootSound(); return; }
+            if (wid === 'zeushand') { playZeusHandShootSound(); return; }
+            if (wid === 'parasite') { playParasiteShootSound(); return; }
+            if (wid === 'whitenight') { playWhiteNightShotSound(); return; }
+            if (wid === 'metalstorm') { playMetalStormShotSound(); return; }
+            if (wid === 'dragonlyknight') { playDragonKnightShootSound(); return; }
+            // 兜底通用枪声
+            _sfxShoot(ctx, { kind:'gun', noise:0.07, nGain:0.28, lpS:4500, lpE:800, bodyType:'square', bodyF:1500, bodyFE:200, bodyG:0.09, bodyDur:0.05, subF:100, subFE:50, subG:0.10, subDur:0.06, ring:0 });
+        });
+    }
+    function playReloadSound() {
+        withAudioCtx(ctx => {
+            const wid = (typeof getCurrentEquippedWeaponId === 'function') ? getCurrentEquippedWeaponId() : null;
+            const spec = wid && WEAPON_SFX[wid] ? WEAPON_SFX[wid].reload : null;
+            if (spec) { _sfxReload(ctx, spec); return; }
+            _sfxReload(ctx, { kind:'rifle' }); // 兜底
+        });
+    }
     function playEnemyDeathSound() { withAudioCtx(ctx => { const t = ctx.currentTime; const s = ctx.createBufferSource(); s.buffer = getNoiseBuffer(0.25, 2); const g = ctx.createGain(); g.gain.setValueAtTime(0.25, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.25); const f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.setValueAtTime(2000, t); f.frequency.exponentialRampToValueAtTime(100, t + 0.25); s.connect(f); f.connect(g); g.connect(masterGainNode); s.start(t); s.stop(t + 0.3); }); }
     function playHurtSound() { withAudioCtx(ctx => { const o = ctx.createOscillator(); const g = ctx.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(150, ctx.currentTime); o.frequency.exponentialRampToValueAtTime(60, ctx.currentTime + 0.2); g.gain.setValueAtTime(0.3, ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25); o.connect(g); g.connect(masterGainNode); o.start(); o.stop(ctx.currentTime + 0.3); }); }
     function playImpactSound() { withAudioCtx(ctx => { const o = ctx.createOscillator(); const g = ctx.createGain(); o.type = 'triangle'; o.frequency.setValueAtTime(2000, ctx.currentTime); o.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.08); g.gain.setValueAtTime(0.15, ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1); o.connect(g); g.connect(masterGainNode); o.start(); o.stop(ctx.currentTime + 0.12); }); }
@@ -7883,15 +8190,22 @@ function initAll() {
     // 调度策略：lookahead 0.1s，schedule 0.2s 内的音符，setInterval 每 25ms 检查
     // 音量层级：音符 gain（0.15~0.3）→ musicGainNode（= masterVolume*musicVolume）→ masterGainNode → destination
     // 4 小节根音：A2(110Hz) / F2(87.31Hz) / C3(130.81Hz) / G2(98Hz)
-    const BGM_BASS_ROOTS = [110.00, 87.31, 130.81, 98.00];
+    const BGM_BASS_ROOTS = [82.41, 65.41, 98.00, 73.42]; // Em - C - G - D（合成波 i-VI-III-VII）
     // lead 旋律：A 小调音阶，索引到 [步, 频率Hz, 持续(拍)]
     // 散布于 64 步中，营造赛博朋克跳跃感
     const BGM_LEAD_PATTERN = [
-        [0,  440.00, 1], [4,  523.25, 1], [8,  659.25, 1], [12, 587.33, 1],
-        [16, 523.25, 1], [20, 440.00, 1], [24, 392.00, 2],
-        [40, 659.25, 1], [44, 783.99, 1], [48, 880.00, 1], [52, 783.99, 1],
-        [56, 659.25, 2]
+        [0,  659.25, 1], [4,  783.99, 1], [8,  987.77, 1], [12, 880.00, 1],
+        [16, 783.99, 1], [20, 659.25, 1], [24, 523.25, 2],
+        [32, 659.25, 1], [36, 783.99, 1], [40, 1046.50, 1], [44, 987.77, 1],
+        [48, 880.00, 1], [52, 783.99, 1], [56, 659.25, 2]
     ];
+    // 琶音层（每8分音符）：按小节和弦三度循环（高八度）
+    const BGM_ARP = {
+        0: [164.81, 196.00, 246.94, 196.00], // Em: E G B G
+        1: [130.81, 164.81, 196.00, 164.81], // C:  C E G E
+        2: [196.00, 246.94, 293.66, 246.94], // G:  G B D B
+        3: [146.83, 196.00, 220.00, 196.00]  // D:  D G A G
+    };
     // 单步调度：根据 step 索引触发三个声部
     function _scheduleBGMStep(step, t, secPerBeat) {
         const bar = Math.floor(step / 16);            // 当前小节 0~3
@@ -7922,19 +8236,20 @@ function initAll() {
             sSrc.connect(sFilt); sFilt.connect(sGain); sGain.connect(musicGainNode);
             sSrc.start(t); sSrc.stop(t + 0.20);
         }
-        // hi-hat：每步触发，偶数步强、奇数步弱，噪声 highpass 7000Hz 短促
+        // hi-hat：闭合踩镲每步触发，反拍（step%4==2）加开镲长音，营造合成波律动
         {
+            const isOpen = (step % 4 === 2);
             const hSrc = audioCtx.createBufferSource();
-            hSrc.buffer = getNoiseBuffer(0.04, 6);
+            hSrc.buffer = getNoiseBuffer(isOpen ? 0.12 : 0.04, 6);
             const hGain = audioCtx.createGain();
-            const amp = (step % 2 === 0) ? 0.10 : 0.05;
+            const amp = isOpen ? 0.09 : (step % 2 === 0 ? 0.07 : 0.04);
             hGain.gain.setValueAtTime(amp, t);
-            hGain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+            hGain.gain.exponentialRampToValueAtTime(0.001, t + (isOpen ? 0.12 : 0.04));
             const hFilt = audioCtx.createBiquadFilter();
             hFilt.type = 'highpass';
-            hFilt.frequency.value = 7000;
+            hFilt.frequency.value = 7500;
             hSrc.connect(hFilt); hFilt.connect(hGain); hGain.connect(musicGainNode);
-            hSrc.start(t); hSrc.stop(t + 0.05);
+            hSrc.start(t); hSrc.stop(t + (isOpen ? 0.14 : 0.05));
         }
         // ---- bass：每拍一次（step % 4 === 0），按小节切换根音，sawtooth 低频律动 ----
         if (step % 4 === 0) {
@@ -7955,7 +8270,44 @@ function initAll() {
             bOsc.connect(bFilt); bFilt.connect(bGain); bGain.connect(musicGainNode);
             bOsc.start(t); bOsc.stop(t + bDur + 0.02);
         }
-        // ---- lead：按预设旋律数组调度 square 旋律线 ----
+            // ---- pad：每小节起始铺一层柔和持续和弦（氛围底色） ----
+        if (step % 16 === 0) {
+            const padRoots = [82.41, 65.41, 98.00, 73.42];
+            const padThird = [98.00, 82.41, 123.47, 110.00];
+            [padRoots[bar], padThird[bar]].forEach((pf, idx) => {
+                const pOsc = audioCtx.createOscillator();
+                const pGain = audioCtx.createGain();
+                pOsc.type = idx === 0 ? 'sine' : 'triangle';
+                pOsc.frequency.setValueAtTime(pf, t);
+                pOsc.frequency.linearRampToValueAtTime(pf * 1.005, t + secPerBeat * 4); // 轻微失谐漂移
+                pGain.gain.setValueAtTime(0, t);
+                pGain.gain.linearRampToValueAtTime(0.045, t + 0.4);
+                pGain.gain.setValueAtTime(0.045, t + secPerBeat * 3.4);
+                pGain.gain.exponentialRampToValueAtTime(0.001, t + secPerBeat * 4);
+                const pFilt = audioCtx.createBiquadFilter();
+                pFilt.type = 'lowpass'; pFilt.frequency.value = 1200;
+                pOsc.connect(pFilt); pFilt.connect(pGain); pGain.connect(musicGainNode);
+                pOsc.start(t); pOsc.stop(t + secPerBeat * 4 + 0.05);
+            });
+        }
+        // ---- arp：每8分音符拨奏和弦音，增加明亮律动 ----
+        if (step % 2 === 0) {
+            const arpNotes = BGM_ARP[bar % 4];
+            const note = arpNotes[(step / 2) % 4];
+            const aOsc = audioCtx.createOscillator();
+            const aGain = audioCtx.createGain();
+            aOsc.type = 'triangle';
+            aOsc.frequency.setValueAtTime(note, t);
+            const aDur = secPerBeat * 0.45;
+            aGain.gain.setValueAtTime(0, t);
+            aGain.gain.linearRampToValueAtTime(0.07, t + 0.01);
+            aGain.gain.exponentialRampToValueAtTime(0.001, t + aDur);
+            const aFilt = audioCtx.createBiquadFilter();
+            aFilt.type = 'lowpass'; aFilt.frequency.value = 2800;
+            aOsc.connect(aFilt); aFilt.connect(aGain); aGain.connect(musicGainNode);
+            aOsc.start(t); aOsc.stop(t + aDur + 0.02);
+        }
+    // ---- lead：按预设旋律数组调度 square 旋律线 ----
         for (let i = 0; i < BGM_LEAD_PATTERN.length; i++) {
             const entry = BGM_LEAD_PATTERN[i];
             if (entry[0] !== step) continue;
@@ -7982,7 +8334,7 @@ function initAll() {
     function playBGM() {
         if (bgmPlaying || !audioCtx || !musicGainNode) return;
         bgmPlaying = true;
-        const bpm = 128;
+        const bpm = 132;
         const secPerBeat = 60 / bpm;
         const secPer16th = secPerBeat / 4;
         bgmNextNoteTime = audioCtx.currentTime + 0.1;
@@ -9078,8 +9430,6 @@ function initAll() {
     // ==================== 敌人 ====================
 
     // ==================== 关卡系统 ====================
-
-
 
     function clearSceneForLevel() {
         // [Bugfix] 重置 DOM 缓存标记（关卡切换后重新查询）
@@ -12105,7 +12455,6 @@ function initAll() {
             line.rotation.set(Math.random(),Math.random(),Math.random()); scene.add(line);
         }
     }
-
 
     // ============================================================
     // ====== 第6章节·星渊彼岸·混沌纪元 场景构建 ======
@@ -15899,7 +16248,6 @@ window.LEVELS = LEVELS;
         boss.healthBarData = hbData; updateHealthBarSprite(hbData, HP, HP);
     }
 
-
     // ============================================================
     // ====== 第6章节·星渊彼岸·混沌纪元 BOSS创建 ======
     // ============================================================
@@ -17138,6 +17486,7 @@ window.LEVELS = LEVELS;
             _dInfo.textContent = '';
         }
         if(document.pointerLockElement) document.exitPointerLock();
+        // [v5.6] 失败/死亡不再弹出抽奖，仅关卡胜利时才发放碎片抽奖
     }
 
     // ==================== 复活币系统 ====================
@@ -18022,7 +18371,6 @@ window.LEVELS = LEVELS;
         tempEffects.push({ group: sg, life: 0.3, maxLife: 0.3, type: 'particles' });
     }
 
-
     // ==================== 第三人称视角系统 ====================
     function toggleThirdPerson() {
         isThirdPerson = !isThirdPerson;
@@ -18566,7 +18914,12 @@ window.LEVELS = LEVELS;
         victoryScreen.style.display = 'flex'; if(document.pointerLockElement) document.exitPointerLock();
         // [P2] 关卡首通成就检测
         trackLevelClear(currentLevel);
-        startAutoNextCountdown();
+        // [v5.1] 对局结束抽奖：抽取角色碎片，关闭后再开始自动进入下一关倒计时
+        if (typeof window._showGachaReward === 'function') {
+            window._showGachaReward('victory', currentLevel, function(){ startAutoNextCountdown(); });
+        } else {
+            startAutoNextCountdown();
+        }
     }
 
     function bossDefeated() {
@@ -19354,130 +19707,6 @@ break;
         }
     };
 
-    // ==================== [P3·Task19] 移动端触控实现 ====================
-    // 触控 overlay 可见性：仅触控设备、且局内活跃时显示；隐藏时清空触控按键避免卡住
-    function _updateTouchOverlayVisibility() {
-        if (!touchEnabled) return;
-        const ov = document.getElementById('touch-overlay');
-        if (!ov) return;
-        const show = gameStarted && !isDead && !levelComplete && !isPanelOpen && !isPaused;
-        if (show) {
-            ov.classList.add('touch-active');
-        } else {
-            ov.classList.remove('touch-active');
-            touchKeys.w=touchKeys.a=touchKeys.s=touchKeys.d=touchKeys.space=false;
-            touchFiring=false;
-        }
-    }
-    // 初始化触控控件（仅在触控设备调用一次）
-    function initTouchControls() {
-        const ov = document.getElementById('touch-overlay');
-        if (!ov) return;
-        const joystick = document.getElementById('touch-joystick');
-        const thumb = document.getElementById('touch-joystick-thumb');
-        const aimArea = document.getElementById('touch-aim-area');
-        if (!joystick || !thumb || !aimArea) return;
-
-        let joyId = null, joyCx = 0, joyCy = 0;
-        const JOY_RADIUS = 50, JOY_DEAD = 10;
-        let aimId = null, aimLastX = 0, aimLastY = 0;
-
-        // 摇杆：根据偏移量设置 touchKeys 方向（带死区），并移动 thumb 视觉
-        function setJoystick(dx, dy) {
-            const cl = Math.sqrt(dx*dx + dy*dy);
-            let tx = dx, ty = dy;
-            if (cl > JOY_RADIUS) { tx = dx/cl*JOY_RADIUS; ty = dy/cl*JOY_RADIUS; }
-            thumb.style.transform = 'translate(' + tx + 'px,' + ty + 'px)';
-            if (Math.abs(dx) < JOY_DEAD) dx = 0;
-            if (Math.abs(dy) < JOY_DEAD) dy = 0;
-            touchKeys.w = dy < 0;
-            touchKeys.s = dy > 0;
-            touchKeys.a = dx < 0;
-            touchKeys.d = dx > 0;
-        }
-        function resetJoystick() {
-            thumb.style.transform = '';
-            touchKeys.w=touchKeys.a=touchKeys.s=touchKeys.d=false;
-        }
-
-        joystick.addEventListener('touchstart', function(e) {
-            e.preventDefault(); e.stopPropagation();
-            if (joyId !== null) return;
-            const t = e.changedTouches[0];
-            joyId = t.identifier;
-            const r = joystick.getBoundingClientRect();
-            joyCx = r.left + r.width/2; joyCy = r.top + r.height/2;
-            setJoystick(t.clientX - joyCx, t.clientY - joyCy);
-        }, {passive:false});
-        joystick.addEventListener('touchmove', function(e) {
-            e.preventDefault(); e.stopPropagation();
-            for (let i=0;i<e.changedTouches.length;i++){
-                const t = e.changedTouches[i];
-                if (t.identifier === joyId) { setJoystick(t.clientX-joyCx, t.clientY-joyCy); break; }
-            }
-        }, {passive:false});
-        function joyEnd(e) {
-            for (let i=0;i<e.changedTouches.length;i++){
-                if (e.changedTouches[i].identifier === joyId) { joyId=null; resetJoystick(); break; }
-            }
-        }
-        joystick.addEventListener('touchend', joyEnd, {passive:false});
-        joystick.addEventListener('touchcancel', joyEnd, {passive:false});
-
-        // 瞄准区：触控拖动 → 累积到 mouseMovementX/Y，复用鼠标瞄准路径（无需指针锁定）
-        aimArea.addEventListener('touchstart', function(e) {
-            e.preventDefault(); e.stopPropagation();
-            if (aimId !== null) return;
-            const t = e.changedTouches[0];
-            aimId = t.identifier;
-            aimLastX = t.clientX; aimLastY = t.clientY;
-        }, {passive:false});
-        aimArea.addEventListener('touchmove', function(e) {
-            e.preventDefault(); e.stopPropagation();
-            for (let i=0;i<e.changedTouches.length;i++){
-                const t = e.changedTouches[i];
-                if (t.identifier === aimId) {
-                    const dx = t.clientX - aimLastX;
-                    const dy = t.clientY - aimLastY;
-                    // TOUCH_LOOK_SENS/0.002 将触控像素映射到与鼠标同量级的 mouseMovement 累积
-                    mouseMovementX += dx * (TOUCH_LOOK_SENS/0.002);
-                    mouseMovementY += dy * (TOUCH_LOOK_SENS/0.002);
-                    aimLastX = t.clientX; aimLastY = t.clientY;
-                    break;
-                }
-            }
-        }, {passive:false});
-        function aimEnd(e) {
-            for (let i=0;i<e.changedTouches.length;i++){
-                if (e.changedTouches[i].identifier === aimId) { aimId=null; break; }
-            }
-        }
-        aimArea.addEventListener('touchend', aimEnd, {passive:false});
-        aimArea.addEventListener('touchcancel', aimEnd, {passive:false});
-
-        // 通用按钮：按下 → onDown，抬起 → onUp（点按按钮 onUp 传 null）
-        function bindButton(id, onDown, onUp) {
-            const el = document.getElementById(id);
-            if (!el) return;
-            el.addEventListener('touchstart', function(e){
-                e.preventDefault(); e.stopPropagation();
-                try { onDown && onDown(); } catch(_e){}
-            }, {passive:false});
-            const up = function(e){ e.preventDefault(); e.stopPropagation(); try { onUp && onUp(); } catch(_e){} };
-            el.addEventListener('touchend', up, {passive:false});
-            el.addEventListener('touchcancel', up, {passive:false});
-        }
-        // 射击 / 跳跃：按住生效
-        bindButton('touch-fire-btn', function(){ touchFiring=true; }, function(){ touchFiring=false; });
-        bindButton('touch-jump-btn', function(){ touchKeys.space=true; }, function(){ touchKeys.space=false; });
-        // 换弹 / 武器技能 / 武器特殊 / 切换武器：点按（复用手柄同名动作函数）
-        bindButton('touch-reload-btn', _performReload, null);
-        bindButton('touch-skill-btn', _performWeaponSkill, null);
-        bindButton('touch-special-btn', _performWeaponSpecial, null);
-        bindButton('touch-switch-btn', function(){ _cycleWeapon(1); }, null);
-    }
-
-
     function restartGame() {
         // 清除BOSS溶解定时器（防止跨局残留触发）
         if (bossDissolveIntervalId) { clearInterval(bossDissolveIntervalId); bossDissolveIntervalId = null; }
@@ -19632,7 +19861,6 @@ break;
         updateShopState();
         try{renderer.domElement.requestPointerLock();}catch(e){}
     }
-
 
     // ==================== 武器系统 ====================
     let secondaryWeaponGroup = null;
@@ -23907,7 +24135,7 @@ break;
         if (secondaryAmmo <= 0) { if (secondaryReserve > 0) startSecondaryReload(); return; }
         secondaryAmmo--;
         secondaryShootCooldown = SECONDARY_FIRE_RATE;
-        playSecondaryShotSound();
+        playShootSound();
         // [优化3] 双持手枪视角后坐力（轻武器，恢复快）
         applyWeaponRecoil('shadow');
         // Alternate pistol recoil
@@ -27122,8 +27350,7 @@ break;
             window._fpsFrames=0; window._fpsLast=now;
         }
         if(delta>0.05) delta=0.05;
-        // [P3·Task19] 触控 overlay 可见性随游戏状态切换（仅触控设备生效，桌面 touchEnabled=false 直接返回）
-        try { _updateTouchOverlayVisibility(); } catch(e) {}
+
         // [优化] 实时点光源预算守卫：每 0.5s 审计一次，低画质档位下自动裁剪过量装饰灯（高画质预算 40 基本不触发）
         _pointLightAuditTimer += delta;
         if (_pointLightAuditTimer >= 0.5) { _pointLightAuditTimer = 0; enforcePointLightBudget(); }
@@ -28082,21 +28309,7 @@ break;
     document.getElementById('skip-wave-no').addEventListener('click', ()=>{ startFromFirstWave(); });
     // Initialize level 2 card state
     updateLevelCardState();
-    // [P3·Task19] 移动端触控检测：不再阻止游玩，改为启用触控 overlay + Beta 提示
-    // 注意：本段必须在 initAll 内部，才能访问 touchEnabled / initTouchControls 等内部成员
-    (function() {
-        const _isTouch = (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) || ('ontouchstart' in window) || /Android|iPhone|iPad|iPod|Mobile|Windows Phone/i.test(navigator.userAgent);
-        if (_isTouch) {
-            touchEnabled = true;            // 启用触控输入路径（桌面保持 false，键盘鼠标不受影响）
-            try { initTouchControls(); } catch(e) { console.error('initTouchControls:', e.message); }
-            // Beta 提示（短暂显示后淡出）
-            const hint = document.createElement('div');
-            hint.style.cssText = 'position:fixed;bottom:10px;left:10px;z-index:9999;background:rgba(0,0,0,0.85);color:#ffc107;padding:8px 14px;border-radius:6px;border:1px solid rgba(255,193,7,0.4);font-size:12px;letter-spacing:1px;backdrop-filter:blur(8px);max-width:300px;';
-            hint.innerHTML = '📱 移动端触控已启用（Beta）：左下摇杆移动 / 右半屏拖动瞄准 / 右下按钮射击与技能';
-            document.body.appendChild(hint);
-            setTimeout(() => { hint.style.transition = 'opacity 1s'; hint.style.opacity = '0'; setTimeout(() => hint.remove(), 1000); }, 6000);
-        }
-    })();
+
     // ================================================================
     //  王者乱斗模式 · 电影级特效系统（新增代码，不改动原有框架与游戏数据）
     // ================================================================
@@ -28731,6 +28944,10 @@ break;
             const st = document.getElementById('wzlb-result-stats');
             if(st) st.textContent = WZLB_MAPS[wzlbMapKey].name + ' · ' + wzlbTeamSize + ' v ' + wzlbTeamSize;
             rm.classList.add('show');
+            // [v5.6] 仅胜利时弹出抽奖（王者乱斗），战败不发奖
+            if (win && typeof window._showGachaReward === 'function') {
+                window._showGachaReward('victory', 5);
+            }
         }
     }
 
@@ -28869,5 +29086,558 @@ break;
     animate();
 }
 </script>
+
+<!-- ====== [v5.1] 角色系统 · 抽奖 · 全局提示 ====== -->
+<div class="modal-overlay" id="character-modal">
+    <div class="modal-box" style="padding:0 !important;">
+        <div class="cm-wrap">
+            <div class="cm-head">
+                <h2>角色系统</h2>
+                <div class="cm-tabs">
+                    <button class="cm-tab active" data-cmtab="mine">我的角色</button>
+                    <button class="cm-tab" data-cmtab="shop">角色商城</button>
+                    <button class="cm-tab" data-cmtab="synth">碎片合成</button>
+                </div>
+                <div class="cm-gold"><span>⬤</span><span id="cm-gold-val">0</span></div>
+                <div class="cm-frag"><span>🧩</span><span id="cm-frag-val">0</span> 碎片</div>
+                <button class="cm-close" data-close="character-modal">&times;</button>
+            </div>
+            <div class="cm-body" id="cm-body"></div>
+        </div>
+    </div>
+</div>
+
+<div id="gacha-overlay">
+    <div class="gacha-box">
+        <div class="gacha-title" id="gacha-title">对局奖励 · 荣耀补给</div>
+        <div class="gacha-sub" id="gacha-sub">荣耀补给轮盘 · 点击中心水晶开始转动</div>
+        <div class="gacha-wheel" id="gacha-wheel">
+            <div class="gacha-grid" id="gacha-grid"></div>
+            <div class="gacha-core" id="gacha-core">
+                <div class="gc-crystal">💎</div>
+                <div class="gc-hint" id="gacha-hint">抽奖</div>
+            </div>
+        </div>
+        <div class="gacha-tip" id="gacha-tip">点击中心水晶开始抽奖</div>
+        <button class="gacha-continue" id="gacha-continue">继 续</button>
+    </div>
+</div>
+
+<div id="cs-toast"></div>
+
+<script>
+/* =====================================================================
+   [v5.1] 角色系统模块（自包含）
+   - 10 个角色，1~5 星，SVG 建模随星级更精美，属性加成随星级提升
+   - 获取途径：商城金币购买 / 通用碎片合成
+   - 每局结束抽奖获得碎片
+   - 属性通过 window.characterBonuses 注入到游戏内 recalc 钩子
+   ===================================================================== */
+(function(){
+'use strict';
+
+/* ---------- 星级配置 ---------- */
+var STAR_META = {
+    1: { color:'#9aa6b2', synth:20,  price:8000,      bonus:{hpPct:0.05, shieldPct:0.05, soulPowerPct:0.05, critAdd:0.01, moveSpeedPct:0.02} },
+    2: { color:'#4fc3f7', synth:40,  price:30000,     bonus:{hpPct:0.10, shieldPct:0.10, soulPowerPct:0.12, critAdd:0.02, moveSpeedPct:0.04} },
+    3: { color:'#ab7bff', synth:80,  price:120000,    bonus:{hpPct:0.18, shieldPct:0.18, soulPowerPct:0.22, critAdd:0.04, moveSpeedPct:0.06} },
+    4: { color:'#ffb347', synth:160, price:500000,    bonus:{hpPct:0.30, shieldPct:0.30, soulPowerPct:0.38, critAdd:0.06, moveSpeedPct:0.10} },
+    5: { color:'#ff5252', synth:320, price:2000000,   bonus:{hpPct:0.50, shieldPct:0.50, soulPowerPct:0.65, critAdd:0.10, moveSpeedPct:0.15} }
+};
+
+/* ---------- 角色定义 ---------- */
+/* palette: 主色/辅色/发光色；每个角色可微调 bonus 倍率(bMul) */
+var CHARACTERS = [
+    { id:'rookie',    name:'新兵 · 阿尔法', en:'ROOKIE ALPHA',   star:1, pal:['#5b6b78','#8b9aa6','#aebccb'], bMul:1.0, free:true },
+    { id:'militia',   name:'民兵 · 布拉沃', en:'MILITIA BRAVO',  star:1, pal:['#6b5b4a','#a08a6a','#c9b48a'], bMul:1.05 },
+    { id:'scout',     name:'侦察兵 · 夜隼', en:'SCOUT NIGHTHAWK',star:2, pal:['#1f6b5a','#2fb99a','#7fe6cf'], bMul:1.0 },
+    { id:'breaker',   name:'爆破手 · 赤焰', en:'DEMO CRIMSON',   star:2, pal:['#7a2a1e','#e0503a','#ffa07a'], bMul:1.05 },
+    { id:'captain',   name:'突击队长 · 钢铁', en:'CAPT. STEEL',  star:3, pal:['#2a4a6b','#4f8fd6','#9cc9ff'], bMul:1.0 },
+    { id:'medic',     name:'医疗兵 · 白鸽', en:'MEDIC DOVE',     star:3, pal:['#4a6b4a','#6fd67f','#c9ffcf'], bMul:1.05 },
+    { id:'sniper',    name:'幽灵狙击 · 寒鸦', en:'GHOST RAVEN',  star:4, pal:['#3a2a5b','#7b4fd6','#c9a6ff'], bMul:1.0 },
+    { id:'titan',     name:'机甲战士 · 泰坦', en:'MECH TITAN',   star:4, pal:['#6b4a1e','#e0a03a','#ffd77a'], bMul:1.08 },
+    { id:'phoenix',   name:'王牌指挥官 · 凤凰', en:'ACE PHOENIX',star:5, pal:['#7a1e1e','#ff5030','#ffb060'], bMul:1.0 },
+    { id:'emperor',   name:'暗影君主 · 帝王', en:'SHADOW EMPEROR',star:5, pal:['#4a1e6b','#a03ae0','#e0a3ff'], bMul:1.12 }
+];
+var CHAR_BY_ID = {}; CHARACTERS.forEach(function(c){ CHAR_BY_ID[c.id]=c; });
+
+function charBonus(c){
+    var b = STAR_META[c.star].bonus, m = c.bMul||1, o={};
+    for(var k in b){ o[k] = +(b[k]*m).toFixed(4); }
+    return o;
+}
+
+/* ---------- SVG 建模：星级越高越精美 ---------- */
+function starSVG(n){
+    var s=''; for(var i=0;i<5;i++){ s += (i<n?'★':'☆'); } return s;
+}
+function buildCharSVG(c){
+    var p = c.pal, star = c.star, rc = STAR_META[star].color;
+    var uid = 'g'+c.id;
+    var d = star; // detail level 1..5
+    var parts = [];
+    parts.push('<svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">');
+    // defs: gradients + glow
+    parts.push('<defs>');
+    parts.push('<linearGradient id="'+uid+'body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+p[1]+'"/><stop offset="1" stop-color="'+p[0]+'"/></linearGradient>');
+    parts.push('<linearGradient id="'+uid+'hi" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+p[2]+'"/><stop offset="1" stop-color="'+p[1]+'"/></linearGradient>');
+    parts.push('<radialGradient id="'+uid+'aura" cx="0.5" cy="0.4" r="0.6"><stop offset="0" stop-color="'+rc+'" stop-opacity="'+(0.12+d*0.05)+'"/><stop offset="1" stop-color="'+rc+'" stop-opacity="0"/></radialGradient>');
+    parts.push('<filter id="'+uid+'gl"><feGaussianBlur stdDeviation="'+(1+d*0.6)+'" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>');
+    parts.push('</defs>');
+    // aura backdrop (higher star = stronger)
+    parts.push('<ellipse cx="100" cy="96" rx="'+(70+d*8)+'" ry="'+(80+d*8)+'" fill="url(#'+uid+'aura)"/>');
+    // 5★ wings/aura ring
+    if(star>=5){
+        parts.push('<g opacity="0.85" filter="url(#'+uid+'gl)">');
+        parts.push('<path d="M46 110 Q4 70 14 40 Q40 66 60 96 Z" fill="'+rc+'" opacity="0.55"/>');
+        parts.push('<path d="M154 110 Q196 70 186 40 Q160 66 140 96 Z" fill="'+rc+'" opacity="0.55"/>');
+        parts.push('</g>');
+    }
+    if(star>=4){
+        // energy ring behind
+        parts.push('<circle cx="100" cy="86" r="'+(50)+'" fill="none" stroke="'+rc+'" stroke-width="1.5" opacity="0.4" stroke-dasharray="6 8"/>');
+    }
+    // ---- torso / shoulders ----
+    // cape for 4-5
+    if(star>=4){ parts.push('<path d="M60 120 L46 232 L154 232 L140 120 Q100 150 60 120 Z" fill="'+p[0]+'" opacity="0.55"/>'); }
+    // shoulders
+    var shW = 34 + d*4;
+    parts.push('<path d="M'+(100-shW)+' 150 Q100 118 '+(100+shW)+' 150 L'+(100+shW-6)+' 232 L'+(100-shW+6)+' 232 Z" fill="url(#'+uid+'body)" stroke="'+rc+'" stroke-width="'+(0.6+d*0.35)+'"/>');
+    // chest plate
+    parts.push('<path d="M74 158 L126 158 L120 214 L100 224 L80 214 Z" fill="url(#'+uid+'hi)" opacity="0.92"/>');
+    // chest core light (2+)
+    if(star>=2){ parts.push('<circle cx="100" cy="182" r="'+(4+d)+'" fill="'+rc+'" filter="url(#'+uid+'gl)"/>'); }
+    // shoulder pads (3+)
+    if(star>=3){
+        parts.push('<path d="M'+(100-shW-2)+' 152 q-14 4 -12 26 q10 2 20 -6 Z" fill="'+p[2]+'" opacity="0.9"/>');
+        parts.push('<path d="M'+(100+shW+2)+' 152 q14 4 12 26 q-10 2 -20 -6 Z" fill="'+p[2]+'" opacity="0.9"/>');
+    }
+    // chest tech lines (3+)
+    if(star>=3){ parts.push('<path d="M86 168 L100 176 L114 168 M92 196 L108 196" stroke="'+rc+'" stroke-width="1.2" fill="none" opacity="0.8"/>'); }
+    // ---- neck ----
+    parts.push('<rect x="92" y="112" width="16" height="20" rx="4" fill="'+p[0]+'"/>');
+    // ---- helmet / head ----
+    parts.push('<ellipse cx="100" cy="80" rx="34" ry="38" fill="url(#'+uid+'body)" stroke="'+rc+'" stroke-width="'+(0.8+d*0.4)+'"/>');
+    // helmet top plate
+    parts.push('<path d="M66 74 Q100 34 134 74 Q100 58 66 74 Z" fill="url(#'+uid+'hi)"/>');
+    // visor
+    var vis = star>=3
+        ? '<path d="M74 78 L126 74 L122 94 Q100 104 78 94 Z" fill="#05121a"/><path d="M78 82 L120 79 L118 90 Q100 97 82 90 Z" fill="'+rc+'" opacity="0.9" filter="url(#'+uid+'gl)"/>'
+        : '<rect x="76" y="76" width="48" height="14" rx="6" fill="#05121a"/><rect x="80" y="80" width="40" height="6" rx="3" fill="'+rc+'" opacity="0.85"/>';
+    parts.push(vis);
+    // side helmet fins (4+)
+    if(star>=4){
+        parts.push('<path d="M66 70 q-12 6 -10 24 q10 -2 14 -14 Z" fill="'+p[2]+'"/>');
+        parts.push('<path d="M134 70 q12 6 10 24 q-10 -2 -14 -14 Z" fill="'+p[2]+'"/>');
+    }
+    // antenna (2+)
+    if(star>=2){ parts.push('<line x1="120" y1="52" x2="132" y2="34" stroke="'+rc+'" stroke-width="2"/><circle cx="132" cy="34" r="'+(2+d*0.5)+'" fill="'+rc+'" filter="url(#'+uid+'gl)"/>'); }
+    // crown/halo for 5★
+    if(star>=5){
+        parts.push('<g filter="url(#'+uid+'gl)"><path d="M78 44 L86 30 L94 42 L100 26 L106 42 L114 30 L122 44 Z" fill="'+rc+'"/></g>');
+    }
+    // rank chevrons on chest (star count)
+    var chev=''; for(var i=0;i<star;i++){ chev += '<path d="M'+(88+i*6)+' 208 l3 5 l3 -5" stroke="'+rc+'" stroke-width="1.4" fill="none" opacity="0.9"/>'; }
+    parts.push(chev);
+    parts.push('</svg>');
+    return parts.join('');
+}
+
+/* ---------- 状态与存档 ---------- */
+var SAVE_KEY = 'cs_characters_v1';
+var state = { owned:{}, frags:0, selected:'rookie' };
+
+function loadState(){
+    try{
+        var raw = localStorage.getItem(SAVE_KEY);
+        if(raw){
+            var d = JSON.parse(raw);
+            if(d.owned && typeof d.owned==='object') state.owned = d.owned;
+            if(typeof d.frags==='number') state.frags = d.frags;
+            if(typeof d.selected==='string') state.selected = d.selected;
+        }
+    }catch(e){}
+    // 保底：默认拥有并选中免费角色
+    if(!state.owned['rookie']) state.owned['rookie']=true;
+    if(!state.owned[state.selected]) state.selected='rookie';
+}
+function saveState(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(state)); }catch(e){} }
+
+/* ---------- 属性注入 ---------- */
+function applyCharacterStats(){
+    var c = CHAR_BY_ID[state.selected] || CHAR_BY_ID['rookie'];
+    var b = charBonus(c);
+    window.characterBonuses = {
+        hpPct:b.hpPct, shieldPct:b.shieldPct, soulPowerPct:b.soulPowerPct,
+        critAdd:b.critAdd, moveSpeedPct:b.moveSpeedPct, energyPct:b.hpPct*0.5
+    };
+    if(typeof window._applyCharacterStats === 'function'){ try{ window._applyCharacterStats(); }catch(e){} }
+}
+
+/* ---------- 金币桥接 ---------- */
+function getGold(){ try{ return window.getGameGold ? window.getGameGold() : 0; }catch(e){ return 0; } }
+function spendGold(n){ try{ if(window.addGameGold) window.addGameGold(-n); }catch(e){} }
+
+/* ---------- 提示 ---------- */
+var _toastTO=null;
+function toast(msg, type){
+    var t=document.getElementById('cs-toast'); if(!t) return;
+    t.textContent=msg; t.className=''; if(type) t.classList.add(type);
+    void t.offsetWidth; t.classList.add('show');
+    clearTimeout(_toastTO); _toastTO=setTimeout(function(){ t.classList.remove('show'); }, 1900);
+}
+
+/* ---------- 首页展示 ---------- */
+function refreshHome(){
+    var c = CHAR_BY_ID[state.selected] || CHAR_BY_ID['rookie'];
+    var m=document.getElementById('home-cs-model'); if(m) m.innerHTML = buildCharSVG(c);
+    var nm=document.getElementById('home-cs-name'); if(nm) nm.textContent = c.name;
+    var st=document.getElementById('home-cs-stars');
+    if(st){ st.textContent = starSVG(c.star); st.style.color = STAR_META[c.star].color; }
+    var gv=document.getElementById('home-gold-val'); if(gv) gv.textContent = getGold().toLocaleString();
+}
+
+/* ---------- 角色面板渲染 ---------- */
+var curTab='mine';
+function bonusText(c){
+    var b=charBonus(c);
+    return '生命 <b>+'+Math.round(b.hpPct*100)+'%</b> · 护盾 <b>+'+Math.round(b.shieldPct*100)+'%</b><br>'+
+           '魂力 <b>+'+Math.round(b.soulPowerPct*100)+'%</b> · 暴击 <b>+'+Math.round(b.critAdd*100)+'%</b> · 移速 <b>+'+Math.round(b.moveSpeedPct*100)+'%</b>';
+}
+function openPanel(tab){
+    curTab = tab || curTab || 'mine';
+    document.querySelectorAll('#character-modal .cm-tab').forEach(function(t){
+        t.classList.toggle('active', t.getAttribute('data-cmtab')===curTab);
+    });
+    renderPanel();
+    var m=document.getElementById('character-modal'); if(m) m.classList.add('show');
+    syncHeader();
+}
+function syncHeader(){
+    var g=document.getElementById('cm-gold-val'); if(g) g.textContent = getGold().toLocaleString();
+    var f=document.getElementById('cm-frag-val'); if(f) f.textContent = state.frags.toLocaleString();
+}
+function renderPanel(){
+    var body=document.getElementById('cm-body'); if(!body) return;
+    syncHeader();
+    if(curTab==='mine') body.innerHTML = renderMine();
+    else if(curTab==='shop') body.innerHTML = renderShop();
+    else body.innerHTML = renderSynth();
+}
+function cardArt(c, owned){
+    return '<div class="cm-card-art">'+buildCharSVG(c)+'<div class="cm-card-lock">🔒</div></div>';
+}
+function renderMine(){
+    var html='<div class="cm-hint">选择一名角色出战，其属性加成将在关卡与王者乱斗中全程生效。星级越高，加成越强、建模越精美。</div>';
+    html+='<div class="cm-grid">';
+    CHARACTERS.forEach(function(c){
+        var owned=!!state.owned[c.id], sel=(state.selected===c.id);
+        html+='<div class="cm-card rarity-'+c.star+(owned?'':' locked')+(sel?' selected':'')+'" data-id="'+c.id+'">';
+        html+='<div class="cm-card-badge">'+c.star+'★</div><div class="cm-card-sel">✓ 出战中</div>';
+        html+=cardArt(c);
+        html+='<div class="cm-card-info"><div class="cm-card-name">'+((c.name.split(' · ')[1])||c.name)+'</div>';
+        html+='<div class="cm-card-en">'+c.en+'</div>';
+        html+='<div class="cm-card-stars">'+starSVG(c.star)+'</div>';
+        html+='<div class="cm-card-bonus">'+bonusText(c)+'</div>';
+        html+='<div class="cm-card-act">';
+        if(owned){
+            html+= sel ? '<button class="cm-btn ok">出战中</button>'
+                       : '<button class="cm-btn primary" data-act="select" data-id="'+c.id+'">选择出战</button>';
+        } else {
+            html+='<button class="cm-btn" data-act="goshop" data-id="'+c.id+'">前往获取</button>';
+        }
+        html+='</div></div></div>';
+    });
+    html+='</div>';
+    return html;
+}
+function renderShop(){
+    var gold=getGold();
+    var html='<div class="cm-hint">在此使用金币直接购买角色。若金币不足，可购买通用<b style="color:#7fd7ff">角色碎片</b>，用于合成任意角色。</div>';
+    // 碎片包
+    html+='<div style="font-family:Orbitron;letter-spacing:2px;color:#7fd7ff;margin:6px 0 14px;font-size:16px;">🧩 碎片包</div>';
+    html+='<div class="cm-fragshop">';
+    FRAG_PACKS.forEach(function(pk,idx){
+        var can=gold>=pk.price;
+        html+='<div class="cm-frag-card"><div class="cm-frag-ico">🧩</div>'+
+              '<div class="cm-frag-amt">'+pk.amt+' <small>碎片</small></div>'+
+              '<div style="color:#e8b340;font-family:Orbitron;margin-top:6px;">⬤ '+pk.price.toLocaleString()+'</div>'+
+              '<button class="cm-frag-buy" data-act="buyfrag" data-idx="'+idx+'" '+(can?'':'disabled')+'>'+(can?'购买':'金币不足')+'</button></div>';
+    });
+    html+='</div>';
+    // 角色购买
+    html+='<div style="font-family:Orbitron;letter-spacing:2px;color:#e8b340;margin:26px 0 14px;font-size:16px;">🦸 角色购买</div>';
+    html+='<div class="cm-grid">';
+    CHARACTERS.forEach(function(c){
+        var owned=!!state.owned[c.id], price=STAR_META[c.star].price;
+        html+='<div class="cm-card rarity-'+c.star+(owned?'':'')+'" data-id="'+c.id+'">';
+        html+='<div class="cm-card-badge">'+c.star+'★</div>';
+        html+=cardArt(c);
+        html+='<div class="cm-card-info"><div class="cm-card-name">'+((c.name.split(' · ')[1])||c.name)+'</div>';
+        html+='<div class="cm-card-en">'+c.en+'</div>';
+        html+='<div class="cm-card-stars">'+starSVG(c.star)+'</div>';
+        html+='<div class="cm-card-bonus">'+bonusText(c)+'</div>';
+        html+='<div class="cm-card-act">';
+        if(owned){ html+='<button class="cm-btn ok">已拥有</button>'; }
+        else {
+            var can=gold>=price;
+            html+='<button class="cm-btn buy" data-act="buychar" data-id="'+c.id+'" '+(can?'':'disabled')+'>'+(can?'购买':'金币不足')+'<span class="sub">⬤ '+price.toLocaleString()+'</span></button>';
+        }
+        html+='</div></div></div>';
+    });
+    html+='</div>';
+    return html;
+}
+function renderSynth(){
+    var html='<div class="cm-hint">角色碎片为<b style="color:#7fd7ff">通用碎片</b>，可合成任意未拥有角色。星级越高所需碎片越多：1★='+STAR_META[1].synth+' / 2★='+STAR_META[2].synth+' / 3★='+STAR_META[3].synth+' / 4★='+STAR_META[4].synth+' / 5★='+STAR_META[5].synth+'。当前拥有 <b style="color:#7fd7ff">'+state.frags+'</b> 碎片。</div>';
+    html+='<div class="cm-grid">';
+    CHARACTERS.forEach(function(c){
+        var owned=!!state.owned[c.id], need=STAR_META[c.star].synth, can=state.frags>=need;
+        html+='<div class="cm-card rarity-'+c.star+(owned?'':' locked')+'" data-id="'+c.id+'">';
+        html+='<div class="cm-card-badge">'+c.star+'★</div>';
+        html+=cardArt(c);
+        html+='<div class="cm-card-info"><div class="cm-card-name">'+((c.name.split(' · ')[1])||c.name)+'</div>';
+        html+='<div class="cm-card-en">'+c.en+'</div>';
+        html+='<div class="cm-card-stars">'+starSVG(c.star)+'</div>';
+        html+='<div class="cm-card-bonus" style="color:#7fd7ff;">🧩 需 '+need+' 碎片 &nbsp; ('+Math.min(state.frags,need)+'/'+need+')</div>';
+        html+='<div class="cm-card-act">';
+        if(owned){ html+='<button class="cm-btn ok">已拥有</button>'; }
+        else { html+='<button class="cm-btn primary" data-act="synth" data-id="'+c.id+'" '+(can?'':'disabled')+'>合成</button>'; }
+        html+='</div></div></div>';
+    });
+    html+='</div>';
+    return html;
+}
+
+var FRAG_PACKS = [
+    { amt:20,  price:15000 },
+    { amt:60,  price:40000 },
+    { amt:160, price:100000 },
+    { amt:400, price:220000 }
+];
+
+/* ---------- 交互 ---------- */
+function doSelect(id){
+    if(!state.owned[id]){ toast('尚未拥有该角色','err'); return; }
+    state.selected=id; saveState(); applyCharacterStats(); refreshHome();
+    var c=CHAR_BY_ID[id]; toast('已切换出战角色：'+((c.name.split(' · ')[1])||c.name), 'ok');
+    renderPanel();
+}
+function doBuyChar(id){
+    var c=CHAR_BY_ID[id]; if(!c || state.owned[id]) return;
+    var price=STAR_META[c.star].price;
+    if(getGold()<price){ toast('金币不足','err'); return; }
+    spendGold(price); state.owned[id]=true; saveState();
+    toast('购买成功：'+((c.name.split(' · ')[1])||c.name),'ok');
+    syncHeader(); renderPanel(); refreshHome();
+}
+function doBuyFrag(idx){
+    var pk=FRAG_PACKS[idx]; if(!pk) return;
+    if(getGold()<pk.price){ toast('金币不足','err'); return; }
+    spendGold(pk.price); state.frags+=pk.amt; saveState();
+    toast('获得 '+pk.amt+' 碎片','ok'); syncHeader(); renderPanel();
+}
+function doSynth(id){
+    var c=CHAR_BY_ID[id]; if(!c || state.owned[id]) return;
+    var need=STAR_META[c.star].synth;
+    if(state.frags<need){ toast('碎片不足','err'); return; }
+    state.frags-=need; state.owned[id]=true; saveState();
+    toast('合成成功：'+((c.name.split(' · ')[1])||c.name),'ok');
+    syncHeader(); renderPanel(); refreshHome();
+}
+
+document.addEventListener('click', function(e){
+    var tab=e.target.closest('.cm-tab');
+    if(tab){ curTab=tab.getAttribute('data-cmtab'); openPanel(curTab); return; }
+    var btn=e.target.closest('[data-act]');
+    if(btn && btn.closest('#character-modal')){
+        var act=btn.getAttribute('data-act'), id=btn.getAttribute('data-id');
+        if(act==='select') doSelect(id);
+        else if(act==='buychar') doBuyChar(id);
+        else if(act==='synth') doSynth(id);
+        else if(act==='buyfrag') doBuyFrag(parseInt(btn.getAttribute('data-idx'),10));
+        else if(act==='goshop'){ curTab='shop'; openPanel('shop'); }
+        return;
+    }
+    // 卡片整体点击（我的角色页快速选择）
+    var card=e.target.closest('.cm-card');
+    if(card && curTab==='mine' && card.closest('#character-modal')){
+        var cid=card.getAttribute('data-id');
+        if(state.owned[cid]) doSelect(cid);
+        return;
+    }
+});
+
+/* 打开入口 */
+function openCharacter(tab){ loadState(); openPanel(tab||'mine'); }
+window._openCharacterPanel = openCharacter;
+
+function bindEntries(){
+    ['home-char-btn','homepage-char-btn'].forEach(function(id){
+        var el=document.getElementById(id);
+        if(el && !el._csBound){ el._csBound=true; el.addEventListener('click', function(){ openCharacter('mine'); }); }
+    });
+    // 关闭
+    document.querySelectorAll('#character-modal [data-close="character-modal"]').forEach(function(b){
+        if(!b._csBound){ b._csBound=true; b.addEventListener('click', function(){ document.getElementById('character-modal').classList.remove('show'); if(window._refreshShopGold) window._refreshShopGold(); }); }
+    });
+}
+
+/* 武器商城内注入"角色商城"入口 */
+function injectShopEntry(){
+    var head=document.querySelector('#shop-modal .rd-shop-head > div:last-child');
+    if(head && !document.getElementById('shop-char-entry')){
+        var b=document.createElement('button');
+        b.id='shop-char-entry'; b.textContent='🦸 角色商城';
+        b.addEventListener('click', function(){ openCharacter('shop'); });
+        head.insertBefore(b, head.firstChild);
+    }
+}
+
+/* ---------- 对局结束抽奖：荣耀补给方形轮盘 ---------- */
+var GACHA_CELLS = [10, 5, 20, 8, 30, 12, 50, 6, 15, 40, 8, 25, 100, 12, 60, 5];
+var GACHA_POS = [[1,1],[1,2],[1,3],[1,4],[1,5],[2,5],[3,5],[4,5],[5,5],[5,4],[5,3],[5,2],[5,1],[4,1],[3,1],[2,1]];
+var _gachaActive=false, _gachaDone=false, _gachaCb=null, _gachaSpin=false;
+
+function amtColor(a){ if(a>=70) return '#ff5252'; if(a>=40) return '#ffb347'; if(a>=24) return '#ab7bff'; if(a>=14) return '#4fc3f7'; return '#9aa6b2'; }
+function gachaCellWeight(a){ return 50 / a; } // 数量越大，中奖权重越低（越稀有）
+
+function buildGachaTrack(win, level){
+    var grid=document.getElementById('gacha-grid'); if(!grid) return [];
+    grid.innerHTML='';
+    var mult = win ? (1 + (level-1)*0.05) : 0.7;
+    var track=[];
+    for(var i=0;i<16;i++){
+        var amt=Math.max(1, Math.round(GACHA_CELLS[i]*mult));
+        var d=document.createElement('div');
+        d.className='gacha-cell';
+        d.style.gridRow=GACHA_POS[i][0]; d.style.gridColumn=GACHA_POS[i][1];
+        d.style.setProperty('--gc', amtColor(amt));
+        d.innerHTML='<div class="gc-amt">+'+amt+'</div><div class="gc-lbl">碎片</div>';
+        d.dataset.amt=amt;
+        grid.appendChild(d); track.push(d);
+    }
+    return track;
+}
+function spinGacha(track){
+    // [v5.6] 每次抽奖仅允许转动一次：转动中或已抽过则直接忽略
+    if(_gachaSpin || _gachaDone) return; _gachaSpin=true;
+    var core=document.getElementById('gacha-core');
+    core.classList.add('disabled');
+    core.onclick=null; // 立即解绑，杜绝重复触发
+    core.querySelector('.gc-hint').textContent='...';
+    document.getElementById('gacha-tip').textContent='轮盘转动中…';
+    // 按权重抽取中奖格（数量越大越稀有）
+    var totalW=0,i; for(i=0;i<track.length;i++){ totalW += gachaCellWeight(parseInt(track[i].dataset.amt,10)); }
+    var r=Math.random()*totalW, acc=0, winIdx=0;
+    for(i=0;i<track.length;i++){ acc += gachaCellWeight(parseInt(track[i].dataset.amt,10)); if(r<=acc){ winIdx=i; break; } }
+    var laps=2, totalSteps=laps*16+winIdx;
+    // [v5.6] 预计算每步延时：先快后慢缓动，总时长固定预算（严格 <10s）
+    var budget=6200, weights=[], sumW=0;
+    for(i=0;i<=totalSteps;i++){ var t=i/totalSteps, w=0.25 + t*t*3.4; weights.push(w); sumW+=w; }
+    var delays=[]; for(i=0;i<totalSteps;i++){ delays.push(Math.max(22, weights[i]/sumW*budget)); }
+    var step=0, idx=0;
+    function tick(){
+        for(var k=0;k<track.length;k++) track[k].classList.remove('hot');
+        track[idx%16].classList.add('hot'); // 先高亮当前格
+        if(step>=totalSteps){
+            // [v5.6] 发奖以“高亮停留格”为准，确保显示数量与实际到账完全一致
+            var amt=parseInt(track[idx%16].dataset.amt,10);
+            state.frags += amt; saveState();
+            core.querySelector('.gc-hint').textContent='+'+amt;
+            document.getElementById('gacha-tip').textContent='恭喜获得 '+amt+' 角色碎片！当前共 '+state.frags+' 碎片';
+            document.getElementById('gacha-continue').classList.add('show');
+            _gachaDone=true; _gachaSpin=false;
+            try{ if(window._applyCharacterStats) window._applyCharacterStats(); }catch(e){}
+            try{ if(typeof refreshHome==='function') refreshHome(); }catch(e){}
+            return;
+        }
+        var d=delays[step]; idx++; step++;
+        setTimeout(tick, d);
+    }
+    tick();
+}
+function showGacha(context, level, cb){
+    loadState();
+    var ov=document.getElementById('gacha-overlay'); if(!ov){ if(cb) cb(); return; }
+    _gachaCb=cb; _gachaDone=false; _gachaActive=true; _gachaSpin=false;
+    var win=context==='victory';
+    var track=buildGachaTrack(win, level);
+    document.getElementById('gacha-title').textContent = win ? '胜利奖励 · 荣耀补给' : '对局奖励 · 荣耀补给';
+    document.getElementById('gacha-sub').textContent = '点击中心水晶，转动轮盘抽取角色碎片';
+    document.getElementById('gacha-tip').textContent = '点击中心水晶开始抽奖';
+    var core=document.getElementById('gacha-core');
+    core.classList.remove('disabled'); core.querySelector('.gc-hint').textContent='抽奖';
+    document.getElementById('gacha-continue').classList.remove('show');
+    core.onclick=function(){ spinGacha(track); };
+    ov.classList.add('show');
+    var cont=document.getElementById('gacha-continue');
+    cont.onclick=function(){ closeGacha(); };
+}
+function closeGacha(){
+    var ov=document.getElementById('gacha-overlay'); if(ov) ov.classList.remove('show');
+    _gachaActive=false;
+    var cb=_gachaCb; _gachaCb=null;
+    if(typeof cb==='function'){ try{ cb(); }catch(e){} }
+}
+window._showGachaReward = function(context, level, cb){
+    try{ showGacha(context, level, cb); }
+    catch(e){ if(typeof cb==='function') cb(); }
+};
+
+/* ---------- PC 端比例检测：非 PC 比例则遮罩 ---------- */
+function checkPC(){
+    var w=window.innerWidth, h=window.innerHeight;
+    var ok = h>0 && (w/h) >= 1.0 && w >= 768; // 横屏且宽度足够视为 PC
+    var g=document.getElementById('pc-guard');
+    if(g) g.classList.toggle('show', !ok);
+}
+function bindPCGuard(){
+    checkPC();
+    window.addEventListener('resize', checkPC);
+    window.addEventListener('orientationchange', checkPC);
+}
+
+/* ---------- 首页禁用滚轮 ---------- */
+function bindWheelGuard(){
+    var ss=document.getElementById('start-screen');
+    if(ss && !ss._wheelBound){
+        ss._wheelBound=true;
+        ss.addEventListener('wheel', function(ev){ ev.preventDefault(); }, { passive:false });
+    }
+}
+
+/* ---------- 初始化 ---------- */
+function init(){
+    loadState();
+    applyCharacterStats();
+    refreshHome();
+    bindEntries();
+    bindWheelGuard();
+    bindPCGuard();
+    injectShopEntry();
+    // 顶栏金币芯片：随游戏金币变化轻量刷新
+    setInterval(function(){
+        var ss=document.getElementById('start-screen');
+        var gv=document.getElementById('home-gold-val');
+        if(gv && ss && ss.offsetParent!==null) gv.textContent = getGold().toLocaleString();
+    }, 1000);
+    // 商城打开时补注入入口
+    var shopBtns=['homepage-shop-btn','open-shop-btn'];
+    shopBtns.forEach(function(id){ var el=document.getElementById(id); if(el){ el.addEventListener('click', function(){ setTimeout(injectShopEntry, 60); }); } });
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init);
+else init();
+// three.js 异步加载后 window._applyCharacterStats 才就绪，稍后重试注入属性
+setTimeout(applyCharacterStats, 1500);
+setTimeout(applyCharacterStats, 4000);
+
+})();
+</script>
+<div id="pc-guard">
+    <div class="pc-ico">🖥️</div>
+    <div class="pc-title">请在 PC 端打开</div>
+    <div class="pc-sub">本游戏仅支持桌面端浏览器。请使用电脑以横屏比例（宽 ≥ 高）访问，以获得最佳作战体验。</div>
+</div>
 </body>
 </html>
