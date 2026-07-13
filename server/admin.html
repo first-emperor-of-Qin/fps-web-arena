@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>枪战突击 · 后台管理</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:#0f1419;color:#e0e6ed}
+a{color:#4da3ff;text-decoration:none}
+button{cursor:pointer;border:none;font:inherit;transition:.15s}
+
+/* layout */
+.admin-layout{display:flex;height:100vh}
+.sidebar{width:220px;background:#141b22;border-right:1px solid rgba(255,255,255,0.08);display:flex;flex-direction:column;flex-shrink:0}
+.sidebar .logo{padding:20px 18px 16px;border-bottom:1px solid rgba(255,255,255,0.06);font:700 18px/1 sans-serif;color:#fff;letter-spacing:.03em}
+.sidebar .logo span{color:#00e5ff}
+.sidebar .nav{flex:1;overflow-y:auto;padding:8px}
+.sidebar .nav-item{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:8px;color:#8a94a0;font:500 14px/1 sans-serif;cursor:pointer;transition:.15s;margin-bottom:2px}
+.sidebar .nav-item:hover{background:rgba(255,255,255,0.04);color:#c0c8d0}
+.sidebar .nav-item.active{background:rgba(0,229,255,0.1);color:#00e5ff}
+.sidebar .nav-item .ico{font-size:16px;width:20px;text-align:center}
+.sidebar .footer{padding:12px 14px;border-top:1px solid rgba(255,255,255,0.06);color:#6a7480;font-size:12px}
+
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;background:#141b22;border-bottom:1px solid rgba(255,255,255,0.08)}
+.topbar .title{font:600 16px/1 sans-serif;color:#fff}
+.topbar .user{display:flex;align-items:center;gap:10px;font:500 13px/1 sans-serif;color:#a0aab2}
+.topbar .user .badge{padding:3px 8px;border-radius:4px;font-size:11px;background:#ffa726;color:#111}
+.topbar button{padding:7px 14px;border-radius:6px;font-size:13px;background:rgba(229,57,53,0.15);color:#ff8a80;border:1px solid rgba(229,57,53,0.3)}
+.topbar button:hover{background:rgba(229,57,53,0.25)}
+
+.content{flex:1;overflow-y:auto;padding:24px}
+
+/* cards */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:24px}
+.stat-card{background:#1a232c;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:18px}
+.stat-card .label{font-size:12px;color:#6a7480;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.stat-card .value{font:700 28px/1 sans-serif;color:#fff}
+.stat-card .sub{font-size:12px;color:#4da3ff;margin-top:6px}
+.stat-card.accent{border-left:3px solid #00e5ff}
+
+/* table */
+.table-wrap{background:#1a232c;border-radius:10px;border:1px solid rgba(255,255,255,0.06);overflow:hidden}
+.table-wrap .th{display:flex;align-items:center;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,0.06);font:600 13px/1 sans-serif;color:#8a94a0;gap:10px}
+.table-wrap .th input{flex:1;max-width:280px;padding:8px 12px;border-radius:6px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.08);color:#e0e6ed;outline:none;font-size:13px}
+.table-wrap .th input:focus{border-color:#00e5ff}
+table{width:100%;border-collapse:collapse}
+table th{text-align:left;padding:10px 14px;font:600 12px/1 sans-serif;color:#6a7480;text-transform:uppercase;letter-spacing:.04em;background:rgba(0,0,0,0.15)}
+table td{padding:10px 14px;font-size:13px;border-top:1px solid rgba(255,255,255,0.04)}
+table tr:hover td{background:rgba(0,229,255,0.03)}
+.tag{padding:2px 8px;border-radius:4px;font-size:11px;display:inline-block}
+.tag-green{background:rgba(76,175,80,0.15);color:#69f0ae}
+.tag-red{background:rgba(229,57,53,0.15);color:#ff8a80}
+.tag-blue{background:rgba(0,229,255,0.12);color:#00e5ff}
+.mini-btn{padding:5px 10px;border-radius:5px;font-size:11px;margin:1px;cursor:pointer}
+.mini-btn.primary{background:rgba(0,229,255,0.15);color:#00e5ff;border:1px solid rgba(0,229,255,0.25)}
+.mini-btn.danger{background:rgba(229,57,53,0.12);color:#ff8a80;border:1px solid rgba(229,57,53,0.25)}
+.mini-btn.warn{background:rgba(255,167,38,0.12);color:#ffa726;border:1px solid rgba(255,167,38,0.25)}
+.mini-btn:hover{filter:brightness(1.25)}
+
+/* form */
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font:600 12px/1 sans-serif;color:#6a7480;margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 12px;border-radius:7px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.08);color:#e0e6ed;outline:none;font-size:13px}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#00e5ff}
+.form-row{display:flex;gap:14px}
+.form-row .form-group{flex:1}
+.btn{padding:10px 20px;border-radius:7px;font-size:13px;font-weight:600}
+.btn.primary{background:linear-gradient(135deg,#00e5ff,#00b8d4);color:#001018}
+.btn.primary:hover{filter:brightness(1.1)}
+.btn.ghost{background:rgba(255,255,255,0.05);color:#c0c8d0;border:1px solid rgba(255,255,255,0.1)}
+
+/* modal */
+.modal-mask{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.6)}
+.modal-mask.show{display:flex}
+.modal-box{background:#1a232c;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:28px;width:540px;max-width:92vw;max-height:85vh;overflow-y:auto}
+.modal-box h3{font-size:18px;margin-bottom:20px;color:#fff}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+
+.chart-bar{display:flex;align-items:flex-end;gap:8px;height:140px;margin-top:8px}
+.chart-bar .bar{flex:1;min-width:20px;border-radius:4px 4px 0 0;background:linear-gradient(180deg,#00e5ff,#007a8a);position:relative}
+.chart-bar .bar span{position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);font-size:10px;color:#6a7480;white-space:nowrap}
+
+.pwd-reset-box{background:rgba(255,167,38,0.08);border:1px solid rgba(255,167,38,0.3);border-radius:8px;padding:16px;margin-top:14px}
+
+#login-page{display:flex;align-items:center;justify-content:center;height:100vh;background:radial-gradient(ellipse at 50% 30%,#0d1a2a,#050d14)}
+.login-card{width:380px;padding:40px 36px;background:#1a232c;border:1px solid rgba(255,255,255,0.08);border-radius:14px;color:#e0e6ed}
+.login-card h2{font-size:22px;margin-bottom:8px;color:#fff}
+.login-card .sub{font-size:13px;color:#6a7480;margin-bottom:28px}
+.login-card .err{color:#ff5252;font-size:13px;margin-bottom:14px;min-height:18px}
+.notification{position:fixed;top:20px;right:20px;z-index:200;padding:12px 20px;border-radius:8px;font-size:13px;color:#fff;opacity:0;transition:.3s;pointer-events:none}
+.notification.show{opacity:1}
+.notification.success{background:#2e7d32}
+.notification.error{background:#c62828}
+</style>
+</head>
+<body>
+
+<!-- 登录页 -->
+<div id="login-page">
+  <div class="login-card">
+    <h2>🔧 后台管理</h2>
+    <div class="sub">枪战突击 · COMBAT STRIKE Admin</div>
+    <div class="form-group"><label>用户名</label><input id="login-user" type="text" placeholder="admin"></div>
+    <div class="form-group"><label>密码</label><input id="login-pass" type="password" placeholder="••••••"></div>
+    <div class="err" id="login-err"></div>
+    <button class="btn primary" id="login-btn" style="width:100%">登 录</button>
+  </div>
+</div>
+
+<!-- 强制改密弹窗 -->
+<div class="modal-mask" id="pwd-modal">
+  <div class="modal-box">
+    <h3>🔒 首次登录，请修改密码</h3>
+    <div class="form-group"><label>新密码</label><input id="reset-new-pwd" type="password" placeholder="至少6位"></div>
+    <div class="form-group"><label>确认新密码</label><input id="reset-confirm-pwd" type="password" placeholder="再次输入"></div>
+    <div class="err" id="reset-err"></div>
+    <button class="btn primary" id="reset-submit">确认修改</button>
+  </div>
+</div>
+
+<!-- 主界面 -->
+<div class="admin-layout" id="admin-main" style="display:none">
+  <div class="sidebar">
+    <div class="logo"><span>⚡</span> Admin Panel</div>
+    <div class="nav" id="sidebar-nav"></div>
+    <div class="footer">v1.0 · 超级管理员</div>
+  </div>
+  <div class="main">
+    <div class="topbar">
+      <div class="title" id="page-title">数据仪表盘</div>
+      <div class="user"><span id="admin-name">admin</span><span class="badge" id="admin-role">super_admin</span><button id="logout-btn">注销</button></div>
+    </div>
+    <div class="content" id="page-content"></div>
+  </div>
+</div>
+
+<div class="notification" id="notif"></div>
+
+<script>
+// ==================== 核心工具 ====================
+const $=id=>document.getElementById(id);
+let API='/admin/api';
+let admin=null;
+
+async function api(path,opts={}){
+  const res=await fetch(API+path,{method:opts.method||'GET',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:opts.body?JSON.stringify(opts.body):undefined});
+  const j=await res.json();
+  if(!j.ok) throw new Error(j.error||'请求失败');
+  return j;
+}
+function notif(msg,type='success'){ const n=$('notif');n.textContent=msg;n.className='notification '+type+' show';setTimeout(()=>n.classList.remove('show'),2800); }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]); }
+
+// ==================== 鉴权 ====================
+async function checkLogin(){
+  try{
+    const j=await api('/me');
+    admin=j.admin;
+    if(admin.must_reset){ showPwdReset(); return; }
+    $('login-page').style.display='none';
+    $('admin-main').style.display='flex';
+    $('admin-name').textContent=admin.username;
+    $('admin-role').textContent=admin.role;
+    initSidebar();
+    navigate('dashboard');
+  }catch(e){ $('login-page').style.display='flex'; }
+}
+$('login-btn').onclick=async()=>{
+  $('login-err').textContent='';
+  try{
+    await api('/login',{method:'POST',body:{username:$('login-user').value,password:$('login-pass').value}});
+    await checkLogin();
+  }catch(e){ $('login-err').textContent=e.message; }
+};
+$('login-pass').onkeydown=e=>{ if(e.key==='Enter') $('login-btn').click(); };
+$('logout-btn').onclick=async()=>{ await api('/logout',{method:'POST'}); location.reload(); };
+
+function showPwdReset(){ $('login-page').style.display='none'; $('pwd-modal').classList.add('show'); }
+$('reset-submit').onclick=async()=>{
+  const p=$('reset-new-pwd').value,c=$('reset-confirm-pwd').value;
+  $('reset-err').textContent='';
+  if(p.length<6) return $('reset-err').textContent='密码至少6位';
+  if(p!==c) return $('reset-err').textContent='两次输入不一致';
+  try{ await api('/change-password',{method:'POST',body:{oldPassword:'admin123456',newPassword:p}}); $('pwd-modal').classList.remove('show'); await checkLogin(); }
+  catch(e){ $('reset-err').textContent=e.message; }
+};
+
+// ==================== 侧边栏 ====================
+const pages=[
+  {id:'dashboard',ico:'📊',label:'数据仪表盘'},
+  {id:'users',ico:'👥',label:'用户管理'},
+  {id:'weapons',ico:'🔫',label:'武器管理'},
+  {id:'characters',ico:'🦸',label:'角色管理'},
+  {id:'levels',ico:'🗺️',label:'关卡管理'},
+  {id:'wzlb-maps',ico:'⚔️',label:'联机地图'},
+  {id:'shop',ico:'🛒',label:'商城管理'},
+  {id:'events',ico:'🎁',label:'运营活动'},
+  {id:'notices',ico:'📢',label:'全服公告'},
+  {id:'logs',ico:'📋',label:'操作日志'}
+];
+function initSidebar(){
+  const nav=$('sidebar-nav');
+  pages.forEach(p=>{
+    const d=document.createElement('div');
+    d.className='nav-item'; d.innerHTML='<span class="ico">'+p.ico+'</span>'+p.label;
+    d.onclick=()=>navigate(p.id);
+    d.setAttribute('data-page',p.id);
+    nav.appendChild(d);
+  });
+}
+function navigate(id){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const el=document.querySelector('.nav-item[data-page="'+id+'"]'); if(el) el.classList.add('active');
+  const page=pages.find(p=>p.id===id); $('page-title').textContent=page?page.label:id;
+  const fns={'dashboard':renderDashboard,'users':renderUsers,'weapons':renderWeapons,'characters':renderCharacters,'levels':renderLevels,'wzlb-maps':renderWzlbMaps,'shop':renderShop,'events':renderEvents,'notices':renderNotices,'logs':renderLogs};
+  if(fns[id]) fns[id]();
+}
+
+// ==================== 仪表盘 ====================
+async function renderDashboard(){
+  const j=await api('/dashboard');
+  const c=$('page-content');
+  c.innerHTML=`<div class="stat-grid">
+    <div class="stat-card accent"><div class="label">总注册用户</div><div class="value">${j.totalUsers}</div><div class="sub">今日新增 +${j.todayUsers}</div></div>
+    <div class="stat-card accent"><div class="label">实时在线</div><div class="value">${j.onlineCount}</div><div class="sub">WebSocket 连接</div></div>
+    <div class="stat-card accent"><div class="label">今日对局</div><div class="value">${j.todayMatches}</div><div class="sub">联机+单机</div></div>
+  </div>
+  <div style="display:flex;gap:24px;flex-wrap:wrap">
+    <div style="flex:1;min-width:280px;background:#1a232c;padding:18px;border-radius:10px"><b>近7天注册趋势</b><div class="chart-bar">${j.regTrend.map(t=>`<div class="bar" style="height:${Math.max(4,(t.count/Math.max(...j.regTrend.map(x=>x.count),1))*120)}px"><span>${t.date.slice(5)}</span></div>`).join('')}</div></div>
+    <div style="flex:1;min-width:280px;background:#1a232c;padding:18px;border-radius:10px"><b>近7天对局趋势</b><div class="chart-bar">${j.matchTrend.map(t=>`<div class="bar" style="height:${Math.max(4,(t.count/Math.max(...j.matchTrend.map(x=>x.count),1))*120)}px"><span>${t.date.slice(5)}</span></div>`).join('')}</div></div>
+  </div>`;
+}
+
+// ==================== 用户管理 ====================
+async function renderUsers(search,page=1){
+  const params=search?'search='+encodeURIComponent(search)+'&page='+page+'&limit=30':'page='+page+'&limit=30';
+  const j=await api('/users?'+params);
+  let rows=j.users.map(u=>`<tr><td>${u.id}</td><td>${esc(u.username)}</td><td>${esc(u.email)}</td><td>${new Date(u.createdAt*1000).toLocaleDateString()}</td>
+    <td>${u.banned?'<span class="tag tag-red">已封禁</span>':'<span class="tag tag-green">正常</span>'}</td>
+    <td>${u.banned?`<button class="mini-btn primary" onclick="unbanUser(${u.id})">解封</button>`:`<button class="mini-btn danger" onclick="banUser(${u.id})">封禁</button>`}
+    <button class="mini-btn warn" onclick="resetUserPwd(${u.id})">重置密码</button></td></tr>`).join('');
+  $('page-content').innerHTML=`<div class="table-wrap">
+    <div class="th">用户管理 <input id="user-search" placeholder="搜索用户名/邮箱" value="${esc(search||'')}" onkeydown="if(event.key==='Enter')renderUsers(this.value)"><button class="btn primary" onclick="renderUsers($('user-search').value)">搜索</button></div>
+    <table><thead><tr><th>ID</th><th>用户名</th><th>邮箱</th><th>注册时间</th><th>状态</th><th>操作</th></tr></thead><tbody>${rows}</tbody></table>
+    <div style="padding:10px;text-align:center">共 ${j.total} 条 · 第 ${page}/${Math.ceil(j.total/30)} 页 ${page>1?`<button class="mini-btn primary" onclick="renderUsers('${esc(search||'')}',${page-1})">上一页</button>`:''} ${page*30<j.total?`<button class="mini-btn primary" onclick="renderUsers('${esc(search||'')}',${page+1})">下一页</button>`:''}</div>
+  </div>`;
+}
+async function banUser(uid){ const r=prompt('封禁原因:'); if(r===null) return; await api('/users/'+uid+'/ban',{method:'POST',body:{reason:r}}); notif('用户已封禁'); renderUsers(); }
+async function unbanUser(uid){ await api('/users/'+uid+'/unban',{method:'POST'}); notif('用户已解封'); renderUsers(); }
+async function resetUserPwd(uid){ if(!confirm('确定重置密码为 reset123456？')) return; const j=await api('/users/'+uid+'/reset-pwd',{method:'POST'}); notif('密码已重置为: '+j.newPassword); }
+
+// ==================== 武器管理 ====================
+async function renderWeapons(){
+  const j=await api('/weapons');
+  let rows=j.weapons.map(w=>`<tr><td>${esc(w.id)}</td><td>${esc(w.name)}</td><td>${w.quality}</td><td>${w.category}</td><td>${w.base_dmg}</td><td>${w.fire_rate}</td>
+    <td>${w.magazine}/${w.reserve}</td><td>${w.is_active?'<span class="tag tag-green">上架</span>':'<span class="tag tag-red">下架</span>'}</td>
+    <td><button class="mini-btn primary" onclick="editWeapon('${esc(w.id)}')">编辑</button>
+    <button class="mini-btn ${w.is_active?'danger':'primary'}" onclick="toggleWeapon('${esc(w.id)}',${w.is_active?0:1})">${w.is_active?'下架':'上架'}</button></td></tr>`).join('');
+  $('page-content').innerHTML=`<div class="table-wrap">
+    <div class="th">武器管理 <span style="flex:1"></span><button class="btn primary" onclick="addWeapon()">+ 新增武器</button></div>
+    <table><thead><tr><th>ID</th><th>名称</th><th>品质</th><th>类别</th><th>基础伤害</th><th>射速</th><th>弹匣/备弹</th><th>状态</th><th>操作</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+async function editWeapon(id){
+  const exists=id?await api('/weapons/'+id).catch(()=>({weapon:{}})):{weapon:{}};
+  const w=exists.weapon;
+  const html=`<div class="modal-mask show" id="weapon-modal"><div class="modal-box">
+    <h3>${id?'编辑':'新增'}武器</h3>
+    <div class="form-row"><div class="form-group"><label>武器ID</label><input id="w-id" value="${esc(w.id||'')}" ${id?'disabled':''}></div><div class="form-group"><label>名称</label><input id="w-name" value="${esc(w.name||'')}"></div></div>
+    <div class="form-row"><div class="form-group"><label>品质</label><select id="w-quality"><option ${w.quality==='common'?'selected':''}>common</option><option ${w.quality==='hero'?'selected':''}>hero</option><option ${w.quality==='legendary'?'selected':''}>legendary</option><option ${w.quality==='divine'?'selected':''}>divine</option></select></div>
+    <div class="form-group"><label>类别</label><select id="w-category"><option ${w.category==='primary'?'selected':''}>primary</option><option ${w.category==='secondary'?'selected':''}>secondary</option><option ${w.category==='melee'?'selected':''}>melee</option><option ${w.category==='grenade'?'selected':''}>grenade</option><option ${w.category==='tactical'?'selected':''}>tactical</option></select></div></div>
+    <div class="form-row"><div class="form-group"><label>基础伤害</label><input id="w-base_dmg" type="number" value="${w.base_dmg||0}" step="any"></div><div class="form-group"><label>射速(发/秒)</label><input id="w-fire_rate" type="number" value="${w.fire_rate||10}" step="any"></div></div>
+    <div class="form-row"><div class="form-group"><label>弹匣</label><input id="w-magazine" type="number" value="${w.magazine||30}"></div><div class="form-group"><label>备弹</label><input id="w-reserve" type="number" value="${w.reserve||180}"></div></div>
+    <div class="form-row"><div class="form-group"><label>技能伤害</label><input id="w-skill_dmg" type="number" value="${w.skill_dmg||0}" step="any"></div><div class="form-group"><label>价格</label><input id="w-price" type="number" value="${w.price||0}"></div></div>
+    <div class="modal-actions"><button class="btn ghost" onclick="document.getElementById('weapon-modal').remove()">取消</button><button class="btn primary" onclick="saveWeapon('${esc(w.id||'')}')">保存</button></div>
+  </div></div>`;
+  $('page-content').insertAdjacentHTML('beforeend',html);
+}
+async function saveWeapon(id){
+  const body={id:$('w-id').value,name:$('w-name').value,quality:$('w-quality').value,category:$('w-category').value,base_dmg:Number($('w-base_dmg').value),fire_rate:Number($('w-fire_rate').value),magazine:Number($('w-magazine').value),reserve:Number($('w-reserve').value),skill_dmg:Number($('w-skill_dmg').value),price:Number($('w-price').value)};
+  await api('/weapons/'+(id||body.id),{method:body?'PUT':'POST',body});
+  document.getElementById('weapon-modal').remove();
+  notif('保存成功'); renderWeapons();
+}
+function addWeapon(){ editWeapon(null); }
+async function toggleWeapon(id,active){ await api('/weapons/'+id+'/toggle',{method:'POST',body:{active}}); renderWeapons(); }
+
+// ==================== 角色管理 ====================
+async function renderCharacters(){
+  const j=await api('/characters');
+  let rows=j.characters.map(c=>`<tr><td>${esc(c.id)}</td><td>${esc(c.name)}</td><td>${'★'.repeat(c.star)}</td><td>HP+${c.hp_bonus}</td><td>Shield+${c.shield_bonus}</td><td>Soul+${c.soul_bonus}</td><td>Crit+${c.crit_bonus}</td><td>Speed+${c.speed_bonus}</td><td>${c.price}</td><td><button class="mini-btn primary" onclick="editCharacter('${esc(c.id)}')">编辑</button></td></tr>`).join('');
+  $('page-content').innerHTML=`<div class="table-wrap"><div class="th">角色管理</div><table><thead><tr><th>ID</th><th>名称</th><th>星级</th><th>HP加成</th><th>护盾加成</th><th>魂力加成</th><th>暴击加成</th><th>速度加成</th><th>价格</th><th>操作</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+async function editCharacter(id){
+  const j=await api('/characters'); const c=j.characters.find(x=>x.id===id)||{};
+  const html=`<div class="modal-mask show" id="char-modal"><div class="modal-box"><h3>编辑角色: ${esc(c.name||id)}</h3>
+    <div class="form-row"><div class="form-group"><label>HP加成</label><input id="chp" type="number" value="${c.hp_bonus||0}" step="any"></div><div class="form-group"><label>护盾加成</label><input id="csh" type="number" value="${c.shield_bonus||0}" step="any"></div></div>
+    <div class="form-row"><div class="form-group"><label>魂力加成</label><input id="cso" type="number" value="${c.soul_bonus||0}" step="any"></div><div class="form-group"><label>暴击加成</label><input id="ccr" type="number" value="${c.crit_bonus||0}" step="any"></div></div>
+    <div class="form-row"><div class="form-group"><label>速度加成</label><input id="csp" type="number" value="${c.speed_bonus||0}" step="any"></div><div class="form-group"><label>价格</label><input id="cpr" type="number" value="${c.price||0}"></div></div>
+    <div class="modal-actions"><button class="btn ghost" onclick="document.getElementById('char-modal').remove()">取消</button><button class="btn primary" onclick="saveCharacter('${esc(id)}')">保存</button></div></div></div>`;
+  $('page-content').insertAdjacentHTML('beforeend',html);
+}
+async function saveCharacter(id){
+  const body={id,name:null,star:null,hp_bonus:Number($('chp').value),shield_bonus:Number($('csh').value),soul_bonus:Number($('cso').value),crit_bonus:Number($('ccr').value),speed_bonus:Number($('csp').value),price:Number($('cpr').value),is_active:1};
+  await api('/characters/'+id,{method:'PUT',body}); document.getElementById('char-modal').remove(); notif('保存成功'); renderCharacters();
+}
+
+// ==================== 关卡管理 ====================
+async function renderLevels(){
+  const j=await api('/levels');
+  let rows=j.levels.map(l=>`<tr><td>${l.level_no}</td><td>${esc(l.name||'')}</td><td>${esc(l.boss_name||'')}</td><td>${(l.boss_hp/1e8).toFixed(1)}亿</td><td>x${l.hp_mult}</td><td>${l.wave_count}波</td><td>${l.is_boss_only?'纯BOSS':''}</td><td><button class="mini-btn primary" onclick="editLevel(${l.level_no})">编辑</button></td></tr>`).join('');
+  $('page-content').innerHTML=`<div class="table-wrap"><div class="th">关卡配置</div><table><thead><tr><th>#</th><th>名称</th><th>BOSS</th><th>BOSS血量</th><th>倍率</th><th>波次</th><th>模式</th><th>操作</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+async function editLevel(no){
+  const j=await api('/levels'); const l=j.levels.find(x=>x.level_no===no)||{};
+  const html=`<div class="modal-mask show" id="lev-modal"><div class="modal-box"><h3>编辑关卡 ${no}</h3>
+    <div class="form-row"><div class="form-group"><label>关卡名</label><input id="l-name" value="${esc(l.name||'')}"></div><div class="form-group"><label>BOSS名</label><input id="l-boss" value="${esc(l.boss_name||'')}"></div></div>
+    <div class="form-row"><div class="form-group"><label>BOSS血量</label><input id="l-hp" type="number" value="${l.boss_hp||1e8}"></div><div class="form-group"><label>递增倍率</label><input id="l-mult" type="number" value="${l.hp_mult||1.5}" step="0.1"></div></div>
+    <div class="form-row"><div class="form-group"><label>小怪血量比</label><input id="l-sr" type="number" value="${l.small_hp_ratio||0.005}" step="0.001"></div><div class="form-group"><label>波次</label><input id="l-wave" type="number" value="${l.wave_count||3}"></div></div>
+    <div class="modal-actions"><button class="btn ghost" onclick="document.getElementById('lev-modal').remove()">取消</button><button class="btn primary" onclick="saveLevel(${no})">保存</button></div></div></div>`;
+  $('page-content').insertAdjacentHTML('beforeend',html);
+}
+async function saveLevel(no){
+  const body={name:$('l-name').value,boss_name:$('l-boss').value,boss_hp:Number($('l-hp').value),hp_mult:Number($('l-mult').value),small_hp_ratio:Number($('l-sr').value),wave_count:Number($('l-wave').value),is_boss_only:0};
+  await api('/levels/'+no,{method:'PUT',body}); document.getElementById('lev-modal').remove(); notif('保存成功'); renderLevels();
+}
+
+// ==================== 联机地图 ====================
+async function renderWzlbMaps(){
+  const j=await api('/wzlb-maps');
+  let rows=j.maps.map(m=>`<tr><td>${esc(m.map_key)}</td><td>${esc(m.name)}</td><td>${m.is_open?'<span class="tag tag-green">开放</span>':'<span class="tag tag-red">关闭</span>'}</td><td>${m.max_players}人</td><td><button class="mini-btn primary" onclick="toggleMap('${esc(m.map_key)}',${m.is_open?0:1})">${m.is_open?'关闭':'开放'}</button></td></tr>`).join('');
+  $('page-content').innerHTML=`<div class="table-wrap"><div class="th">王者乱斗地图</div><table><thead><tr><th>Key</th><th>名称</th><th>状态</th><th>最大人数</th><th>操作</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+async function toggleMap(key,open){ await api('/wzlb-maps/'+key,{method:'PUT',body:{is_open:open}}); renderWzlbMaps(); }
+
+// ==================== 商城 / 活动 / 公告 / 日志 ====================
+async function renderShop(){
+  const j=await api('/shop');
+  let rows=j.items.map(i=>`<tr><td>${i.id}</td><td>${i.item_type}</td><td>${i.item_key}</td><td>${i.price}</td><td>${i.is_active?'<span class="tag tag-green">上架</span>':'<span class="tag tag-red">下架</span>'}</td><td><button class="mini-btn danger" onclick="deleteShop(${i.id})">删除</button></td></tr>`).join('');
+  $('page-content').innerHTML=`<div class="table-wrap"><div class="th">商城商品 <span style="flex:1"></span><button class="btn primary" onclick="addShopItem()">+ 新增</button></div><table><thead><tr><th>ID</th><th>类型</th><th>KEY</th><th>价格</th><th>状态</th><th>操作</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+async function addShopItem(){
+  const html=`<div class="modal-mask show" id="shop-modal"><div class="modal-box"><h3>新增商品</h3>
+    <div class="form-row"><div class="form-group"><label>类型</label><select id="si-type"><option>weapon</option><option>character</option><option>item</option></select></div><div class="form-group"><label>KEY</label><input id="si-key"></div></div>
+    <div class="form-group"><label>价格</label><input id="si-price" type="number"></div>
+    <div class="modal-actions"><button class="btn ghost" onclick="document.getElementById('shop-modal').remove()">取消</button><button class="btn primary" onclick="saveShopItem()">保存</button></div></div></div>`;
+  $('page-content').insertAdjacentHTML('beforeend',html);
+}
+async function saveShopItem(){
+  await api('/shop',{method:'POST',body:{item_type:$('si-type').value,item_key:$('si-key').value,price:Number($('si-price').value),is_active:1}});
+  document.getElementById('shop-modal').remove(); notif('已添加'); renderShop();
+}
+async function deleteShop(id){ await api('/shop/'+id,{method:'DELETE'}); renderShop(); }
+
+async function renderEvents(){
+  const j=await api('/events');
+  let rows=j.events.map(e=>`<tr><td>${e.id}</td><td>${esc(e.title)}</td><td>${e.type}</td><td>${e.bonus_mult}x</td><td>${new Date(e.start_at*1000).toLocaleDateString()}~${new Date(e.end_at*1000).toLocaleDateString()}</td><td>${e.is_active?'<span class="tag tag-green">进行中</span>':'<span class="tag tag-red">已停用</span>'}</td><td><button class="mini-btn danger" onclick="deleteEvent(${e.id})">删除</button></td></tr>`).join('');
+  $('page-content').innerHTML=`<div class="table-wrap"><div class="th">运营活动 <span style="flex:1"></span><button class="btn primary" onclick="addEvent()">+ 创建活动</button></div><table><thead><tr><th>ID</th><th>标题</th><th>类型</th><th>倍率</th><th>时间</th><th>状态</th><th>操作</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+async function addEvent(){
+  const html=`<div class="modal-mask show" id="ev-modal"><div class="modal-box"><h3>创建活动</h3>
+    <div class="form-group"><label>标题</label><input id="ev-title"></div>
+    <div class="form-row"><div class="form-group"><label>类型</label><select id="ev-type"><option>double_drop</option><option>exp_boost</option><option>special</option></select></div><div class="form-group"><label>倍率</label><input id="ev-mult" type="number" value="2" step="0.5"></div></div>
+    <div class="form-row"><div class="form-group"><label>开始时间(时间戳)</label><input id="ev-start" type="number" value="${Math.floor(Date.now()/1000)}"></div><div class="form-group"><label>结束时间</label><input id="ev-end" type="number" value="${Math.floor(Date.now()/1000)+86400*7}"></div></div>
+    <div class="modal-actions"><button class="btn ghost" onclick="document.getElementById('ev-modal').remove()">取消</button><button class="btn primary" onclick="saveEvent()">保存</button></div></div></div>`;
+  $('page-content').insertAdjacentHTML('beforeend',html);
+}
+async function saveEvent(){
+  await api('/events',{method:'POST',body:{title:$('ev-title').value,type:$('ev-type').value,bonus_mult:Number($('ev-mult').value),start_at:Number($('ev-start').value),end_at:Number($('ev-end').value),is_active:1}});
+  document.getElementById('ev-modal').remove(); notif('活动已创建'); renderEvents();
+}
+async function deleteEvent(id){ await api('/events/'+id,{method:'DELETE'}); renderEvents(); }
+
+async function renderNotices(){
+  const j=await api('/notices');
+  let rows=j.notices.map(n=>`<tr><td>${n.id}</td><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(n.content)}</td><td>${n.type}</td><td>${n.is_active?'<span class="tag tag-green">启用</span>':'<span class="tag tag-red">停用</span>'}</td><td><button class="mini-btn danger" onclick="deleteNotice(${n.id})">删除</button></td></tr>`).join('');
+  $('page-content').innerHTML=`<div class="table-wrap"><div class="th">全服公告 <span style="flex:1"></span><button class="btn primary" onclick="addNotice()">+ 发布</button></div><table><thead><tr><th>ID</th><th>内容</th><th>类型</th><th>状态</th><th>操作</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+async function addNotice(){
+  const html=`<div class="modal-mask show" id="nt-modal"><div class="modal-box"><h3>发布公告</h3>
+    <div class="form-group"><label>内容</label><textarea id="nt-content" rows="3"></textarea></div>
+    <div class="form-group"><label>类型</label><select id="nt-type"><option>normal</option><option>urgent</option><option>marquee</option></select></div>
+    <div class="modal-actions"><button class="btn ghost" onclick="document.getElementById('nt-modal').remove()">取消</button><button class="btn primary" onclick="saveNotice()">发布</button></div></div></div>`;
+  $('page-content').insertAdjacentHTML('beforeend',html);
+}
+async function saveNotice(){
+  await api('/notices',{method:'POST',body:{content:$('nt-content').value,type:$('nt-type').value,is_active:1}});
+  document.getElementById('nt-modal').remove(); notif('公告已发布'); renderNotices();
+}
+async function deleteNotice(id){ await api('/notices/'+id,{method:'DELETE'}); renderNotices(); }
+
+async function renderLogs(page=1){
+  const j=await api('/logs?page='+page+'&limit=50');
+  let rows=j.logs.map(l=>`<tr><td>${l.id}</td><td>${esc(l.admin_name)}</td><td>${esc(l.action)}</td><td>${esc(l.target||'')}</td><td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">${esc(l.detail||'')}</td><td>${new Date(l.created_at*1000).toLocaleString()}</td></tr>`).join('');
+  $('page-content').innerHTML=`<div class="table-wrap"><div class="th">操作日志</div><table><thead><tr><th>ID</th><th>操作人</th><th>动作</th><th>目标</th><th>详情</th><th>时间</th></tr></thead><tbody>${rows}</tbody></table>
+    <div style="padding:10px;text-align:center">第 ${page} 页 ${page>1?`<button class="mini-btn primary" onclick="renderLogs(${page-1})">上一页</button>`:''} <button class="mini-btn primary" onclick="renderLogs(${page+1})">下一页</button></div></div>`;
+}
+
+// 启动
+checkLogin();
+</script>
+</body>
+</html>

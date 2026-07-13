@@ -2997,9 +2997,371 @@ body{ font-family:'Rajdhani','Microsoft YaHei',Arial,sans-serif; }
 #cs-toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
 #cs-toast.ok{ border-color:rgba(105,240,174,0.5); color:#69f0ae; }
 #cs-toast.err{ border-color:rgba(216,71,58,0.5); color:var(--red-2); }
+
+/* ==================== [联机] 登录 / 注册 ==================== */
+#auth-screen {
+  position: fixed; inset: 0; z-index: 5000; display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(ellipse at 50% 40%, #0d1424 0%, #050810 70%);
+  color: #eaf6ff; overflow: hidden;
+}
+#auth-screen.hide { display: none; }
+#auth-screen .auth-bg-grid {
+  position: absolute; inset: 0; opacity: 0.25; pointer-events: none;
+  background:
+    linear-gradient(rgba(0,229,255,0.08) 1px, transparent 1px) 0 0/40px 40px,
+    linear-gradient(90deg, rgba(0,229,255,0.08) 1px, transparent 1px) 0 0/40px 40px;
+  animation: authGrid 18s linear infinite;
+}
+@keyframes authGrid { to { background-position: 40px 40px, 40px 40px; } }
+#auth-screen .auth-scanline {
+  position: absolute; inset: 0; pointer-events: none; opacity: 0.5;
+  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,229,255,0.02) 3px, rgba(0,229,255,0.02) 4px);
+}
+.auth-card {
+  position: relative; width: 400px; max-width: 92vw; padding: 38px 34px 30px;
+  background: linear-gradient(160deg, rgba(15,22,38,0.92), rgba(8,13,22,0.96));
+  border: 1px solid rgba(0,200,255,0.28); border-radius: 16px;
+  box-shadow: 0 0 0 1px rgba(0,200,255,0.05), 0 20px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.04);
+  backdrop-filter: blur(12px);
+}
+.auth-logo { display:flex; align-items:center; gap:12px; margin-bottom: 6px; }
+.auth-logo .al-mark { width:42px; height:42px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+  font: 900 24px/1 'Orbitron', sans-serif; color:#001018;
+  background: linear-gradient(135deg, #00e5ff, #00b8d4); box-shadow: 0 0 18px rgba(0,229,255,0.5); }
+.auth-logo .al-name { font: 700 20px/1.1 'Orbitron',sans-serif; color:#eaf6ff; }
+.auth-logo .al-name b { color:#00e5ff; }
+.auth-tag { color:#6b7a8f; font: 500 12px/1.4 'Rajdhani',sans-serif; letter-spacing:.18em; margin: 4px 0 26px; text-transform: uppercase; }
+.auth-tabs { display:flex; gap:8px; margin-bottom: 22px; }
+.auth-tab { flex:1; padding:11px 0; text-align:center; cursor:pointer; border-radius:9px; font: 600 15px/1 'Rajdhani',sans-serif;
+  color:#8aa0b4; background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); transition:.2s; letter-spacing:.05em; }
+.auth-tab.active { color:#001018; background: linear-gradient(135deg,#00e5ff,#00b8d4); border-color:transparent; box-shadow:0 0 16px rgba(0,229,255,0.4); }
+.auth-field { margin-bottom: 16px; }
+.auth-field label { display:block; font: 500 12px/1 'Rajdhani',sans-serif; color:#7d92a8; margin-bottom:7px; letter-spacing:.08em; text-transform: uppercase; }
+.auth-field input { width:100%; box-sizing:border-box; padding:13px 14px; border-radius:9px; font: 500 15px/1 'Rajdhani',sans-serif; color:#eaf6ff;
+  background: rgba(0,0,0,0.35); border:1px solid rgba(0,200,255,0.18); outline:none; transition:.2s; }
+.auth-field input:focus { border-color:#00e5ff; box-shadow: 0 0 0 3px rgba(0,229,255,0.12); }
+.auth-err { min-height: 18px; color:#ff5252; font: 500 13px/1.3 'Rajdhani',sans-serif; margin: 2px 0 14px; }
+/* 封禁横幅 */
+.ban-banner { display:none; padding:16px 20px; margin-bottom:20px; border-radius:10px; text-align:center;
+  background:rgba(200,20,20,0.18); border:2px solid rgba(229,57,53,0.5);
+  color:#ff5252; font:700 16px/1.5 sans-serif; letter-spacing:.04em; animation:banBlink 1.5s ease-in-out infinite; }
+.ban-banner.show { display:block; }
+.ban-banner .ban-icon { font-size:32px; display:block; margin-bottom:6px; }
+@keyframes banBlink { 0%,100%{opacity:1} 50%{opacity:.75} }
+.auth-submit { width:100%; padding:14px; border:none; border-radius:10px; cursor:pointer; font: 700 16px/1 'Orbitron',sans-serif; letter-spacing:.1em;
+  color:#001018; background: linear-gradient(135deg,#00e5ff,#00b8d4); box-shadow:0 8px 24px rgba(0,229,255,0.3); transition:.2s; }
+.auth-submit:hover { transform: translateY(-1px); box-shadow:0 12px 30px rgba(0,229,255,0.45); }
+.auth-submit:disabled { opacity:.6; cursor: wait; transform:none; }
+.auth-hint { margin-top:16px; text-align:center; color:#5d7088; font: 400 12px/1.5 'Rajdhani',sans-serif; }
+.auth-hint a { color:#00e5ff; cursor:pointer; text-decoration:none; }
+
+/* ==================== [联机] 顶栏用户芯片 ==================== */
+#net-user-chip { display:none; align-items:center; gap:8px; padding:4px 12px 4px 6px; border-radius:20px;
+  background: rgba(0,229,255,0.08); border:1px solid rgba(0,200,255,0.25); font: 600 13px/1 'Rajdhani',sans-serif; color:#cfeefe; }
+#net-user-chip.show { display:inline-flex; }
+#net-user-chip .nuc-dot { width:8px;height:8px;border-radius:50%; background:#4caf50; box-shadow:0 0 8px #4caf50; }
+#net-user-chip .nuc-ava { width:24px;height:24px;border-radius:50%; display:flex;align-items:center;justify-content:center;
+  font:700 12px/1 'Orbitron',sans-serif; color:#001018; background:linear-gradient(135deg,#00e5ff,#00b8d4); }
+#net-logout-btn { display:none; margin-left:4px; padding:4px 10px; border-radius:8px; cursor:pointer;
+  background:rgba(229,57,53,0.12); border:1px solid rgba(229,57,53,0.3); color:#ff8a80; font:600 12px/1 'Rajdhani',sans-serif; transition:.2s; }
+#net-logout-btn.show { display:inline-block; }
+#net-logout-btn:hover { background:rgba(229,57,53,0.22); }
+
+/* ==================== [联机] 通用侧边面板 ==================== */
+.mp-panel { position: fixed; top:0; right:-440px; width:420px; max-width:94vw; height:100vh; z-index:2100;
+  background: linear-gradient(180deg, rgba(13,20,36,0.97), rgba(8,13,22,0.98)); backdrop-filter: blur(14px);
+  border-left:1px solid rgba(0,200,255,0.22); box-shadow:-20px 0 60px rgba(0,0,0,0.5);
+  display:flex; flex-direction:column; transition: right .28s cubic-bezier(.4,0,.2,1); color:#eaf6ff; }
+.mp-panel.open { right:0; }
+.mp-panel .mpp-head { display:flex; align-items:center; gap:10px; padding:18px 20px 14px; border-bottom:1px solid rgba(0,200,255,0.12); }
+.mp-panel .mpp-head .mpp-ico { font-size:20px; }
+.mp-panel .mpp-head .mpp-title { font:700 17px/1 'Orbitron',sans-serif; flex:1; }
+.mp-panel .mpp-head .mpp-close { width:32px;height:32px;border-radius:8px; cursor:pointer; display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:#9fb3c8; font-size:18px; transition:.2s; }
+.mp-panel .mpp-head .mpp-close:hover { background:rgba(229,57,53,0.15); color:#ff8a80; }
+.mp-panel .mpp-body { flex:1; overflow-y:auto; padding:16px 20px; }
+.mp-panel .mpp-body::-webkit-scrollbar { width:6px; }
+.mp-panel .mpp-body::-webkit-scrollbar-thumb { background:rgba(0,200,255,0.2); border-radius:3px; }
+
+.mp-input { width:100%; box-sizing:border-box; padding:11px 13px; border-radius:9px; color:#eaf6ff;
+  background:rgba(0,0,0,0.32); border:1px solid rgba(0,200,255,0.16); outline:none; font:500 14px/1 'Rajdhani',sans-serif; }
+.mp-input:focus { border-color:#00e5ff; }
+.mp-btn { padding:10px 16px; border-radius:9px; cursor:pointer; border:none; font:600 14px/1 'Rajdhani',sans-serif;
+  background:linear-gradient(135deg,#00e5ff,#00b8d4); color:#001018; transition:.2s; }
+.mp-btn:hover { filter:brightness(1.1); }
+.mp-btn.ghost { background:rgba(255,255,255,0.05); color:#cfeefe; border:1px solid rgba(255,255,255,0.1); }
+.mp-btn.danger { background:rgba(229,57,53,0.16); color:#ff8a80; border:1px solid rgba(229,57,53,0.3); }
+.mp-btn:disabled { opacity:.5; cursor: not-allowed; }
+.mp-section-title { font:700 12px/1 'Rajdhani',sans-serif; letter-spacing:.12em; color:#5d7088; text-transform:uppercase; margin:18px 0 10px; }
+
+/* 列表项 */
+.mp-row { display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:10px; background:rgba(255,255,255,0.025);
+  border:1px solid rgba(255,255,255,0.05); margin-bottom:8px; transition:.2s; }
+.mp-row:hover { background:rgba(0,229,255,0.06); border-color:rgba(0,200,255,0.2); }
+.mp-ava { width:38px;height:38px;border-radius:50%; flex-shrink:0; display:flex;align-items:center;justify-content:center;
+  font:700 15px/1 'Orbitron',sans-serif; color:#001018; }
+.mp-ava.c0 { background:linear-gradient(135deg,#00e5ff,#00b8d4); }
+.mp-ava.c1 { background:linear-gradient(135deg,#ffb347,#ff8a3d); }
+.mp-ava.c2 { background:linear-gradient(135deg,#b388ff,#7c4dff); }
+.mp-ava.c3 { background:linear-gradient(135deg,#69f0ae,#00e676); }
+.mp-ava.c4 { background:linear-gradient(135deg,#ff5252,#e53935); }
+.mp-row .mp-meta { flex:1; min-width:0; }
+.mp-row .mp-name { font:600 15px/1.2 'Rajdhani',sans-serif; color:#eaf6ff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.mp-row .mp-sub { font:400 12px/1.3 'Rajdhani',sans-serif; color:#6b7a8f; margin-top:2px; }
+.mp-status-dot { width:9px;height:9px;border-radius:50%; flex-shrink:0; }
+.mp-status-dot.on { background:#4caf50; box-shadow:0 0 8px #4caf50; }
+.mp-status-dot.off { background:#4a5666; }
+.mp-row .mp-mini-btn { padding:6px 11px; border-radius:7px; cursor:pointer; font:600 12px/1 'Rajdhani',sans-serif; transition:.2s; }
+.mp-row .mp-mini-btn.primary { background:rgba(0,229,255,0.15); color:#00e5ff; border:1px solid rgba(0,229,255,0.3); }
+.mp-row .mp-mini-btn.primary:hover { background:rgba(0,229,255,0.28); }
+.mp-row .mp-mini-btn.accept { background:rgba(76,175,80,0.16); color:#69f0ae; border:1px solid rgba(76,175,80,0.3); }
+.mp-row .mp-mini-btn.decline { background:rgba(229,57,53,0.14); color:#ff8a80; border:1px solid rgba(229,57,53,0.28); }
+.mp-empty { text-align:center; color:#5d7088; font:500 13px/1.6 'Rajdhani',sans-serif; padding:30px 10px; }
+
+/* ==================== [联机] 聊天 ==================== */
+#chat-panel { width:380px; }
+#chat-panel .mpp-body { display:flex; flex-direction:column; padding:0; }
+.chat-channels { display:flex; gap:4px; padding:10px 12px; border-bottom:1px solid rgba(0,200,255,0.1); overflow-x:auto; flex-wrap:nowrap; }
+.chat-chan { padding:7px 13px; border-radius:8px; cursor:pointer; white-space:nowrap; font:600 13px/1 'Rajdhani',sans-serif;
+  color:#8aa0b4; background:rgba(255,255,255,0.03); border:1px solid transparent; transition:.2s; position:relative; }
+.chat-chan.active { color:#001018; background:linear-gradient(135deg,#00e5ff,#00b8d4); }
+.chat-chan .cc-badge { position:absolute; top:-4px; right:-4px; min-width:16px; height:16px; border-radius:8px; padding:0 4px;
+  background:#ff3d3d; color:#fff; font:700 10px/16px 'Rajdhani',sans-serif; text-align:center; display:none; }
+.chat-chan .cc-badge.show { display:block; }
+.chat-msgs { flex:1; overflow-y:auto; padding:14px 16px; display:flex; flex-direction:column; gap:10px; }
+.chat-msg { max-width:82%; padding:9px 13px; border-radius:13px; font:500 14px/1.45 'Rajdhani',sans-serif; word-wrap:break-word; }
+.chat-msg .cm-name { font:700 11px/1 'Rajdhani',sans-serif; opacity:.7; margin-bottom:4px; }
+.chat-msg.me { align-self:flex-end; background:linear-gradient(135deg, rgba(0,229,255,0.2), rgba(0,184,212,0.16)); border:1px solid rgba(0,229,255,0.25); color:#eaf6ff; }
+.chat-msg.them { align-self:flex-start; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); color:#cfeefe; }
+.chat-msg.sys { align-self:center; background:rgba(255,215,0,0.08); border:1px solid rgba(255,215,0,0.18); color:#ffd54f; font-size:12px; text-align:center; }
+.chat-input-row { display:flex; gap:8px; padding:12px; border-top:1px solid rgba(0,200,255,0.1); }
+.chat-input-row .mp-input { flex:1; }
+
+/* ==================== [联机] 组队 / 房间大厅 ==================== */
+#team-panel .mpp-body { display:flex; flex-direction:column; gap:14px; }
+.team-card { background:rgba(255,255,255,0.025); border:1px solid rgba(0,200,255,0.14); border-radius:12px; padding:16px; }
+.team-code-box { display:flex; align-items:center; gap:10px; margin:12px 0; }
+.team-code-box code { flex:1; padding:10px 14px; border-radius:8px; background:rgba(0,0,0,0.3); border:1px dashed rgba(0,200,255,0.3);
+  font:700 20px/1 'JetBrains Mono', monospace; color:#00e5ff; text-align:center; letter-spacing:.15em; }
+.room-lobby-row { display:flex; align-items:center; gap:10px; margin-bottom:8px; flex-wrap:wrap; }
+
+/* ==================== [联机] 匹配遮罩 ==================== */
+#matchmaking-overlay { position:fixed; inset:0; z-index:3000; display:none; align-items:center; justify-content:center;
+  background:rgba(5,8,16,0.85); backdrop-filter:blur(6px); }
+#matchmaking-overlay.show { display:flex; }
+.mm-box { text-align:center; color:#eaf6ff; }
+.mm-spinner { width:80px;height:80px; border-radius:50%; border:3px solid rgba(0,229,255,0.15); border-top-color:#00e5ff;
+  margin:0 auto 24px; animation: mmSpin 1s linear infinite; }
+@keyframes mmSpin { to { transform: rotate(360deg); } }
+.mm-title { font:700 24px/1 'Orbitron',sans-serif; margin-bottom:10px; }
+.mm-sub { font:500 15px/1.5 'Rajdhani',sans-serif; color:#8aa0b4; margin-bottom:24px; }
+.mm-cancel { padding:12px 30px; }
+
+/* ==================== [联机] 房间内大厅（等待开始） ==================== */
+#room-lobby { position:fixed; inset:0; z-index:2600; display:none; align-items:center; justify-content:center;
+  background:rgba(5,8,16,0.8); backdrop-filter:blur(4px); }
+#room-lobby.show { display:flex; }
+.rl-box { width:560px; max-width:94vw; background:linear-gradient(180deg, rgba(13,20,36,0.97), rgba(8,13,22,0.98));
+  border:1px solid rgba(0,200,255,0.28); border-radius:16px; padding:28px; color:#eaf6ff; }
+.rl-title { font:700 22px/1 'Orbitron',sans-serif; margin-bottom:4px; }
+.rl-sub { color:#6b7a8f; font:500 13px/1.4 'Rajdhani',sans-serif; margin-bottom:20px; }
+.rl-code-row { display:flex; align-items:center; gap:10px; margin-bottom:20px; }
+.rl-code-row code { flex:1; text-align:center; padding:12px; border-radius:10px; background:rgba(0,0,0,0.3); border:1px dashed rgba(0,229,255,0.3);
+  font:700 26px/1 'JetBrains Mono',monospace; color:#00e5ff; letter-spacing:.2em; }
+.rl-teams { display:flex; gap:16px; }
+.rl-team { flex:1; background:rgba(255,255,255,0.025); border-radius:11px; padding:14px; min-height:160px; }
+.rl-team-name { font:700 14px/1 'Rajdhani',sans-serif; margin-bottom:12px; letter-spacing:.08em; }
+.rl-team.t0 .rl-team-name { color:#00e5ff; }
+.rl-team.t1 .rl-team-name { color:#ff8a80; }
+
+/* 联机通知 toast */
+#net-toast { position:fixed; left:50%; bottom:90px; transform:translateX(-50%) translateY(20px); z-index:3200;
+  padding:12px 22px; border-radius:10px; background:rgba(13,20,36,0.95); border:1px solid rgba(0,200,255,0.3);
+  color:#eaf6ff; font:600 14px/1.4 'Rajdhani',sans-serif; box-shadow:0 10px 40px rgba(0,0,0,0.5);
+  opacity:0; pointer-events:none; transition:.3s; max-width:90vw; text-align:center; }
+#net-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* [联机] 局内击杀提示条 */
+#net-killfeed { position:absolute; right:16px; top:60px; z-index:60; display:flex; flex-direction:column; gap:6px; pointer-events:none; }
+.nkf-item { background:rgba(6,10,14,0.6); border:1px solid rgba(0,200,255,0.2); border-radius:7px; padding:5px 11px;
+  font:600 13px/1.3 'Rajdhani',sans-serif; color:#eaf6ff; animation: nkfIn .3s; }
+@keyframes nkfIn { from { opacity:0; transform: translateX(20px); } to { opacity:1; transform:none; } }
+.nkf-item .killed { color:#ff5252; }
 </style>
 </head>
 <body>
+
+<!-- ==================== [联机] 登录 / 注册界面（未登录时显示） ==================== -->
+<div id="auth-screen">
+    <div class="auth-bg-grid"></div>
+    <div class="auth-scanline"></div>
+    <div class="auth-card">
+        <div class="auth-logo">
+            <div class="al-mark">V</div>
+            <div class="al-name">枪战<b>突击</b></div>
+        </div>
+        <div class="auth-tag">COMBAT STRIKE · 联机战域</div>
+        <!-- 封禁提示 -->
+        <div class="ban-banner" id="ban-banner"><span class="ban-icon">🚫</span><span id="ban-reason">该账户已被封禁</span></div>
+        <div class="auth-tabs">
+            <div class="auth-tab active" id="auth-tab-login">登 录</div>
+            <div class="auth-tab" id="auth-tab-register">注 册</div>
+        </div>
+        <!-- 登录表单 -->
+        <div id="auth-form-login">
+            <div class="auth-field"><label>用户名 或 邮箱</label><input id="li-account" type="text" autocomplete="username" placeholder="输入用户名或邮箱"></div>
+            <div class="auth-field"><label>密码</label><input id="li-password" type="password" autocomplete="current-password" placeholder="至少 6 位"></div>
+            <div class="auth-err" id="li-err"></div>
+            <button class="auth-submit" id="li-submit">登 录 并 进 入</button>
+            <div class="auth-hint">还没有账号？<a id="li-to-reg">立即注册</a></div>
+        </div>
+        <!-- 注册表单 -->
+        <div id="auth-form-register" style="display:none;">
+            <div class="auth-field"><label>用户名</label><input id="rg-username" type="text" autocomplete="username" placeholder="2-20 位字母/数字/中文"></div>
+            <div class="auth-field"><label>邮箱</label><input id="rg-email" type="email" autocomplete="email" placeholder="your@email.com"></div>
+            <div class="auth-field"><label>密码</label><input id="rg-password" type="password" autocomplete="new-password" placeholder="至少 6 位"></div>
+            <div class="auth-err" id="rg-err"></div>
+            <button class="auth-submit" id="rg-submit">注 册 并 进 入</button>
+            <div class="auth-hint">已有账号？<a id="rg-to-li">返回登录</a></div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== [联机] 好友面板 ==================== -->
+<div class="mp-panel" id="friends-panel">
+    <div class="mpp-head"><span class="mpp-ico">👥</span><span class="mpp-title">好友</span><div class="mpp-close" data-close-panel="friends-panel">×</div></div>
+    <div class="mpp-body">
+        <div class="mp-section-title">搜索玩家</div>
+        <div style="display:flex; gap:8px;">
+            <input class="mp-input" id="fr-search" placeholder="输入用户名或邮箱" style="flex:1;">
+            <button class="mp-btn" id="fr-search-btn">搜索</button>
+        </div>
+        <div id="fr-search-results" style="margin-top:10px;"></div>
+        <div class="mp-section-title">好友申请 <span id="fr-pending-count" style="color:#ffd54f;"></span></div>
+        <div id="fr-pending-list"></div>
+        <div class="mp-section-title">我的好友</div>
+        <div id="fr-list"></div>
+    </div>
+</div>
+
+<!-- ==================== [联机] 聊天面板 ==================== -->
+<div class="mp-panel" id="chat-panel">
+    <div class="mpp-head"><span class="mpp-ico">💬</span><span class="mpp-title">聊天</span><div class="mpp-close" data-close-panel="chat-panel">×</div></div>
+    <div class="mpp-body">
+        <div class="chat-channels" id="chat-channels"></div>
+        <div class="chat-msgs" id="chat-msgs"></div>
+        <div class="chat-input-row">
+            <input class="mp-input" id="chat-input" placeholder="输入消息，回车发送…" style="flex:1;">
+            <button class="mp-btn" id="chat-send">发送</button>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== [联机] 组队 / 联机面板 ==================== -->
+<div class="mp-panel" id="team-panel">
+    <div class="mpp-head"><span class="mpp-ico">🛡️</span><span class="mpp-title">组队 / 联机</span><div class="mpp-close" data-close-panel="team-panel">×</div></div>
+    <div class="mpp-body" id="team-body">
+        <div class="team-card" id="team-state-none">
+            <div style="font:600 15px/1.5 'Rajdhani',sans-serif; color:#8aa0b4; margin-bottom:14px;">你还没有加入任何队伍。创建或加入一支队伍，即可带队匹配联机对战。</div>
+            <div style="display:flex; gap:8px;">
+                <button class="mp-btn" id="team-create-btn">创建队伍</button>
+            </div>
+            <div class="team-code-box" style="margin-top:16px;">
+                <input class="mp-input" id="team-join-code" placeholder="输入队伍邀请码" style="flex:1;">
+                <button class="mp-btn ghost" id="team-join-btn">加入</button>
+            </div>
+        </div>
+        <div class="team-card" id="team-state-active" style="display:none;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                <span style="font:700 16px/1 'Orbitron',sans-serif;">当前队伍</span>
+                <span id="team-role-tag" style="font:600 12px/1 'Rajdhani',sans-serif; padding:3px 9px; border-radius:6px; background:rgba(255,215,0,0.15); color:#ffd54f; border:1px solid rgba(255,215,0,0.3);">队长</span>
+            </div>
+            <div class="team-code-box">
+                <code id="team-invite-code">------</code>
+                <button class="mp-btn ghost" id="team-copy-code">复制</button>
+            </div>
+            <div class="mp-section-title">成员</div>
+            <div id="team-members-list"></div>
+            <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;">
+                <button class="mp-btn" id="team-queue-btn">带队匹配</button>
+                <button class="mp-btn ghost" id="team-leave-btn">退出队伍</button>
+            </div>
+            <div id="team-invite-requests" style="margin-top:14px;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== [联机] 快速匹配遮罩 ==================== -->
+<div id="matchmaking-overlay">
+    <div class="mm-box">
+        <div class="mm-spinner"></div>
+        <div class="mm-title">正在匹配对手…</div>
+        <div class="mm-sub" id="mm-status">等待其它玩家加入队列</div>
+        <button class="mp-btn ghost mm-cancel" id="mm-cancel-btn">取 消 匹 配</button>
+    </div>
+</div>
+
+<!-- ==================== [联机] 房间大厅（开房等待开始） ==================== -->
+<div id="room-lobby">
+    <div class="rl-box">
+        <div class="rl-title" id="rl-title">联机房间</div>
+        <div class="rl-sub" id="rl-sub">等待玩家加入，房主可开始对战</div>
+        <div class="rl-code-row">
+            <span style="color:#6b7a8f; font:600 13px/1 'Rajdhani',sans-serif;">房间码</span>
+            <code id="rl-code">------</code>
+            <button class="mp-btn ghost" id="rl-copy">复制</button>
+            <button class="mp-btn ghost" id="rl-leave">离开房间</button>
+        </div>
+        <div class="rl-teams">
+            <div class="rl-team t0"><div class="rl-team-name">A 队（我方）</div><div id="rl-team-0"></div></div>
+            <div class="rl-team t1"><div class="rl-team-name">B 队（敌方）</div><div id="rl-team-1"></div></div>
+        </div>
+        <div style="margin-top:20px; display:flex; gap:10px; justify-content:center;">
+            <button class="mp-btn" id="rl-switch-team">切换队伍</button>
+            <button class="mp-btn" id="rl-start" style="display:none;">开 始 对 战</button>
+        </div>
+    </div>
+</div>
+
+<!-- [联机] PVE 组队大厅 -->
+<div id="pve-lobby" style="position:fixed;inset:0;z-index:2600;display:none;align-items:center;justify-content:center;background:rgba(5,8,16,0.8);backdrop-filter:blur(4px)">
+    <div style="width:560px;max-width:94vw;background:linear-gradient(180deg,rgba(13,20,36,0.97),rgba(8,13,22,0.98));border:1px solid rgba(0,229,255,0.28);border-radius:16px;padding:28px;color:#eaf6ff;">
+        <h3 style="font:700 22px/1 'Orbitron'">🤝 组队攻略大厅</h3>
+        <p style="color:#6b7a8f;margin:6px 0 20px" id="pve-lobby-sub">创建房间，邀请好友一起攻略关卡</p>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+            <span style="color:#6b7a8f">房间码</span>
+            <code id="pve-code" style="flex:1;text-align:center;padding:12px;border-radius:10px;background:rgba(0,0,0,0.3);border:1px dashed rgba(0,229,255,0.3);font:700 26px/1 'JetBrains Mono',monospace;color:#00e5ff;letter-spacing:.2em">------</code>
+            <button class="mp-btn ghost" id="pve-copy">复制</button>
+            <button class="mp-btn ghost" id="pve-leave">离开</button>
+        </div>
+        <div style="margin-bottom:12px">
+            <span style="color:#6b7a8f">攻略关卡：</span>
+            <select id="pve-level-select" style="padding:8px 12px;border-radius:6px;background:rgba(0,0,0,0.3);border:1px solid rgba(0,200,255,0.2);color:#eaf6ff;font-size:14px;margin-left:8px;">
+                <option value="1">第1关 - 熔岩炼狱</option><option value="2">第2关 - 深渊水域</option><option value="3">第3关 - 时空裂隙</option><option value="4">第4关 - 机械坟场</option><option value="5">第5关 - 终焉之城</option>
+            </select>
+        </div>
+        <div class="mp-section-title">队员</div>
+        <div id="pve-members"></div>
+        <div style="margin-top:18px;display:flex;gap:10px;justify-content:center">
+            <button class="mp-btn ghost" id="pve-invite-btn">📩 邀请好友</button>
+            <button class="mp-btn" id="pve-start-btn" style="display:none;">⚔️ 开始攻略</button>
+        </div>
+    </div>
+</div>
+
+<!-- PVE 好友邀请弹窗 -->
+<div class="modal-mask" id="pve-invite-modal">
+    <div style="background:#1a232c;border:1px solid rgba(0,229,255,0.25);border-radius:12px;padding:24px;width:400px;max-width:92vw;color:#eaf6ff">
+        <h3 style="font:700 18px 'Orbitron';margin-bottom:18px">📩 邀请好友</h3>
+        <div id="pve-invite-friends" style="max-height:300px;overflow-y:auto"></div>
+        <div style="text-align:right;margin-top:16px">
+            <button class="mp-btn ghost" onclick="document.getElementById('pve-invite-modal').classList.remove('show')">关闭</button>
+        </div>
+    </div>
+</div>
+
+<!-- [联机] toast -->
+<div id="net-toast"></div>
 
 <div id="start-screen">
     <!-- 顶栏 / 品牌 -->
@@ -3014,6 +3376,8 @@ body{ font-family:'Rajdhani','Microsoft YaHei',Arial,sans-serif; }
         <div class="spacer"></div>
         <div class="v-actions">
             <div class="v-gold" title="金币"><i>🪙</i><span id="home-gold-val">0</span></div>
+            <div id="net-user-chip"><span class="nuc-dot"></span><span class="nuc-ava" id="nuc-ava">?</span><span id="nuc-name">游客</span></div>
+            <button id="net-logout-btn" title="退出登录">注销</button>
             <button class="v-icon-btn" id="homepage-panel-btn" title="个人面板">👤</button>
             <button class="v-icon-btn" id="homepage-settings-btn" title="设置">⚙️</button>
             <button class="fullscreen-btn" onclick="toggleFullscreen()" title="全屏">⛶</button>
@@ -3057,6 +3421,19 @@ body{ font-family:'Rajdhani','Microsoft YaHei',Arial,sans-serif; }
                         <span class="v-mc-go">开始 ▸</span>
                     </div>
                 </button>
+                <button class="v-mode-card" id="pve-coop-btn" style="border-left:3px solid #00e5ff;">
+                    <div class="v-mc-top">
+                        <div class="v-mc-icon">🤝</div>
+                        <div class="v-mc-body">
+                            <div class="v-mc-title">组队攻略</div>
+                            <div class="v-mc-desc">PVE 联机 · 与好友并肩作战</div>
+                        </div>
+                    </div>
+                    <div class="v-mc-foot">
+                        <span class="v-mc-tag">CO-OP</span>
+                        <span class="v-mc-go">组队 ▸</span>
+                    </div>
+                </button>
             </div>
         </div>
 
@@ -3076,6 +3453,9 @@ body{ font-family:'Rajdhani','Microsoft YaHei',Arial,sans-serif; }
     <div class="v-dock">
         <button class="v-dock-item accent-cyan" id="homepage-char-btn"><span class="di">🦸</span><span class="dl">角色</span></button>
         <button class="v-dock-item accent-gold" id="homepage-shop-btn"><span class="di">🛒</span><span class="dl">商城</span></button>
+        <button class="v-dock-item" id="net-friends-btn"><span class="di">👥</span><span class="dl">好友</span></button>
+        <button class="v-dock-item" id="net-chat-btn"><span class="di">💬</span><span class="dl">聊天</span></button>
+        <button class="v-dock-item" id="net-team-btn"><span class="di">⚔️</span><span class="dl">组队联机</span></button>
         <button class="v-dock-item" id="equip-codex-btn"><span class="di">🛡️</span><span class="dl">装备</span></button>
         <button class="v-dock-item" id="monster-codex-btn"><span class="di">👾</span><span class="dl">怪物</span></button>
         <button class="v-dock-item" id="guide-btn"><span class="di">📖</span><span class="dl">指南</span></button>
@@ -3117,7 +3497,7 @@ body{ font-family:'Rajdhani','Microsoft YaHei',Arial,sans-serif; }
     <div class="modal-box wzlb-box">
         <button class="modal-close" data-close="wzlb-modal">&times;</button>
         <h3 class="wzlb-h3">王者乱斗 · <span class="wzlb-en">KING'S BRAWL</span></h3>
-        <p class="wzlb-sub">选择战场与对战规模 · 当前为单人 Demo，队友与敌人皆由 AI 指挥</p>
+        <p class="wzlb-sub">1v1 联机竞技对决 · 与真实玩家一决高下</p>
         <div class="wzlb-section-title"><span>01</span> 选择地图</div>
         <div class="wzlb-maps">
             <button class="wzlb-map selected" data-map="port"><span class="wzlb-map-thumb" style="background:linear-gradient(135deg,#1b2a3a,#0e1620)"></span><span class="wzlb-map-name">废弃港口</span><span class="wzlb-map-sub">集装箱 · 巨轮</span></button>
@@ -3126,13 +3506,11 @@ body{ font-family:'Rajdhani','Microsoft YaHei',Arial,sans-serif; }
             <button class="wzlb-map" data-map="radar"><span class="wzlb-map-thumb" style="background:linear-gradient(135deg,#2e3a47,#141b22)"></span><span class="wzlb-map-name">山地雷达站</span><span class="wzlb-map-sub">雷达穹顶 · 风雪</span></button>
             <button class="wzlb-map" data-map="ruins"><span class="wzlb-map-thumb" style="background:linear-gradient(135deg,#2a1c14,#120a06)"></span><span class="wzlb-map-name">城市废墟</span><span class="wzlb-map-sub">坍塌高楼 · 街垒</span></button>
         </div>
-        <div class="wzlb-section-title"><span>02</span> 对战规模</div>
-        <div class="wzlb-modes">
-            <button class="wzlb-mode" data-size="1">1 <i>v</i> 1</button>
-            <button class="wzlb-mode selected" data-size="3">3 <i>v</i> 3</button>
-            <button class="wzlb-mode" data-size="5">5 <i>v</i> 5</button>
+        <div class="wzlb-section-title"><span>02</span> 进入战场</div>
+        <div style="display:flex; gap:10px; margin-top:4px;">
+            <button class="wzlb-start" id="wzlb-online-match-btn" style="background:linear-gradient(135deg,#00e5ff,#00b8d4); flex:1;">⚡ 快速匹配 1v1</button>
+            <button class="wzlb-start" id="wzlb-online-room-btn" style="background:rgba(255,255,255,0.06); border:1px solid rgba(0,200,255,0.3); color:#cfeefe; flex:1;">🏠 创建/加入房间</button>
         </div>
-        <button class="wzlb-start" id="wzlb-start-btn">进 入 战 场</button>
     </div>
 </div>
 
@@ -3837,6 +4215,768 @@ body{ font-family:'Rajdhani','Microsoft YaHei',Arial,sans-serif; }
 </div>
 
 <script>
+/* =====================================================================
+   [联机] 核心层：登录守卫 + MultiplayerClient(window.net)
+   - 启动即显示登录界面，登录成功后才放行游戏引擎(Three.js initAll)、
+     按钮绑定(registerStartScreenButtons)、角色系统 init。
+   - window.net：WebSocket 客户端，封装聊天/好友/组队/房间/匹配/对局同步，
+     并向游戏引擎(initAll)提供 createRemotePlayer / 发送快照 / 接收命中等接口。
+   ===================================================================== */
+(function(){
+'use strict';
+
+// ---------------- 全局状态 ----------------
+var MP = window.MP = window.MP || {};          // 联机运行时状态
+MP.user = null;                                  // 当前登录用户 {id,username,email,displayName}
+MP.onlineFriends = {};                           // friendId -> true
+MP.friends = [];                                 // [{id,username,displayName,online}]
+MP.pendingReqs = [];                             // [{requestId,fromUserId,username,displayName}]
+MP.room = null;                                  // {code,hostId,mapKey,teamSize,state,myTeam,players}
+MP.team = null;                                  // {teamId,leaderId,inviteCode,members}
+MP.match = null;                                 // 当前对局信息 {roomCode,mapKey,teamSize,team,remotePlayers}
+MP.remotePlayers = {};                           // userId -> {profile, team, snap buffer}
+MP.chatChannels = [];                            // [{id,type,label}]  type: dm|room|team
+MP.activeChannel = null;                         // 当前聊天频道 id
+MP.chatHistory = {};                             // channelId -> [msg]
+MP.unread = {};                                  // channelId -> count
+MP._snapSendTimer = null;
+
+// ---------------- 登录守卫 ----------------
+// 三个游戏入口（initAll / registerStartScreenButtons / character init）在登录前不执行
+window.__fpsBootState = 'locked';  // locked | unlocked
+window.__pendingBoots = [];        // 登录后要执行的 {fn}
+window.__fpsGate = function(fn){ if(window.__fpsBootState==='unlocked'){ try{fn();}catch(e){console.error(e);} } else { window.__pendingBoots.push(fn); } };
+
+function unlockBoot(){
+  window.__fpsBootState = 'unlocked';
+  var q = window.__pendingBoots; window.__pendingBoots = [];
+  for(var i=0;i<q.length;i++){ try{ q[i](); }catch(e){ console.error('boot error', e); } }
+}
+
+// ---------------- DOM 工具 ----------------
+function $(id){ return document.getElementById(id); }
+function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; }
+function avatarColor(name){ var c=0; for(var i=0;i<(name||'').length;i++) c=(c*31+name.charCodeAt(i))>>>0; return 'mp-ava c'+(c%5); }
+function initials(name){ var n=(name||'?').trim(); return n? n.charAt(0).toUpperCase() : '?'; }
+
+var toastTimer=null;
+function toast(msg, ms){
+  var t=$('net-toast'); if(!t) return;
+  t.textContent = msg; t.classList.add('show');
+  if(toastTimer) clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){ t.classList.remove('show'); }, ms||2400);
+}
+MP.toast = toast;
+
+// ---------------- 登录界面逻辑 ----------------
+function showAuthForm(which){
+  $('auth-form-login').style.display = which==='login'?'block':'none';
+  $('auth-form-register').style.display = which==='register'?'block':'none';
+  $('auth-tab-login').classList.toggle('active', which==='login');
+  $('auth-tab-register').classList.toggle('active', which==='register');
+  $('li-err').textContent=''; $('rg-err').textContent='';
+}
+function api(path, opts){
+  opts = opts||{};
+  return fetch(path, { method: opts.method||'GET', headers: {'Content-Type':'application/json'}, credentials:'same-origin', body: opts.body? JSON.stringify(opts.body): undefined })
+    .then(function(r){ return r.json().then(function(j){ return {ok:r.ok, json:j}; }); })
+    .then(function(res){ if(!res.ok || !res.json.ok) throw new Error(res.json.error||('请求失败 ('+res+')')); return res.json; });
+}
+function onAuthed(user){
+  MP.user = user;
+  $('auth-screen').classList.add('hide');
+  // 顶栏用户芯片
+  var chip=$('net-user-chip'); chip.classList.add('show');
+  $('nuc-name').textContent = user.displayName || user.username;
+  $('nuc-ava').textContent = initials(user.displayName||user.username);
+  $('net-logout-btn').classList.add('show');
+  // 放行游戏
+  unlockBoot();
+  // 连接 WebSocket + 拉取好友列表
+  Net.connect();
+  MP.refreshFriends();
+  toast('欢迎回来，' + (user.displayName||user.username) + '！');
+}
+
+// 绑定登录表单事件（DOM 一就绪就绑，不依赖 Three.js）
+function bindAuthUI(){
+  $('auth-tab-login').onclick = function(){ showAuthForm('login'); };
+  $('auth-tab-register').onclick = function(){ showAuthForm('register'); };
+  $('li-to-reg').onclick = function(){ showAuthForm('register'); };
+  $('rg-to-li').onclick = function(){ showAuthForm('login'); };
+  $('li-submit').onclick = function(){ doLogin(); };
+  $('rg-submit').onclick = function(){ doRegister(); };
+  $('net-logout-btn').onclick = doLogout;
+  // 回车提交
+  $('li-password').addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
+  $('rg-password').addEventListener('keydown', function(e){ if(e.key==='Enter') doRegister(); });
+}
+function doLogin(){
+  var acc=$('li-account').value.trim(), pw=$('li-password').value;
+  if(!acc||!pw){ $('li-err').textContent='请输入账号与密码'; return; }
+  $('li-submit').disabled=true; $('li-err').textContent='';
+  api('/api/login',{method:'POST',body:{account:acc,password:pw}}).then(function(j){
+    onAuthed(j.user);
+  }).catch(function(e){
+    var msg=e.message||'';
+    if(msg.indexOf('封禁')>=0){
+      showBanBanner(msg);
+      $('li-err').textContent='';
+    } else {
+      $('li-err').textContent=msg;
+    }
+  }).then(function(){ $('li-submit').disabled=false; });
+}
+function doRegister(){
+  var u=$('rg-username').value.trim(), em=$('rg-email').value.trim(), pw=$('rg-password').value;
+  if(!u||!em||!pw){ $('rg-err').textContent='请完整填写所有字段'; return; }
+  $('rg-submit').disabled=true; $('rg-err').textContent='';
+  api('/api/register',{method:'POST',body:{username:u,email:em,password:pw}}).then(function(j){
+    onAuthed(j.user);
+  }).catch(function(e){ $('rg-err').textContent=e.message; })
+    .then(function(){ $('rg-submit').disabled=false; });
+}
+function doLogout(){
+  api('/api/logout',{method:'POST'}).then(function(){
+    // 刷新页面回到登录界面（最干净）
+    location.reload();
+  }).catch(function(){ location.reload(); });
+}
+
+// 启动时先尝试 /api/me（cookie 仍在则免登录）
+function tryAutoLogin(){
+  fetch('/api/me',{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(j){
+    if(j && j.ok && j.user){ onAuthed(j.user); }
+    // 否则保持登录界面
+  }).catch(function(){});
+}
+
+// =====================================================================
+//  MultiplayerClient —— window.net
+// =====================================================================
+var Net = {
+  ws: null, connected:false, reconnectAttempts:0, reconnectTimer:null,
+  pingTimer:null, lastPong:0,
+
+  connect: function(){
+    if(this.ws && (this.ws.readyState===WebSocket.OPEN||this.ws.readyState===WebSocket.CONNECTING)) return;
+    var proto = location.protocol==='https:'?'wss:':'ws:';
+    // 通过 cookie 无法在 ws 握手时携带给 ws 库自动读取，这里改用 URL token。
+    // token 与 cookie 同源（服务端 verifySessionToken 校验同一个 sessions 表）。
+    var self=this;
+    fetch('/api/me',{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(j){
+      if(!j||!j.ok){ toast('会话失效，请重新登录'); return; }
+      // 复用 cookie：服务端 ws 鉴权我们改为支持 cookie header。
+      // 但浏览器 ws 不暴露自定义 header，故仍用 token：服务端已支持 query token。
+      // 我们没有 token 明文，改为让服务端 ws 通过 cookie 鉴权（见下方：浏览器会自动带 cookie 到 ws 握手）。
+      var url = proto+'//'+location.host+'/ws';
+      try { self._open(url); } catch(e){ console.error('ws open error', e); }
+    }).catch(function(){ toast('网络错误，无法连接服务器'); });
+  },
+
+  _open: function(url){
+    var self=this;
+    // 浏览器对 ws 握手会自动携带同源 cookie（SameSite=Lax），服务端已支持双路径鉴权
+    var ws = new WebSocket(url);
+    this.ws = ws;
+    ws.onopen = function(){
+      self.connected=true; self.reconnectAttempts=0; self.lastPong=Date.now();
+      self._startPing();
+      toast('已连接联机服务器');
+      // 若有断线前的房间，尝试重连
+      if(MP.room && MP.room.code){ self.send({type:'reconnect', roomCode: MP.room.code}); }
+      MP.onWsReady && MP.onWsReady();
+    };
+    ws.onmessage = function(ev){ self._onMessage(ev); };
+    ws.onclose = function(){ self.connected=false; self._stopPing(); self._scheduleReconnect(); };
+    ws.onerror = function(){ try{ ws.close(); }catch(e){} };
+  },
+  _scheduleReconnect: function(){
+    var self=this;
+    if(this.reconnectTimer) return;
+    this.reconnectAttempts++;
+    if(this.reconnectAttempts>20){ toast('与服务器断开，请检查网络后刷新'); return; }
+    var delay = Math.min(3000*this.reconnectAttempts, 15000);
+    this.reconnectTimer = setTimeout(function(){ self.reconnectTimer=null; self.connect(); }, delay);
+  },
+  _startPing: function(){
+    var self=this; this._stopPing();
+    this.pingTimer = setInterval(function(){
+      if(!self.connected) return;
+      if(Date.now()-self.lastPong > 15000){ try{self.ws.close();}catch(e){} return; }
+      self.send({type:'ping'});
+    }, 5000);
+  },
+  _stopPing: function(){ if(this.pingTimer){ clearInterval(this.pingTimer); this.pingTimer=null; } },
+
+  send: function(obj){ if(this.ws && this.ws.readyState===WebSocket.OPEN){ try{ this.ws.send(JSON.stringify(obj)); }catch(e){} } },
+
+  _onMessage: function(ev){
+    var m; try{ m=JSON.parse(ev.data); }catch(e){ return; }
+    var t=m.type;
+    switch(t){
+      case 'hello': MP.user.id = m.user.id; break;
+      case 'pong': this.lastPong=Date.now(); break;
+
+      // ---- 在线状态 ----
+      case 'presence':
+        MP.onlineFriends[m.userId]=!!m.online;
+        MP.renderFriendsList && MP.renderFriendsList();
+        break;
+
+      // ---- 聊天 ----
+      case 'chat': MP.onChatMessage(m); break;
+
+      // ---- 房间 ----
+      case 'room_created': MP.onRoomCreated(m); break;
+      case 'room_joined': MP.onRoomJoined(m); break;
+      case 'room_update': MP.room = Object.assign(MP.room||{}, m.room); renderRoomLobby(); break;
+      case 'roster': MP.onRoster(m.players); break;
+      case 'room_player_left': MP.onRoster(); break;  // roster 会随后下发
+      case 'room_error': toast(m.error||'房间操作失败'); break;
+      case 'match_start': MP.onMatchStart(m); break;
+      case 'player_disconnect': MP.onPlayerDisconnect(m.userId); break;
+
+      // ---- 匹配 ----
+      case 'match_queued': toast('已加入匹配队列'); break;
+      case 'match_waiting':
+        var ss=$('mm-status'); if(ss) ss.textContent='当前队列 '+m.inQueue+' / '+m.need+' 人';
+        break;
+      case 'match_found': MP.onMatchFound(m); break;
+      case 'match_cancelled': closeMatchmaking(); break;
+      case 'match_error': toast(m.error||'匹配失败'); closeMatchmaking(); break;
+
+      // ---- 组队 ----
+      case 'team_update': MP.onTeamUpdate(m.team); break;
+      case 'team_join_request': MP.onTeamJoinRequest(m.from); break;
+      case 'team_dissolved': MP.team=null; renderTeamPanel(); toast('队伍已解散'); break;
+      case 'team_error': toast(m.error||'队伍操作失败'); break;
+
+      // ---- 好友申请通知 ----
+      case 'friend_request':
+        toast(m.from.username+' 向你发送了好友申请');
+        MP.refreshFriends();
+        break;
+      case 'friend_accepted':
+        toast(m.by.username+' 接受了你的好友申请');
+        MP.refreshFriends();
+        break;
+
+      // ---- 对局同步 ----
+      case 'match_found':
+      case 'snap': MP.onSnap(m); break;
+      case 'remote_shoot': MP.onRemoteShoot(m); break;
+      case 'hit': MP.onHitMe(m); break;
+      case 'remote_hit': MP.onRemoteHit(m); break;
+      case 'remote_death': MP.onRemoteDeath(m); break;
+      case 'remote_respawn': MP.onRemoteRespawn(m); break;
+      case 'remote_emote': toast(m.text||''); break;
+	      case 'reconnect_ok': MP.onReconnectOk(m); break;
+	      case 'reconnect_failed': MP.room=null; closeRoomLobby(); toast('重连失败：房间已关闭'); break;
+	      // ---- PVE 联机组队 ----
+	      case 'pve_created': MP.onPveCreated(m); break;
+	      case 'pve_joined': MP.onPveJoined(m); break;
+	      case 'pve_start': MP.onPveStart(m); break;
+	      case 'pve_sync': if(window.__netHooks && window.__netHooks.onPveSync) window.__netHooks.onPveSync(m); break;
+	      case 'pve_wave': if(window.__netHooks && window.__netHooks.onPveWave) window.__netHooks.onPveWave(m); break;
+	      case 'pve_shoot': if(window.__netHooks && window.__netHooks.onPveShoot) window.__netHooks.onPveShoot(m); break;
+	      case 'pve_complete': if(window.__netHooks && window.__netHooks.onPveComplete) window.__netHooks.onPveComplete(m); break;
+	      case 'pve_error': toast(m.error||'PVE房间操作失败'); break;
+	      case 'pve_invite': MP.onPveInvite(m); break;
+	      case 'auth_error': console.warn('[ws] auth_error:', m.error);
+        if(m.error && m.error.indexOf('封禁')>=0){
+          // 被封禁：停止重连，跳转登录页显示封禁提示
+          if(Net.reconnectTimer){ clearTimeout(Net.reconnectTimer); Net.reconnectTimer=null; }
+          Net.connected=false; location.href='/?banned='+encodeURIComponent(m.error);
+        } else {
+          toast(m.error||'WebSocket 鉴权失败，尝试重连');
+        }
+        break;
+      case 'kicked': // 被管理员强制下线
+        if(Net.reconnectTimer){ clearTimeout(Net.reconnectTimer); Net.reconnectTimer=null; }
+        Net.connected=false; location.href='/?banned='+encodeURIComponent(m.reason||'账户已被管理员封禁');
+        break;
+    }
+  }
+};
+window.net = Net;
+
+// =====================================================================
+//  社交 / 聊天 / 组队 面板逻辑（挂在 MP 上，供 UI 与 ws 回调共用）
+// =====================================================================
+
+// ---- 面板开关 ----
+function openPanel(id){ document.querySelectorAll('.mp-panel.open').forEach(function(p){ if(p.id!==id) p.classList.remove('open'); }); $(id).classList.add('open'); }
+function closePanel(id){ $(id).classList.remove('open'); }
+
+// ---- 好友 ----
+MP.refreshFriends = function(){
+  fetch('/api/friends',{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(j){
+    if(!j||!j.ok) return;
+    MP.friends = j.friends||[];
+    MP.pendingReqs = j.pending||[];
+    MP.renderFriendsList();
+    MP.renderPendingList();
+    MP.renderChatChannels();
+  }).catch(function(){});
+};
+MP.renderFriendsList = function(){
+  var box=$('fr-list');
+  if(!MP.friends.length){ box.innerHTML='<div class="mp-empty">还没有好友，去搜索添加吧</div>'; return; }
+  box.innerHTML='';
+  MP.friends.forEach(function(f){
+    var r=el('div','mp-row');
+    r.innerHTML='<div class="'+avatarColor(f.username)+'">'+initials(f.username)+'</div>'+
+      '<div class="mp-meta"><div class="mp-name">'+escapeHtml(f.displayName||f.username)+'</div>'+
+      '<div class="mp-sub">'+(f.online?'<span style="color:#4caf50">● 在线</span>':'离线')+'</div></div>'+
+      '<div class="mp-mini-btn primary" data-act="dm">私聊</div>'+
+      '<div class="mp-mini-btn decline" data-act="del">删除</div>';
+    var dot=el('div','mp-status-dot '+(f.online?'on':'off'));
+    r.insertBefore(dot, r.firstChild);
+    r.querySelector('[data-act=dm]').onclick=function(){ closePanel('friends-panel'); openChatWithFriend(f); };
+    r.querySelector('[data-act=del]').onclick=function(){ if(confirm('确定删除好友 '+f.username+'？')) removeFriend(f.id); };
+    box.appendChild(r);
+  });
+};
+MP.renderPendingList = function(){
+  var box=$('fr-pending-list'); var cnt=$('fr-pending-count');
+  if(cnt) cnt.textContent = MP.pendingReqs.length? ('('+MP.pendingReqs.length+')'):'';
+  if(!MP.pendingReqs.length){ box.innerHTML='<div class="mp-empty">暂无好友申请</div>'; return; }
+  box.innerHTML='';
+  MP.pendingReqs.forEach(function(rq){
+    var r=el('div','mp-row');
+    r.innerHTML='<div class="'+avatarColor(rq.username)+'">'+initials(rq.username)+'</div>'+
+      '<div class="mp-meta"><div class="mp-name">'+escapeHtml(rq.displayName||rq.username)+'</div><div class="mp-sub">请求加为好友</div></div>'+
+      '<div class="mp-mini-btn accept" data-act="acc">接受</div>'+
+      '<div class="mp-mini-btn decline" data-act="rej">拒绝</div>';
+    r.querySelector('[data-act=acc]').onclick=function(){ friendAction('/api/friends/accept',{requestId:rq.requestId}); };
+    r.querySelector('[data-act=rej]').onclick=function(){ friendAction('/api/friends/reject',{requestId:rq.requestId}); };
+    box.appendChild(r);
+  });
+};
+function friendAction(path, body){ api(path,{method:'POST',body:body}).then(function(){ MP.refreshFriends(); toast('操作成功'); }).catch(function(e){ toast(e.message); }); }
+function removeFriend(id){ api('/api/friends/remove',{method:'POST',body:{friendId:id}}).then(function(){ MP.refreshFriends(); toast('已删除好友'); }).catch(function(e){ toast(e.message); }); }
+function searchUsers(){
+  var q=$('fr-search').value.trim(); if(!q) return;
+  api('/api/friends/search?q='+encodeURIComponent(q)).then(function(j){
+    var box=$('fr-search-results'); box.innerHTML='';
+    if(!j.users||!j.users.length){ box.innerHTML='<div class="mp-empty">未找到匹配的玩家</div>'; return; }
+    j.users.forEach(function(u){
+      var already = MP.friends.some(function(f){return f.id===u.id;});
+      var r=el('div','mp-row');
+      r.innerHTML='<div class="'+avatarColor(u.username)+'">'+initials(u.username)+'</div>'+
+        '<div class="mp-meta"><div class="mp-name">'+escapeHtml(u.displayName||u.username)+'</div><div class="mp-sub">'+(u.online?'在线':'离线')+'</div></div>'+
+        '<div class="mp-mini-btn '+(already?'':'primary')+'" data-act="add">'+(already?'已是好友':'加好友')+'</div>';
+      if(!already) r.querySelector('[data-act=add]').onclick=function(){ api('/api/friends/request',{method:'POST',body:{toUserId:u.id}}).then(function(){ toast('好友申请已发送'); }).catch(function(e){ toast(e.message); }); };
+      box.appendChild(r);
+    });
+  }).catch(function(e){ toast(e.message); });
+}
+
+// ---- 聊天 ----
+function channelOfFriend(id){ return 'dm:'+id; }
+function openChatWithFriend(f){
+  ensureChannel({id:channelOfFriend(f.id), type:'dm', label:f.displayName||f.username, peerId:f.id});
+  selectChannel(channelOfFriend(f.id));
+  openPanel('chat-panel');
+  loadDMHistory(f.id);
+}
+function ensureChannel(ch){
+  if(!MP.chatChannels.some(function(c){return c.id===ch.id;})) MP.chatChannels.push(ch);
+  MP.renderChatChannels();
+}
+function loadDMHistory(peerId){
+  fetch('/api/messages/dm?with='+peerId,{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(j){
+    var cid=channelOfFriend(peerId); MP.chatHistory[cid]=[];
+    (j.messages||[]).forEach(function(m){ MP.chatHistory[cid].push({from:m.fromUser, name:(m.fromUser===MP.user.id?'我':'对方'), content:m.content, me: m.fromUser===MP.user.id, ts:m.createdAt*1000}); });
+    if(MP.activeChannel===cid) renderChatMsgs();
+  }).catch(function(){});
+}
+MP.renderChatChannels = function(){
+  var box=$('chat-channels'); box.innerHTML='';
+  if(!MP.chatChannels.length){ box.innerHTML='<div style="color:#5d7088;font:500 12px/1 \'Rajdhani\',sans-serif;padding:6px 4px;">从好友列表发起私聊，或进入房间/组队后自动出现频道</div>'; return; }
+  MP.chatChannels.forEach(function(c){
+    var ch=el('div','chat-chan'+(MP.activeChannel===c.id?' active':''));
+    ch.textContent=c.label;
+    var u=MP.unread[c.id]||0;
+    if(u){ var b=el('div','cc-badge show'); b.textContent=u>99?'99+':u; ch.appendChild(b); }
+    ch.onclick=function(){ selectChannel(c.id); };
+    box.appendChild(ch);
+  });
+};
+function selectChannel(id){
+  MP.activeChannel=id; MP.unread[id]=0;
+  MP.renderChatChannels(); renderChatMsgs();
+  // 输入框聚焦
+  var inp=$('chat-input'); if(inp) setTimeout(function(){ inp.focus(); }, 50);
+}
+function renderChatMsgs(){
+  var box=$('chat-msgs'); var hist=MP.chatHistory[MP.activeChannel]||[];
+  box.innerHTML='';
+  if(!hist.length){ box.innerHTML='<div class="mp-empty">还没有消息，发条招呼吧</div>'; box.scrollTop=0; return; }
+  hist.forEach(function(m){
+    var d=el('div','chat-msg '+(m.me?'me':(m.sys?'sys':'them')));
+    d.innerHTML=(m.name?'<div class="cm-name">'+escapeHtml(m.name)+'</div>':'')+escapeHtml(m.content);
+    box.appendChild(d);
+  });
+  box.scrollTop=box.scrollHeight;
+}
+MP.onChatMessage = function(m){
+  var cid;
+  if(m.channel==='dm'){ cid = m.fromUser===MP.user.id ? ('dm:'+m.scope) : ('dm:'+m.fromUser); ensureDMChannel(m.fromUser, m.fromName); }
+  else if(m.channel==='room'){ cid='room:'+(m.scope||''); ensureChannel({id:cid, type:'room', label:'房间频道'}); }
+  else if(m.channel==='team'){ cid='team:'+(m.scope||''); ensureChannel({id:cid, type:'team', label:'队伍频道'}); }
+  if(!MP.chatHistory[cid]) MP.chatHistory[cid]=[];
+  var me = m.fromUser===MP.user.id;
+  MP.chatHistory[cid].push({from:m.fromUser, name: me?'我':m.fromName, content:m.content, me:me, ts:m.ts});
+  if(MP.activeChannel!==cid){ MP.unread[cid]=(MP.unread[cid]||0)+1; MP.renderChatChannels(); }
+  else renderChatMsgs();
+};
+function ensureDMChannel(userId, name){
+  if(userId===MP.user.id) return;
+  var cid=channelOfFriend(userId);
+  if(!MP.chatChannels.some(function(c){return c.id===cid;})) MP.chatChannels.push({id:cid,type:'dm',label:name||('用户'+userId),peerId:userId});
+  MP.renderChatChannels();
+}
+function sendChat(){
+  var inp=$('chat-input'); var txt=inp.value.trim(); if(!txt||!MP.activeChannel) return;
+  var ch = MP.chatChannels.filter(function(c){return c.id===MP.activeChannel;})[0];
+  if(!ch) return;
+  var msg;
+  if(ch.type==='dm'){ msg={type:'chat',channel:'dm',scope:String(ch.peerId),content:txt}; }
+  else if(ch.type==='room'){ msg={type:'chat',channel:'room',scope:(MP.room&&MP.room.code)||'',content:txt}; }
+  else if(ch.type==='team'){ msg={type:'chat',channel:'team',content:txt}; }
+  Net.send(msg);
+  inp.value='';
+  // 立即本地回显（服务端也会回传给自己）
+  if(!MP.chatHistory[ch.id]) MP.chatHistory[ch.id]=[];
+  MP.chatHistory[ch.id].push({from:MP.user.id, name:'我', content:txt, me:true, ts:Date.now()});
+  renderChatMsgs();
+}
+
+// ---- 组队 ----
+function teamCreate(){ Net.send({type:'team_create'}); }
+function teamJoin(){
+  var code=$('team-join-code').value.trim().toUpperCase();
+  if(!code){ toast('请输入邀请码'); return; }
+  Net.send({type:'team_invite', inviteCode:code});
+  toast('已向队长发送入队请求');
+}
+function teamLeave(){ Net.send({type:'team_leave'}); MP.team=null; renderTeamPanel(); }
+function teamQueue(){
+  if(!MP.team){ toast('请先创建或加入队伍'); return; }
+  var map=$('wzlb-modal') && document.querySelector('.wzlb-map.selected');
+  var size=document.querySelector('.wzlb-mode.selected');
+  Net.send({type:'match_queue', mapKey:(map?map.dataset.map:'port'), teamSize: Number((size?size.dataset.size:'3'))});
+  showMatchmaking();
+}
+MP.onTeamUpdate = function(team){
+  MP.team=team;
+  renderTeamPanel();
+};
+MP.onTeamJoinRequest = function(from){
+  // 仅队长收到；自动接受（演示），并把加入者信息带上
+  if(!MP.team || MP.team.leaderId!==MP.user.id){ return; }
+  Net.send({type:'team_accept_join', userId:from.id, username:from.username, displayName:from.displayName});
+  toast(from.username+' 加入了队伍');
+};
+function renderTeamPanel(){
+  var none=$('team-state-none'), act=$('team-state-active');
+  if(!MP.team){ none.style.display='block'; act.style.display='none'; return; }
+  none.style.display='none'; act.style.display='block';
+  $('team-invite-code').textContent=MP.team.inviteCode;
+  $('team-role-tag').textContent = MP.team.leaderId===MP.user.id?'队长':'队员';
+  var ml=$('team-members-list'); ml.innerHTML='';
+  (MP.team.members||[]).forEach(function(u){
+    var r=el('div','mp-row');
+    var leaderTag = u.id===MP.team.leaderId?'<span style="color:#ffd54f"> ★ 队长</span>':'';
+    r.innerHTML='<div class="'+avatarColor(u.username)+'">'+initials(u.username)+'</div><div class="mp-meta"><div class="mp-name">'+escapeHtml(u.displayName||u.username)+leaderTag+'</div></div>';
+    if(MP.team.leaderId===MP.user.id && u.id!==MP.user.id){
+      var k=el('div','mp-mini-btn decline','踢出'); k.onclick=function(){ Net.send({type:'team_kick',userId:u.id}); }; r.appendChild(k);
+    }
+    ml.appendChild(r);
+  });
+}
+
+// ---- 房间大厅 ----
+function showRoomLobby(){ $('room-lobby').classList.add('show'); renderRoomLobby(); }
+function closeRoomLobby(){ $('room-lobby').classList.remove('show'); }
+function renderRoomLobby(){
+  if(!$('room-lobby').classList.contains('show')) return;
+  var r=MP.room; if(!r){ return; }
+  $('rl-code').textContent=r.code;
+  $('rl-title').textContent='联机房间 · '+(r.mapKey||'port')+' · '+r.teamSize+'v'+r.teamSize;
+  var isHost = r.hostId===MP.user.id;
+  $('rl-start').style.display = isHost ? 'inline-block':'none';
+  $('rl-sub').textContent = isHost ? '你是房主，可复制房间码邀请好友，或直接开始对战' : '等待房主开始对战…';
+  // 分队（来自 roster；roster 未到时按 myTeam 显示自己）
+  var teams = {0:[],1:[]};
+  (r.players||[]).forEach(function(p){ teams[p.team]=(teams[p.team]||[]); teams[p.team].push(p); });
+  renderLobbyTeam($('rl-team-0'), teams[0]||[]);
+  renderLobbyTeam($('rl-team-1'), teams[1]||[]);
+}
+function renderLobbyTeam(box, arr){
+  box.innerHTML='';
+  if(!arr.length){ box.innerHTML='<div class="mp-empty" style="padding:14px;">— 空 —</div>'; return; }
+  arr.forEach(function(p){
+    var r=el('div','mp-row'); var host=p.userId===MP.room.hostId;
+    r.innerHTML='<div class="'+avatarColor(p.username)+'">'+initials(p.username)+'</div><div class="mp-meta"><div class="mp-name">'+escapeHtml(p.displayName||p.username)+(host?' <span style="color:#ffd54f">★房主</span>':'')+'</div></div>';
+    box.appendChild(r);
+  });
+}
+MP.onRoomCreated = function(m){ MP.room={code:m.room.code,hostId:m.room.hostId,mapKey:m.room.mapKey,teamSize:m.room.teamSize,state:m.room.state,myTeam:0,players:m.players}; showRoomLobby(); toast('房间已创建：'+m.room.code); };
+MP.onRoomJoined = function(m){
+  var me = (m.players||[]).filter(function(p){return p.userId===MP.user.id;})[0];
+  MP.room={code:m.room.code,hostId:m.room.hostId,mapKey:m.room.mapKey,teamSize:m.room.teamSize,state:m.room.state,myTeam: me?me.team:0,players:m.players};
+  ensureChannel({id:'room:'+m.room.code, type:'room', label:'房间频道'});
+  showRoomLobby();
+};
+MP.onRoster = function(players){
+  if(MP.room){ MP.room.players=players||[]; renderRoomLobby(); }
+};
+MP.onPlayerDisconnect = function(userId){ /* roster 会更新；这里可加占位 */ };
+
+// ---- PVE 组队大厅 ----
+function showPveLobby(){
+  // 不再自动建房：让玩家先选择"创建"还是"加入"
+  var choice = prompt('输入房间码加入已有队伍，或点"取消"创建新房间：\n（创建后可将房间码发给好友邀请加入）');
+  if(choice === null){
+    // 取消 = 创建新房间
+    Net.send({type:'pve_create', level:parseInt($('pve-level-select').value)||1});
+  } else {
+    choice = choice.trim().toUpperCase();
+    if(choice){ Net.send({type:'pve_join', roomCode:choice}); }
+    else { Net.send({type:'pve_create', level:parseInt($('pve-level-select').value)||1}); }
+  }
+}
+function showPveLobbyForce(){ $('pve-lobby').style.display='flex'; renderPveLobby(); }
+function closePveLobby(){ $('pve-lobby').style.display='none'; }
+function renderPveLobby(){
+  if($('pve-lobby').style.display==='none') return;
+  var r=MP.pveRoom; if(!r) return;
+  $('pve-code').textContent=r.code;
+  $('pve-lobby-sub').textContent='房间码已生成，邀请好友加入后选择关卡开始攻略';
+  var isHost = r.hostId===MP.user.id;
+  $('pve-start-btn').style.display = isHost ? 'inline-block':'none';
+  $('pve-level-select').disabled = !isHost;
+  // 队员列表
+  var ml=$('pve-members'); ml.innerHTML='';
+  (r.players||[]).forEach(function(p){
+    var d=document.createElement('div'); d.className='mp-row';
+    var hostTag = p.userId===r.hostId?' <span style="color:#ffd54f">★ 队长</span>':'';
+    d.innerHTML='<div class="mp-ava c'+(p.userId%5)+'">'+initials(p.username)+'</div><div class="mp-meta"><div class="mp-name">'+escapeHtml(p.username)+hostTag+'</div></div>';
+    ml.appendChild(d);
+  });
+}
+MP.onPveCreated = function(m){
+  MP.pveRoom = {code:m.room.code, hostId:m.room.hostId, mode:'pve', level:m.level, players:m.players};
+  showPveLobbyForce(); renderPveLobby();
+  ensureChannel({id:'room:'+m.room.code, type:'room', label:'PVE队伍频道'});
+  toast('PVE房间已创建：'+m.room.code+'（可将房间码发给好友）');
+};
+MP.onPveJoined = function(m){
+  MP.pveRoom = {code:m.room.code, hostId:m.room.hostId, mode:'pve', level:m.level, players:m.players};
+  showPveLobbyForce(); renderPveLobby();
+  ensureChannel({id:'room:'+m.room.code, type:'room', label:'PVE队伍频道'});
+};
+MP.onPveRoster = function(players){ if(MP.pveRoom){ MP.pveRoom.players=players; renderPveLobby(); } };
+MP.onPveStart = function(m){
+  closePveLobby();
+  MP.pveCoop = { active:true, level:m.level, players:m.players, isHost:m.players[0]&&m.players[0].userId===MP.user.id };
+  if(typeof window.__startPveCoop === 'function') window.__startPveCoop(m.level, m.players);
+  else setTimeout(function(){ MP.onPveStart(m); }, 200);
+};
+// PVE 好友邀请
+function showPveInviteModal(){
+  MP.refreshFriends();
+  var box = document.getElementById('pve-invite-friends');
+  var friends = (MP.friends||[]).filter(function(f){ return f.online; });
+  if(!friends.length){ box.innerHTML='<div class="mp-empty">没有在线好友</div>'; }
+  else {
+    box.innerHTML = friends.map(function(f){
+      var avaC = 'mp-ava c'+(f.id%5);
+      return '<div class="mp-row"><div class="'+avaC+'">'+initials(f.username)+'</div><div class="mp-meta"><div class="mp-name">'+escapeHtml(f.displayName||f.username)+'</div><div class="mp-sub">● 在线</div></div><button class="mp-mini-btn primary" onclick="invitePveFriend('+f.id+')">邀请</button></div>';
+    }).join('');
+  }
+  document.getElementById('pve-invite-modal').classList.add('show');
+}
+function invitePveFriend(userId){
+  Net.send({type:'pve_invite', userId:userId});
+  document.getElementById('pve-invite-modal').classList.remove('show');
+  toast('已发送邀请');
+}
+MP.onPveInvite = function(m){
+  if(!confirm(m.fromName+' 邀请你加入PVE组队攻略第'+m.level+'关，是否接受？')){
+    return;
+  }
+  Net.send({type:'pve_accept_invite', roomCode:m.roomCode});
+};
+
+// ---- 匹配遮罩 ----
+function showMatchmaking(){ $('matchmaking-overlay').classList.add('show'); }
+function closeMatchmaking(){ $('matchmaking-overlay').classList.remove('show'); }
+
+// 匹配成功 → 直接进入对局（跳过房间大厅）
+MP.onMatchFound = function(m){
+  closeMatchmaking(); closeRoomLobby();
+  MP.room = {code:m.roomCode, hostId:MP.user.id, mapKey:m.mapKey, teamSize:m.teamSize, myTeam:m.team, players:(m.players||[]).map(function(p){return {userId:p.userId,username:p.username,displayName:p.displayName,team:p.team,connected:true};})};
+  // 注：匹配模式下服务端直接进入 playing；客户端直接启动对局
+  startOnlineMatch(m.mapKey, m.teamSize, m.team, m.players);
+};
+
+// =====================================================================
+//  联机对局启动桥接 —— 与 initAll 内部对接
+//  initAll 会暴露 window.__startOnlineMatch(mapKey, teamSize, myTeam, remoteList)
+//  并提供 window.__netHooks: { createRemotePlayer, onSnap, onHitMe, ... }
+// =====================================================================
+function startOnlineMatch(mapKey, teamSize, myTeam, remoteList){
+  MP.match = { roomCode: MP.room && MP.room.code, mapKey:mapKey, teamSize:teamSize, team:myTeam, remotePlayers:{} };
+  // 远程玩家先登记，等游戏引擎 ready 后 createRemotePlayer
+  (remoteList||[]).forEach(function(p){
+    if(p.userId!==MP.user.id){
+      MP.match.remotePlayers[p.userId]={ profile:p, team:p.team, snaps:[], dead:false };
+    }
+  });
+  if(typeof window.__startOnlineMatch === 'function'){
+    window.__startOnlineMatch(mapKey, teamSize, myTeam, remoteList);
+  } else {
+    // 引擎尚未就绪（极少见，Three.js 还在加载），稍后重试
+    setTimeout(function(){ startOnlineMatch(mapKey,teamSize,myTeam,remoteList); }, 200);
+  }
+}
+
+// 服务端发来的快照
+MP.onSnap = function(m){
+  if(!MP.match) return;
+  var rp=MP.match.remotePlayers[m.userId];
+  if(!rp){ rp={profile:{userId:m.userId},team:0,snaps:[],dead:false}; MP.match.remotePlayers[m.userId]=rp; if(m.user) rp.profile=m.user; }
+  rp.snaps.push(m.data); if(rp.snaps.length>6) rp.snaps.shift();
+  rp.dead = !!(m.data && m.data.dead);
+  if(window.__netHooks && window.__netHooks.onSnap) window.__netHooks.onSnap(m.userId, m.data, rp);
+};
+MP.onRemoteShoot = function(m){ if(window.__netHooks && window.__netHooks.onRemoteShoot) window.__netHooks.onRemoteShoot(m.userId, m); };
+MP.onHitMe = function(m){
+  // 我被命中：在自己权威状态扣血（由引擎钩子处理）
+  if(window.__netHooks && window.__netHooks.onHitMe) window.__netHooks.onHitMe(m);
+};
+MP.onRemoteHit = function(m){
+  // 其他人之间的命中：用于伤害飘字（可选）
+  if(window.__netHooks && window.__netHooks.onRemoteHit) window.__netHooks.onRemoteHit(m);
+};
+MP.onRemoteDeath = function(m){ if(window.__netHooks && window.__netHooks.onRemoteDeath) window.__netHooks.onRemoteDeath(m.userId, m); };
+MP.onRemoteRespawn = function(m){ if(window.__netHooks && window.__netHooks.onRemoteRespawn) window.__netHooks.onRemoteRespawn(m.userId, m.pos); };
+MP.onMatchStart = function(m){
+  // 房间大厅里房主点了开始
+  closeRoomLobby();
+  var me = (m.players||[]).filter(function(p){return p.userId===MP.user.id;})[0];
+  startOnlineMatch(m.mapKey, m.teamSize, me?me.team:0, m.players);
+};
+MP.onReconnectOk = function(m){
+  MP.room = Object.assign(MP.room||{}, m.room);
+  MP.room.players = m.players||[];
+  // 把已存在的快照灌回引擎
+  if(window.__netHooks && window.__netHooks.onReconnect){ window.__netHooks.onReconnect(m); }
+  toast('已重新连接到对局');
+};
+
+// 玩家上报自身快照（引擎调用）
+MP.sendSnap = function(data){ Net.send({type:'snap', data:data}); };
+MP.send = function(obj){ Net.send(obj); }; // [PVE联机] 通用ws发送
+// 我命中了远程玩家（引擎调用）
+MP.sendHit = function(targetId, dmg, headshot, crit, weapon){ Net.send({type:'hit', targetId:targetId, dmg:dmg, headshot:headshot, crit:crit, weapon:weapon}); };
+// 我开火（用于他人看到枪口火光/弹道）
+MP.sendShoot = function(origin, dir, weapon){ Net.send({type:'shoot', origin:origin, dir:dir, weapon:weapon}); };
+MP.sendDeath = function(killerId, killerName){ Net.send({type:'death', killerId:killerId||0, killerName:killerName||''}); };
+MP.sendRespawn = function(pos){ Net.send({type:'respawn', pos:pos}); };
+MP.leaveMatch = function(){ if(MP.room){ Net.send({type:'room_leave'}); } MP.match=null; };
+
+function escapeHtml(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+
+// =====================================================================
+//  UI 事件绑定（登录守卫放行后绑定）
+// =====================================================================
+function bindSocialUI(){
+  // dock 按钮
+  $('net-friends-btn').onclick=function(){ openPanel('friends-panel'); MP.refreshFriends(); };
+  $('net-chat-btn').onclick=function(){ openPanel('chat-panel'); MP.renderChatChannels(); };
+  $('net-team-btn').onclick=function(){ openPanel('team-panel'); renderTeamPanel(); };
+  // 面板关闭
+  document.querySelectorAll('[data-close-panel]').forEach(function(b){ b.onclick=function(){ closePanel(b.getAttribute('data-close-panel')); }; });
+  // 好友
+  $('fr-search-btn').onclick=searchUsers;
+  $('fr-search').addEventListener('keydown', function(e){ if(e.key==='Enter') searchUsers(); });
+  // 聊天
+  $('chat-send').onclick=sendChat;
+  $('chat-input').addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); sendChat(); } });
+  // 组队
+  $('team-create-btn').onclick=teamCreate;
+  $('team-join-btn').onclick=teamJoin;
+  $('team-leave-btn').onclick=teamLeave;
+  $('team-queue-btn').onclick=teamQueue;
+  $('team-copy-code').onclick=function(){ if(MP.team){ navigator.clipboard&&navigator.clipboard.writeText(MP.team.inviteCode); toast('邀请码已复制'); } };
+  // 房间大厅
+  $('rl-copy').onclick=function(){ if(MP.room){ navigator.clipboard&&navigator.clipboard.writeText(MP.room.code); toast('房间码已复制'); } };
+  $('rl-leave').onclick=function(){ Net.send({type:'room_leave'}); MP.room=null; closeRoomLobby(); };
+  $('rl-switch-team').onclick=function(){ Net.send({type:'room_switch_team'}); };
+  $('rl-start').onclick=function(){ Net.send({type:'room_start'}); };
+  // 王者乱斗联机入口
+  var onlineBtn=$('wzlb-online-match-btn');
+  if(onlineBtn) onlineBtn.onclick=function(){ closeModal('wzlb-modal'); var map=document.querySelector('.wzlb-map.selected'); Net.send({type:'match_queue', mapKey:(map?map.dataset.map:'port'), teamSize:1}); showMatchmaking(); };
+  var roomBtn=$('wzlb-online-room-btn');
+  if(roomBtn) roomBtn.onclick=function(){
+    closeModal('wzlb-modal');
+    var map=document.querySelector('.wzlb-map.selected');
+    var code=prompt('输入房间码加入（留空则创建新房间）：');
+    if(code===null) return;
+    code=code.trim().toUpperCase();
+    if(code){ Net.send({type:'room_join', roomCode:code}); }
+    else { Net.send({type:'room_create', mapKey:(map?map.dataset.map:'port'), teamSize:1}); }
+  };
+  // PVE 组队入口
+  var pveBtn=$('pve-coop-btn');
+  if(pveBtn) pveBtn.onclick=function(){ showPveLobby(); };
+  // PVE 大厅按钮
+  $('pve-copy').onclick=function(){ if(MP.pveRoom){ navigator.clipboard&&navigator.clipboard.writeText(MP.pveRoom.code); toast('房间码已复制'); } };
+  $('pve-leave').onclick=function(){ Net.send({type:'room_leave'}); MP.pveRoom=null; closePveLobby(); };
+  $('pve-start-btn').onclick=function(){ Net.send({type:'pve_start'}); };
+  $('pve-invite-btn').onclick=function(){ showPveInviteModal(); };
+
+  // 匹配取消
+  $('mm-cancel-btn').onclick=function(){ Net.send({type:'match_cancel'}); closeMatchmaking(); };
+}
+function closeModal(id){ var m=$(id); if(m) m.classList.remove('show'); }
+
+// =====================================================================
+//  初始化（DOM ready 即绑定登录 UI + 自动登录尝试；不放行游戏）
+// =====================================================================
+function bootstrap(){
+  bindAuthUI();
+  bindSocialUI();
+  // 检查封禁 URL 参数
+  var params = new URLSearchParams(location.search);
+  var banReason = params.get('banned');
+  if(banReason){
+    showBanBanner(decodeURIComponent(banReason));
+    // 清除 URL 参数避免刷新后重复显示
+    if(history.replaceState){ history.replaceState(null,'',location.pathname); }
+  }
+  tryAutoLogin();
+}
+function showBanBanner(reason){
+  var banner = $('ban-banner'); if(!banner) return;
+  var span = $('ban-reason'); if(span) span.textContent = reason;
+  banner.classList.add('show');
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', bootstrap);
+else bootstrap();
+
+// 暴露给页面：放行后才绑定的 UI
+window.__fpsGate(bindSocialUI);
+
+})();
+</script>
+
+<script>
 // ====== 图鉴系统（纯数据+DOM，不依赖Three.js）——前置加载确保首页按钮立即可用 ======
 // ====== BOSS血量表（单一数据源，供图鉴与主游戏共用）======
 // 10 关扁平结构（取消章节）：索引 0 占位，1-10 对应 10 关
@@ -4190,9 +5330,9 @@ function registerStartScreenButtons() {
         }
     });
     // ==================== [王者乱斗] 入口与选择界面 ====================
-    // 默认选中项与 HTML 中 .selected 一致；用户若直接点"进入战场"而未手动选择，仍走默认值
+    // 默认选中项与 HTML 中 .selected 一致
     var _wzlbSelMap = 'port';
-    var _wzlbSelSize = 3;
+    var _wzlbSelSize = 1; // 仅支持1v1联机
     var wzlbEntryBtn = document.getElementById('wzlb-entry-btn');
     if (wzlbEntryBtn) wzlbEntryBtn.addEventListener('click', function(){
         var m = document.getElementById('wzlb-modal'); if (m) m.classList.add('show');
@@ -4204,25 +5344,18 @@ function registerStartScreenButtons() {
             btn.classList.add('selected'); _wzlbSelMap = btn.getAttribute('data-map');
         });
     });
-    var _wzlbModeBtns = document.querySelectorAll('.wzlb-mode');
-    _wzlbModeBtns.forEach(function(btn){
-        btn.addEventListener('click', function(){
-            _wzlbModeBtns.forEach(function(b){ b.classList.remove('selected'); });
-            btn.classList.add('selected'); _wzlbSelSize = parseInt(btn.getAttribute('data-size'), 10);
-        });
-    });
-    var wzlbStartBtn = document.getElementById('wzlb-start-btn');
-    if (wzlbStartBtn) wzlbStartBtn.addEventListener('click', function(){
-        var m = document.getElementById('wzlb-modal'); if (m) m.classList.remove('show');
-        if (typeof window.runWzlbLoading === 'function') window.runWzlbLoading(_wzlbSelMap, _wzlbSelSize);
-    });
     var wzlbAgainBtn = document.getElementById('wzlb-again-btn');
     if (wzlbAgainBtn) wzlbAgainBtn.addEventListener('click', function(){
         var rm = document.getElementById('wzlb-result-modal'); if (rm) rm.classList.remove('show');
         if (typeof window.showWzlbHud === 'function') window.showWzlbHud(false);
-        var st = (typeof window.wzlbGetState === 'function') ? window.wzlbGetState() : { mapKey: _wzlbSelMap, teamSize: _wzlbSelSize };
-        if (typeof window.runWzlbLoading === 'function') window.runWzlbLoading(st.mapKey, st.teamSize);
+        // 使用联机匹配重新对局（关闭结算弹窗后自动重新匹配）
+        if(window.MP && window.MP.match){ window.MP.leaveMatch(); }
+        document.querySelector('.wzlb-map.selected') && (document.querySelector('.wzlb-map.selected').classList.remove('selected'));
+        var firstMap = document.querySelector('.wzlb-map'); if(firstMap) firstMap.classList.add('selected');
+        // 重新打开 WZLB 弹窗
+        var m = document.getElementById('wzlb-modal'); if (m) m.classList.add('show');
     });
+    var wzlbHomeBtn = document.getElementById('wzlb-home-btn');
     var wzlbHomeBtn = document.getElementById('wzlb-home-btn');
     if (wzlbHomeBtn) wzlbHomeBtn.addEventListener('click', function(){
         var rm = document.getElementById('wzlb-result-modal'); if (rm) rm.classList.remove('show');
@@ -4601,11 +5734,14 @@ function registerStartScreenButtons() {
     });
     } catch(e) { console.error('registerStartScreenButtons error:', e); }
 }
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', registerStartScreenButtons);
-} else {
-    registerStartScreenButtons();
-}
+// [联机] 登录守卫：未登录不绑定按钮
+window.__fpsGate(function(){
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', registerStartScreenButtons);
+    } else {
+        registerStartScreenButtons();
+    }
+});
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.min.js"></script>
@@ -4670,7 +5806,8 @@ function waitForThreeJS(cb) {
     }
     poll();
 }
-waitForThreeJS(function() { initAll(); });
+// [联机] 登录守卫：未登录不启动游戏引擎
+waitForThreeJS(function() { window.__fpsGate(function() { initAll(); }); });
 
 function initAll() {
     let scene, camera, renderer;
@@ -7096,8 +8233,10 @@ function initAll() {
 
     let enemies = [];
     // [王者乱斗] AI 单位容器与模式状态
-    let bots = [];                 // 全部 AI 单位（敌我）
+    let bots = [];                 // 全部 AI 单位（敌我）+ 联机远程玩家（isBot:false）
     let wzlbActive = false;        // 是否处于王者乱斗模式
+    let wzlbOnlineActive = false;  // [联机] 是否为联机对战（区分 AI 乱斗）
+    let pveCoopActive = false;    // [联机] PVE组队模式
     let wzlbMatchOver = false;     // 本局是否已结束
     let wzlbResultShown = false;   // 结算界面是否已弹出
     let wzlbTeamSize = 3;          // 每队人数（1/3/5）
@@ -7105,6 +8244,7 @@ function initAll() {
     let wzlbPlayerLives = 3;        // 玩家剩余复活次数（王者乱斗）
     let botEffects = [];           // 自管理的特效（碎片/烟尘/枪口灯）
     let wzlbMinimapCtx = null;     // 小地图绘制上下文
+    let _wzlbNetSnapTimer = 0;    // [联机] 快照发送计时器
     const maxEnemies = 80; // 同屏上限（分散入场降低峰值）
     // [P1重构] 敌人命中半径常量化（原散落于碰撞检测中的字面量 3 / 1.5）
     const ENEMY_HIT_RADIUS = { boss: 3, normal: 1.5 };
@@ -9921,6 +11061,9 @@ function initAll() {
         if(document.pointerLockElement) document.exitPointerLock();
         hudEl.style.display = 'none'; crosshairEl.style.display = 'none';
         showWzlbHud(false); // [王者乱斗] 返回主页时隐藏乱斗 HUD（横幅/小地图）
+        wzlbOnlineActive = false; // [联机] 退出联机对局
+        pveCoopActive = false; // [联机] 退出PVE组队
+        if(window.MP){ window.MP.match = null; window.MP.remotePlayers = {}; }
         const diffDisp = document.getElementById('difficulty-display');
         if (diffDisp) diffDisp.style.display = 'none';
         crosshairEl.classList.remove('ch-hit', 'ch-sustain'); crosshairConsecutiveHits = 0; crosshairHitTimer = 0; crosshairSustainTimer = 0;
@@ -13025,6 +14168,7 @@ function initAll() {
             fuseTimer: 0, isFusing: false, bombMesh: null
         };
         enemies.push(e);
+        e._uid = 'e' + (enemies.length - 1); // [PVE联机] 敌人唯一标识（按生成顺序）
         waveEnemiesSpawned++;
         const hbData = createHealthBarSprite(enemyHP, false);
         hbData.sprite.position.y = 2.6; group.add(hbData.sprite);
@@ -17441,12 +18585,16 @@ window.LEVELS = LEVELS;
         invincibleOverlay.style.opacity = '1'; invincibleIndicator.style.display = 'block';
         invincibleBarContainer.classList.add('active'); invincibleBarInner.style.width = '100%';
         updateHealthUI();
+        // [联机] 通知服务器我复活了
+        if(wzlbOnlineActive && window.MP && window.MP.sendRespawn) window.MP.sendRespawn({x:0, z:20});
     }
 
     function playerDie() {
         if (wzlbActive) {
             if (wzlbPlayerLives > 0) { wzlbPlayerLives--; respawnPlayerWzlb(); }
             else { endMatch(false); }
+            // [联机] 通知服务器我死了
+            if(wzlbOnlineActive && window.MP && window.MP.sendDeath) window.MP.sendDeath(0, '');
             return;
         }
         isDead = true; isFiring = false; killStreak = 0; killStreakTimer = 0; burnTimer = 0;
@@ -17649,7 +18797,12 @@ window.LEVELS = LEVELS;
                         if (hitEnemy.isBoss && hitEnemy.damageHistory) { hitEnemy.damageHistory.push({time: gameTime, dmg: damage}); if (hitEnemy.damageHistory.length > 20) hitEnemy.damageHistory.shift(); }
                         // Fire damage bonus from U-type (nearby)
                         if (hitEnemy.fireDamageBonus > 0) { damage += hitEnemy.fireDamageBonus; }
+                        // [联机] 远程玩家：发送 hit 到服务器由目标客户端权威扣血，不本地扣
+                        if(hitEnemy.isBot===false && wzlbOnlineActive && window.MP && window.MP.sendHit){
+                            window.MP.sendHit(hitEnemy.userId, damage, isHeadshot, isCritFinal, currentWeaponSlot);
+                        } else {
                         hitEnemy.health -= damage;
+                        }
                         trackEnemyDamage(damage);
                         // [优化4] 受击反馈：身体变形动画 + 帧停顿（暴击触发更强反馈）
                         triggerHitFeedback(hitEnemy, isCritFinal || isHeadshot);
@@ -17665,7 +18818,7 @@ window.LEVELS = LEVELS;
                         if (skillEActive) chainLightning(hitEnemy, damage);
                         // 准星命中反馈
                         triggerCrosshairHit();
-                        if(hitEnemy.health <= 0) killEnemy(hitEnemy, false);
+                        if(hitEnemy.health <= 0 && !(hitEnemy.isBot===false && wzlbOnlineActive)) killEnemy(hitEnemy, false);
                     }
                 }
             } else {
@@ -27856,6 +29009,8 @@ break;
             try { updateEnemies(_gameLogicDelta); } catch(e) { if(!window._ueErr){window._ueErr=e;console.error('updateEnemies:',e.message);} }
             // [王者乱斗] AI 单位更新（含屏幕震动衰减、自管特效推进、小地图绘制）
             try { updateWzlb(delta); } catch(e) { if(!window._wzlbErr){window._wzlbErr=e;console.error('updateWzlb:',e.message);} }
+            // [联机] 发送自身快照给服务器（仅联机对战时）
+            try { sendNetSnapshot(delta); } catch(e) { if(!window._netSnapErr){window._netSnapErr=e;console.error('sendNetSnapshot:',e.message);} }
             // [优化2] AABB 怪物间碰撞检测与响应（每帧调用，使用真实 delta 的位置结果）
             try { resolveEnemyCollisions(); } catch(e) { if(!window._aecErr){window._aecErr=e;console.error('resolveEnemyCollisions:',e.message);} }
             // [优化1] 血条缓动动画（按真实 delta 推进，使受击瞬间血条平滑变化）
@@ -28918,6 +30073,47 @@ break;
         const mn = document.getElementById('wzlb-mapname'); if(mn && WZLB_MAPS[wzlbMapKey]) mn.textContent = WZLB_MAPS[wzlbMapKey].name;
         const le = document.getElementById('wzlb-lives'); if(le) le.textContent = '你的复活：' + wzlbPlayerLives + ' / ' + WZLB_LIVES;
     }
+
+    // [联机] 远程玩家插值更新（替代 updateBotAI；位置由网络快照驱动）
+    function updateRemotePlayer(rp, delta){
+        if(!rp.alive || rp.pendingRespawn){ rp.mesh.visible=false; return; }
+        rp.mesh.visible = true;
+        if(!rp._interpDirty) return;
+        var target = rp._interpPos;
+        var t = Math.min(1, delta * 15); // 平滑插值因子
+        rp.mesh.position.x += (target.x - rp.mesh.position.x) * t;
+        rp.mesh.position.z += (target.z - rp.mesh.position.z) * t;
+        rp.mesh.position.y = 0;
+        // 朝向插值
+        var da = rp._interpAngle - rp.faceAngle;
+        if(da > Math.PI) da -= Math.PI*2;
+        if(da < -Math.PI) da += Math.PI*2;
+        rp.faceAngle += da * Math.min(1, delta * 12);
+        rp.mesh.rotation.y = rp.faceAngle;
+        // 生命值条
+        if(rp.healthBar){
+            rp.healthBar.sprite.position.set(rp.mesh.position.x, rp.mesh.position.y+2.7, rp.mesh.position.z);
+            updateHealthBarSprite(rp.healthBar, rp.health, rp.maxHealth);
+        }
+    }
+
+    // [联机] 网络快照发送（在 animate 主循环中调用，~30Hz 帧同步）
+    function sendNetSnapshot(delta){
+        if((!wzlbOnlineActive && !pveCoopActive) || !window.MP || !window.MP.sendSnap) return;
+        _wzlbNetSnapTimer += delta;
+        if(_wzlbNetSnapTimer < 0.033) return;
+        _wzlbNetSnapTimer = 0;
+        var pp = isThirdPerson ? playerPos : camera.position;
+        window.MP.sendSnap({
+            px: pp.x, py: pp.y, pz: pp.z,
+            ry: yaw, rx: pitch,
+            hp: playerHealth, sp: playerShield,
+            alive: !isDead,
+            weapon: currentWeaponSlot,
+            lives: wzlbPlayerLives
+        });
+    }
+
     function drawWzlbMinimap(){
         const cv = document.getElementById('wzlb-minimap'); if(!cv) return;
         const ctx = cv.getContext('2d'); if(!ctx) return;
@@ -28944,11 +30140,11 @@ break;
             const st = document.getElementById('wzlb-result-stats');
             if(st) st.textContent = WZLB_MAPS[wzlbMapKey].name + ' · ' + wzlbTeamSize + ' v ' + wzlbTeamSize;
             rm.classList.add('show');
-            // [v5.6] 仅胜利时弹出抽奖（王者乱斗），战败不发奖
-            if (win && typeof window._showGachaReward === 'function') {
-                window._showGachaReward('victory', 5);
-            }
+            // [联机] 王者乱斗模式不弹出抽奖界面
         }
+        // [联机] 对局结束，退出房间
+        if(wzlbOnlineActive && window.MP && window.MP.leaveMatch) window.MP.leaveMatch();
+        wzlbOnlineActive = false;
     }
 
     function updateWzlb(delta){
@@ -28963,7 +30159,7 @@ break;
         if(wzlbMatchOver){ return; }
         // [王者乱斗] 处理待复活单位
         for(let i=0;i<bots.length;i++){ const b=bots[i]; if(b.pendingRespawn){ b.respawnTimer -= delta; if(b.respawnTimer<=0) respawnBot(b); } }
-        for(let i=0;i<bots.length;i++){ const b=bots[i]; if(!b.alive) continue; updateBotAI(b, delta); }
+        for(let i=0;i<bots.length;i++){ const b=bots[i]; if(!b.alive) continue; if(b.isBot!==false) updateBotAI(b, delta); else updateRemotePlayer(b, delta); }
         const enemyActive = bots.some(function(b){ return b.team==='enemy' && (b.alive || b.pendingRespawn); });
         const playerActive = playerHealth>0 || wzlbPlayerLives>0;
         const enemyAlive = bots.filter(function(b){ return b.alive && b.team==='enemy'; }).length;
@@ -28998,15 +30194,80 @@ break;
         updateWeaponUI(); updateAmmoUI(); updateHealthUI();
     }
 
-    function startMatch(mapKey, teamSize){
+	    function startMatch(mapKey, teamSize){
+	        _initWzlbCommon(mapKey, teamSize);
+	        const pz = BOUNDS.maxZ*0.82, ez = -BOUNDS.maxZ*0.82;
+	        for(let i=0;i<teamSize;i++){
+	            const e = createBot('enemy');
+	            const ex = (i-(teamSize-1)/2)*8;
+	            e.mesh.position.set(clamp(ex, -BOUNDS.maxX+4, BOUNDS.maxX-4), 0, ez + (Math.random()*6-3));
+	        }
+	        for(let i=0;i<teamSize-1;i++){
+	            const a = createBot('ally');
+	            const ax = (i-((teamSize-2)/2))*8;
+	            a.mesh.position.set(clamp(ax, -BOUNDS.maxX+4, BOUNDS.maxX-4), 0, pz + (Math.random()*6-3));
+	        }
+	        _finishWzlbStart(teamSize, teamSize);
+    }
+
+    // [联机] 联机对局：用远程真实玩家替代 AI
+    function startOnlineMatch(mapKey, teamSize, myTeam, remoteList){
+        _initWzlbCommon(mapKey, teamSize);
+        // myTeam: 0 或 1 — 直接比较：同队=ally，异队=enemy
+        const pz = BOUNDS.maxZ*0.82, ez = -BOUNDS.maxZ*0.82;
+        var allyCount=0, enemyCount=0;
+        (remoteList||[]).forEach(function(p){
+            if(p.userId === (window.MP && window.MP.user && window.MP.user.id)) return; // 跳过自己
+            var pTeam = p.team === myTeam ? 'ally' : 'enemy';
+            var rp = createRemotePlayer(pTeam, p);
+            var sz = pTeam==='enemy' ? ez : pz;
+            var off = pTeam==='enemy' ? enemyCount : allyCount;
+            rp.mesh.position.set(clamp((off-(teamSize-1)/2)*8, -BOUNDS.maxX+4, BOUNDS.maxX-4), 0, sz + (Math.random()*6-3));
+            if(pTeam==='enemy') enemyCount++; else allyCount++;
+        });
+        // 补充 AI 填满空位（演示/无人时）
+        var totalAllies = (remoteList||[]).filter(function(p){ return p.team===myTeam; }).length - 1; // -1 是自己
+        var totalEnemies = (remoteList||[]).filter(function(p){ return p.team!==myTeam; }).length;
+        while(totalAllies < teamSize-1){ var a=createBot('ally'); var ax=(totalAllies-((teamSize-2)/2))*8; a.mesh.position.set(clamp(ax,-BOUNDS.maxX+4,BOUNDS.maxX-4),0,pz+(Math.random()*6-3)); totalAllies++; }
+        while(totalEnemies < teamSize){ var e=createBot('enemy'); var ex=(totalEnemies-(teamSize-1)/2)*8; e.mesh.position.set(clamp(ex,-BOUNDS.maxX+4,BOUNDS.maxX-4),0,ez+(Math.random()*6-3)); totalEnemies++; }
+        // 联机标记
+        wzlbOnlineActive = true;
+        _finishWzlbStart(teamSize, teamSize);
+    }
+
+    // [联机] 创建远程玩家（复用 buildBotMesh / createHealthBarSprite，但 isBot=false 无 AI）
+    function createRemotePlayer(team, profile){
+        var mesh = buildBotMesh(team, 'thunder');
+        var maxHP = WZLB_MAX_HP;
+        var rp = {
+            team:team, weapons:{primary:'thunder'}, isBot:false, alive:true,
+            health:maxHP, maxHealth:maxHP, lives:WZLB_LIVES, pendingRespawn:false, respawnTimer:0, permanentDead:false,
+            mesh:mesh, vel:new THREE.Vector3(), faceAngle:0,
+            userId: profile.userId||profile.id, username: profile.username||profile.displayName||'???',
+            displayName: profile.displayName||profile.username||'???',
+            // 插值缓冲
+            _interpPos: new THREE.Vector3(), _interpAngle:0, _interpDirty:false,
+            _lastSnapTime:0, healthBar:null
+        };
+        rp.healthBar = createHealthBarSprite(maxHP, false);
+        scene.add(rp.healthBar.sprite);
+        bots.push(rp); scene.add(mesh);
+        if(team==='enemy') enemies.push(rp);
+        // 注册到 MP.match.remotePlayers 供快照写回
+        if(window.MP && window.MP.match) window.MP.match.remotePlayers[rp.userId] = {profile:profile, team:team==='ally'?0:1, snaps:[], dead:false};
+        return rp;
+    }
+
+    // 共用初始化
+    function _initWzlbCommon(mapKey, teamSize){
         wzlbMapKey = mapKey; wzlbTeamSize = teamSize;
         wzlbMatchOver = false; wzlbResultShown = false;
+        wzlbOnlineActive = false;
         clearSceneForLevel(); scene.add(camera);
         buildWzlbMap(mapKey);
         restartGameState();
-        wzlbActive = true; // 必须在 clearSceneForLevel 之后设置（该函数会把 wzlbActive 重置为 false）
+        wzlbActive = true;
         stopSpawning = true; waveSpawnActive = false; currentWave = 0; levelComplete = false; isDead = false;
-        // [王者乱斗] 随机分配 5 把商城武器 + 固定 50亿 血/盾 + 3 条命
         assignWzlbPlayerLoadout();
         wzlbPlayerLives = WZLB_LIVES;
         playerHealth = WZLB_MAX_HP; playerShield = WZLB_MAX_HP;
@@ -29014,23 +30275,15 @@ break;
         playerEnergy = PLAYER_MAX_ENERGY_EFFECTIVE;
         camera.position.set(0, playerHeight, 20); camera.rotation.set(0,0,0);
         if(typeof playerPos !== 'undefined') playerPos.set(0, playerHeight, 20);
-        const pz = BOUNDS.maxZ*0.82, ez = -BOUNDS.maxZ*0.82;
-        for(let i=0;i<teamSize;i++){
-            const e = createBot('enemy');
-            const ex = (i-(teamSize-1)/2)*8;
-            e.mesh.position.set(clamp(ex, -BOUNDS.maxX+4, BOUNDS.maxX-4), 0, ez + (Math.random()*6-3));
-        }
-        for(let i=0;i<teamSize-1;i++){
-            const a = createBot('ally');
-            const ax = (i-((teamSize-2)/2))*8;
-            a.mesh.position.set(clamp(ax, -BOUNDS.maxX+4, BOUNDS.maxX-4), 0, pz + (Math.random()*6-3));
-        }
+        _wzlbNetSnapTimer = 0;
+    }
+    function _finishWzlbStart(allyTotal, enemyTotal){
         gameStarted = true; isPaused = false;
         startScreen.style.display = 'none';
         hudEl.style.display = 'block'; crosshairEl.style.display = 'block';
-        const pht = document.getElementById('pause-hint-title'); if(pht) pht.textContent = '王者乱斗';
-        const ph = document.getElementById('pause-hint'); if(ph){ ph.querySelector('p').textContent = '点击画面开始战斗'; ph.style.display='block'; }
-        showWzlbHud(true); updateWzlbHud(teamSize, teamSize);
+        var pht = document.getElementById('pause-hint-title'); if(pht) pht.textContent = wzlbOnlineActive ? '联机对战' : '王者乱斗';
+        var ph = document.getElementById('pause-hint'); if(ph){ ph.querySelector('p').textContent = '点击画面开始战斗'; ph.style.display='block'; }
+        showWzlbHud(true); updateWzlbHud(allyTotal||1, enemyTotal||1);
     }
 
     function runWzlbLoading(mapKey, size){
@@ -29082,6 +30335,237 @@ break;
         getCamera: function(){ return { x:camera.position.x, y:camera.position.y, z:camera.position.z, rx:camera.rotation.x, ry:camera.rotation.y, rz:camera.rotation.z }; },
         isWzlbActive: function(){ return wzlbActive; }
     };
+
+    // ==================== [联机] 对局桥接 ====================
+    // 由 MP.startOnlineMatch 调用，进入联机对局
+    window.__startOnlineMatch = startOnlineMatch;
+    // [联机] PVE 组队攻略桥接
+    window.__startPveCoop = function(level, players){
+      // 强制关闭所有遮罩/面板/弹窗
+      var ids = ['pve-lobby','pve-invite-modal','room-lobby','matchmaking-overlay',
+                 'wzlb-modal','wzlb-result-modal','friends-panel','chat-panel','team-panel',
+                 'player-panel','settings-modal','guide-modal','character-modal','shop-modal','activity-modal'];
+      ids.forEach(function(id){ var el=document.getElementById(id); if(el){ el.style.display='none'; el.classList.remove('show','open'); } });
+      // 先启动关卡（会调用 clearSceneForLevel 清场）
+      pveCoopActive = true;
+      if(typeof startLevel === 'function') startLevel(level||1);
+      // 关卡构建完成后，创建远程玩家（延迟确保 scene 已就绪）
+      setTimeout(function(){
+        (players||[]).forEach(function(p){
+          if(p.userId === (window.MP && window.MP.user && window.MP.user.id)) return;
+          createPveAlly(p);
+        });
+      }, 400);
+      gameStarted = true; isPaused = false;
+      startScreen.style.display = 'none';
+      hudEl.style.display = 'block'; crosshairEl.style.display = 'block';
+    };
+
+    // PVE 联机：创建队友（不用 WZLB bot 系统，独立管理）
+    function createPveAlly(profile){
+      var mesh = buildBotMesh('ally', 'thunder');
+      var maxHP = 50000;
+      var rp = {
+        team:'ally', weapons:{primary:'thunder'}, isBot:false, alive:true,
+        health:maxHP, maxHealth:maxHP, lives:99, pendingRespawn:false, respawnTimer:0, permanentDead:false,
+        mesh:mesh, vel:new THREE.Vector3(), faceAngle:0,
+        userId: profile.userId||profile.id,
+        username: profile.username||'???', displayName: profile.displayName||'???',
+        _interpPos: new THREE.Vector3(), _interpAngle:0, _interpDirty:false,
+        _lastSnapTime:0, healthBar:null
+      };
+      rp.healthBar = createHealthBarSprite(maxHP, false);
+      rp.mesh.position.set((Math.random()*6-3), 0, 18 + Math.random()*4);
+      scene.add(rp.mesh); scene.add(rp.healthBar.sprite);
+      bots.push(rp);
+      // PVE 队友不加入 enemies（不会被打）
+      if(window.MP && window.MP.pveCoop) window.MP.pveCoop.remotePlayers = window.MP.pveCoop.remotePlayers || {};
+      if(window.MP && window.MP.pveCoop) window.MP.pveCoop.remotePlayers[rp.userId] = {profile:profile, team:0, snaps:[], dead:false};
+      return rp;
+    }
+
+    // 网络钩子：MP 在收到 ws 消息时回调，更新本地远程玩家状态
+    window.__netHooks = {
+        onSnap: function(userId, data, rp){
+            // 找到本地对应的远程玩家 mesh
+            var bot = bots.filter(function(b){ return b.isBot===false && b.userId===userId; })[0];
+            if(!bot){
+                if(rp){ rp.cachedSnap = data; }
+                return;
+            }
+            // 帧同步：更新位置/朝向/血量/存活状态
+            bot._interpPos.set(data.px||0, 0, data.pz||0);
+            bot._interpAngle = data.ry||0;
+            bot._interpDirty = true;
+            bot.health = data.hp!=null?data.hp:bot.health;
+            bot.shield = data.sp!=null?data.sp:0;
+            bot._lastSnapTime = performance.now();
+            // alive 状态同步（远程玩家死了则隐藏 mesh）
+            if(data.alive===false && bot.alive){
+                bot.alive = false;
+                if(bot.mesh) bot.mesh.visible = false;
+                if(bot.healthBar && bot.healthBar.sprite) bot.healthBar.sprite.visible = false;
+                var ei = enemies.indexOf(bot); if(ei>-1) enemies.splice(ei,1);
+            } else if(data.alive!==false && !bot.alive){
+                bot.alive = true;
+                if(bot.mesh){ bot.mesh.visible = true; scene.add(bot.mesh); }
+                if(bot.healthBar && bot.healthBar.sprite){ bot.healthBar.sprite.visible = true; scene.add(bot.healthBar.sprite); }
+                if(bot.team==='enemy' && enemies.indexOf(bot)<0) enemies.push(bot);
+            }
+        },
+        onRemoteShoot: function(userId, m){
+            var bot = bots.filter(function(b){ return b.isBot===false && b.userId===userId; })[0];
+            if(bot && bot.alive && bot.mesh){
+                // 远程玩家开火反馈：枪口位置爆炸粒子
+                try { spawnExplosionEffect(bot.mesh.position.clone().setY(1.4)); } catch(e){}
+            }
+        },
+        onHitMe: function(m){
+            // 我被远程玩家命中 —— 权威扣血
+            if(!wzlbOnlineActive) return;
+            var dmg = Math.max(1, (m.dmg||0) * WZLB_DAMAGE_MULT * 0.5); // 联机伤害平衡
+            applyNetDamage(dmg, m.fromName||'敌方玩家');
+        },
+        onRemoteHit: function(m){
+            // 其他人之间的命中：可在此显示伤害飘字（此处略）
+        },
+        onRemoteDeath: function(userId, m){
+            var bot = bots.filter(function(b){ return b.isBot===false && b.userId===userId; })[0];
+            if(bot && bot.alive){
+                bot.alive = false;
+                // 视觉：隐藏 mesh 但保留（不解绑几何体），播放爆炸
+                if(bot.mesh){ bot.mesh.visible = false; spawnExplosionEffect(bot.mesh.position.clone().setY(1.2)); }
+                if(bot.healthBar && bot.healthBar.sprite){ bot.healthBar.sprite.visible = false; }
+                var ei = enemies.indexOf(bot); if(ei>-1) enemies.splice(ei,1);
+                addNetKillFeed(m.killerName||'?', bot.username||bot.displayName||'敌方');
+                // 减命（respawnBot 复用相同逻辑）
+                if(bot.lives > 0){ bot.lives--; bot.pendingRespawn = true; bot.respawnTimer = 3; }
+                else { bot.permanentDead = true; }
+            }
+        },
+        onRemoteRespawn: function(userId, pos){
+            var bot = bots.filter(function(b){ return b.isBot===false && b.userId===userId; })[0];
+            if(bot){
+                bot.pendingRespawn = false; bot.alive = true;
+                bot.health = bot.maxHealth;
+                if(pos){ bot.mesh.position.set(pos.x||0,0,pos.z||0); bot._interpPos.set(pos.x||0,0,pos.z||0); }
+                if(bot.mesh){ bot.mesh.visible = true; scene.add(bot.mesh); }
+                if(bot.healthBar && bot.healthBar.sprite){ bot.healthBar.sprite.visible = true; scene.add(bot.healthBar.sprite); }
+                if(bot.team==='enemy' && enemies.indexOf(bot)<0) enemies.push(bot);
+            }
+        },
+        onReconnect: function(m){
+            (m.snaps||[]).forEach(function(s){ window.__netHooks.onSnap(s.userId, s.data, null); });
+        },
+        // PVE 联机同步钩子
+        onPveSync: function(m){
+          if(!pveCoopActive || !m.data) return;
+          var pos = m.data.enemyPos;
+          var eType = m.data.enemyType;
+          var isBoss = m.data.isBoss;
+          var dmg = m.data.dmg || 0;
+          var isKill = m.data.killed;
+          if(!pos) return;
+          // 按位置+类型匹配最接近的敌人
+          var best = null, bestDist = 999;
+          for(var i=0;i<enemies.length;i++){
+            var e = enemies[i];
+            if(!e || e.health <= 0 || e.isBot || e._pveKillSynced) continue;
+            if(isBoss && !e.isBoss) continue;
+            if(!isBoss && eType && e.enemyType !== eType) continue;
+            var dx = e.mesh.position.x - pos[0];
+            var dz = e.mesh.position.z - pos[2];
+            var dist = Math.hypot(dx, dz);
+            if(dist < bestDist){ bestDist = dist; best = e; }
+          }
+          if(best && bestDist < 50){
+            if(isKill){
+              best._pveKillSynced = true;
+              best.health = 0;
+              // 显示队友击杀信息
+              var kn = (m.data && m.data.killerName) || '队友';
+              var wn = (m.data && m.data.weaponName) || '';
+              addNetKillFeed(kn + (wn?(' 用'+wn+''):''), best.isBoss?'BOSS':(best.enemyType||'敌人'));
+              killEnemy(best, false);
+            } else {
+              best.health = Math.max(0, best.health - dmg);
+              updateEnemyHealthBar(best);
+              if(best.health <= 0){ best._pveKillSynced = true; killEnemy(best, false); }
+            }
+          }
+        },
+        onPveWave: function(m){
+          if(!pveCoopActive) return;
+          if(m.done){
+            // 波次完成：强制跳到同一波次
+            if(currentWave < m.wave){ currentWave = m.wave-1; }
+            // 清除当前存活小怪（已被队友清完）
+            for(var i=enemies.length-1;i>=0;i--){
+              if(!enemies[i].isBoss && !enemies[i].isBot && enemies[i].health>0){
+                enemies[i].health = 0; killEnemy(enemies[i], false);
+              }
+            }
+            waveEnemiesKilled = waveEnemyTotal; waveSpawnActive = false;
+            waveDelay = Math.min(typeof waveDelay!=='undefined'?waveDelay:3, 2);
+          } else {
+            // 新波次开始
+            currentWave = m.wave-1;
+            waveDelay = 0.5; // 立即开始新波
+            waveSpawnActive = false;
+            waveEnemiesKilled = 0; waveEnemiesSpawned = 0;
+          }
+        },
+        onPveComplete: function(m){
+          if(pveCoopActive) toast('关卡完成！得分: '+(m.score||0));
+        },
+        // PVE 队友射击特效
+        onPveShoot: function(m){
+          if(!pveCoopActive || !m.origin) return;
+          try {
+            var pos = new THREE.Vector3(m.origin.x||0, m.origin.y||0, m.origin.z||0);
+            spawnExplosionEffect(pos);
+          } catch(e){}
+        }
+    };
+
+    // PVE 联机：远程敌人伤害应用（客机收到主机广播后调用）
+    function applyPveEnemyDamage(idx, dmg){
+      if(idx >= 0 && idx < enemies.length){
+        var e = enemies[idx];
+        if(e && e.health > 0){
+          e.health -= dmg;
+          updateEnemyHealthBar(e);
+          if(e.health <= 0) killEnemy(e, false);
+        }
+      }
+    }
+
+    // 联机伤害结算（与玩家受伤逻辑一致）
+    function applyNetDamage(dmg, srcName){
+        if(isDead || !gameStarted) return;
+        // 先扣盾再扣血
+        if(playerShield > 0){ const s = Math.min(playerShield, dmg); playerShield -= s; dmg -= s; }
+        if(dmg > 0) playerHealth = Math.max(0, playerHealth - dmg);
+        // 受伤反馈
+        try { playHurtSound(); updateHealthUI(); } catch(e){}
+        try { damageOverlay.style.opacity='0.7'; setTimeout(function(){ damageOverlay.style.opacity='0'; }, 200); } catch(e){}
+        try { triggerScreenShake(0.04); } catch(e){}
+        if(playerHealth <= 0 && !isDead){
+            playerDie();
+            if(window.MP && window.MP.sendDeath) window.MP.sendDeath(0, srcName);
+        }
+    }
+
+    // 联机击杀提示
+    function addNetKillFeed(killer, victim){
+        var kf = document.getElementById('net-killfeed');
+        if(!kf){ kf = document.createElement('div'); kf.id='net-killfeed'; var hud=document.getElementById('hud'); if(hud) hud.appendChild(kf); }
+        var item = document.createElement('div'); item.className='nkf-item';
+        item.innerHTML = escapeHtmlLocal(killer) + ' ▸ <span class="killed">' + escapeHtmlLocal(victim) + '</span>';
+        kf.appendChild(item);
+        setTimeout(function(){ item.style.opacity='0'; setTimeout(function(){ if(item.parentNode) item.parentNode.removeChild(item); }, 300); }, 3500);
+    }
+    function escapeHtmlLocal(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
 
     animate();
 }
@@ -29626,8 +31110,8 @@ function init(){
     var shopBtns=['homepage-shop-btn','open-shop-btn'];
     shopBtns.forEach(function(id){ var el=document.getElementById(id); if(el){ el.addEventListener('click', function(){ setTimeout(injectShopEntry, 60); }); } });
 }
-if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init);
-else init();
+// [联机] 登录守卫：未登录不初始化角色系统
+window.__fpsGate(function(){ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else init(); });
 // three.js 异步加载后 window._applyCharacterStats 才就绪，稍后重试注入属性
 setTimeout(applyCharacterStats, 1500);
 setTimeout(applyCharacterStats, 4000);
