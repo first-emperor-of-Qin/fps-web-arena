@@ -502,7 +502,8 @@ function handleMessage(ws, user, buf) {
     case 'pve_sync': {
       const room = ws._roomCode ? rooms.get(ws._roomCode) : null;
       if(!room || room.mode !== 'pve') return;
-      broadcastRoom(room, { type: 'pve_sync', fromUser: user.id, data: msg.data || msg }, user.id);
+      if(!msg.data) return; // 必须携带 data 字段
+      broadcastRoom(room, { type: 'pve_sync', fromUser: user.id, fromName: user.username, data: msg.data }, user.id);
       break;
     }
     // PVE 射击特效同步

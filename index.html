@@ -3187,6 +3187,7 @@ body{ font-family:'Rajdhani','Microsoft YaHei',Arial,sans-serif; }
   font:600 13px/1.3 'Rajdhani',sans-serif; color:#eaf6ff; animation: nkfIn .3s; }
 @keyframes nkfIn { from { opacity:0; transform: translateX(20px); } to { opacity:1; transform:none; } }
 .nkf-item .killed { color:#ff5252; }
+.nkf-item .weapon { color:#ffd54f; font-weight:700; }
 </style>
 </head>
 <body>
@@ -19844,6 +19845,25 @@ window.LEVELS = LEVELS;
     function killEnemy(enemy, isMelee) {
         // [王者乱斗] AI 单位（敌方 bots）走专属击杀流程，避免触发战役波次/成就逻辑
         if (enemy.isBot) { onBotKilled(enemy); return; }
+        // [PVE联机] 广播击杀事件给队友（仅在 PVE 组队模式且非同步触发时生效，单机完全无影响）
+        // _pveKillSynced 标记防止：onPveSync 收到广播→killEnemy→再广播 的死循环
+        if (typeof pveCoopActive !== 'undefined' && pveCoopActive && !enemy._pveKillSynced && window.MP && window.MP.send) {
+          try {
+            var _pveKn = (window.MP.user && window.MP.user.username) || '队友';
+            var _pveWn = (typeof getCurrentWeaponDisplayName === 'function') ? getCurrentWeaponDisplayName() : '';
+            window.MP.send({
+              type: 'pve_sync',
+              data: {
+                killed: true,
+                enemyPos: [enemy.mesh.position.x, enemy.mesh.position.y, enemy.mesh.position.z],
+                enemyType: enemy.enemyType || null,
+                isBoss: !!enemy.isBoss,
+                killerName: _pveKn,
+                weaponName: _pveWn
+              }
+            });
+          } catch(e) {}
+        }
         // Special death effects for new enemy types
         if (enemy.enemyType === 'P' && !enemy.isBoss) {
             // P-type Void Walker: spawn void rift at death position
@@ -24813,6 +24833,10 @@ break;
 
     function handlePrimaryFire() {
         if (isDead || levelComplete || weaponSwitchCooldown > 0) return;
+        // [PVE联机] 广播射击事件给队友（仅 PVE 组队模式，单机无影响；slot 5 战术装置无射击）
+        if (typeof pveCoopActive !== 'undefined' && pveCoopActive && currentWeaponSlot !== 5 && window.MP && window.MP.send) {
+          try { _pveBroadcastShoot(); } catch(e) {}
+        }
         // 空手状态检测：当前槽位无武器时只能近战
         const isSlotEmpty = (currentWeaponSlot === 1 && equippedPrimary === 'none') ||
                             (currentWeaponSlot === 2 && equippedSecondary === 'none') ||
@@ -30384,6 +30408,59 @@ break;
       return rp;
     }
 
+    // [PVE联机] 获取当前手持武器的中文名（用于击杀广播）
+    function getCurrentWeaponDisplayName(){
+      try {
+        if (currentWeaponSlot === 1) {
+          if (equippedPrimary === 'thunder') return '雷霆之怒';
+          if (equippedPrimary === 'tumo') return '屠魔';
+          if (equippedPrimary === 'dragonlyknight') return '魔龙骑士';
+          if (equippedPrimary === 'dawnlight') return '黎明之光';
+          if (equippedPrimary === 'parasite') return '寄生者';
+          if (equippedPrimary === 'zeushand') return '宙斯之手';
+          if (equippedPrimary === 'phasewalker') return '相位行者';
+        } else if (currentWeaponSlot === 2) {
+          if (equippedSecondary === 'shadow') return '幽影双枪';
+          if (equippedSecondary === 'metalstorm') return '金属风暴';
+          if (equippedSecondary === 'whitenight') return '白夜铳刃';
+          if (equippedSecondary === 'moonbow') return '皓月神弓';
+        } else if (currentWeaponSlot === 3) {
+          if (equippedMelee === 'thunderblade') return '雷霆战刃';
+          if (equippedMelee === 'hellscythe') return '地狱魔镰';
+          if (equippedMelee === 'thousandumbrella') return '千机伞';
+        } else if (currentWeaponSlot === 4) {
+          if (equippedGrenadeType === 'normal') return '爆炎手雷';
+          if (equippedGrenadeType === 'deathlight') return '死神之光';
+          if (equippedGrenadeType === 'froststar') return '急冻霜星';
+          if (equippedGrenadeType === 'tanglotus') return '佛怒唐莲';
+        } else if (currentWeaponSlot === 5) {
+          if (equippedTactical === 'datacube') return '数据魔方';
+        }
+      } catch(e) {}
+      return '';
+    }
+
+    // [PVE联机] 广播射击事件给队友（带 80ms 节流，避免自动武器刷屏）
+    var _pveLastShootCast = 0;
+    function _pveBroadcastShoot(){
+      var now = performance.now();
+      if(now - _pveLastShootCast < 80) return;
+      _pveLastShootCast = now;
+      try {
+        var origin = new THREE.Vector3();
+        if(typeof muzzleFlashMesh !== 'undefined' && muzzleFlashMesh){ muzzleFlashMesh.getWorldPosition(origin); }
+        else { origin.copy(camera.position); }
+        var dir = new THREE.Vector3();
+        camera.getWorldDirection(dir);
+        window.MP.send({
+          type: 'pve_shoot',
+          origin: { x: origin.x, y: origin.y, z: origin.z },
+          dir: { x: dir.x, y: dir.y, z: dir.z },
+          weapon: currentWeaponSlot
+        });
+      } catch(e) {}
+    }
+
     // 网络钩子：MP 在收到 ws 消息时回调，更新本地远程玩家状态
     window.__netHooks = {
         onSnap: function(userId, data, rp){
@@ -30465,33 +30542,40 @@ break;
           var isBoss = m.data.isBoss;
           var dmg = m.data.dmg || 0;
           var isKill = m.data.killed;
+          var kn = (m.data.killerName) || m.fromName || '队友';
+          var wn = (m.data.weaponName) || '';
           if(!pos) return;
-          // 按位置+类型匹配最接近的敌人
+          // 按位置+类型匹配最接近的敌人；同时记录同类型最近敌人作为兜底
+          // （双方独立生成敌人，位置可能偏差较大，需兜底保证击杀能体现）
           var best = null, bestDist = 999;
+          var fallback = null, fallbackDist = 999;
           for(var i=0;i<enemies.length;i++){
             var e = enemies[i];
             if(!e || e.health <= 0 || e.isBot || e._pveKillSynced) continue;
             if(isBoss && !e.isBoss) continue;
-            if(!isBoss && eType && e.enemyType !== eType) continue;
+            if(!isBoss && e.isBoss) continue;
+            if(eType && e.enemyType !== eType) continue;
             var dx = e.mesh.position.x - pos[0];
             var dz = e.mesh.position.z - pos[2];
             var dist = Math.hypot(dx, dz);
             if(dist < bestDist){ bestDist = dist; best = e; }
+            if(dist < fallbackDist){ fallbackDist = dist; fallback = e; }
           }
-          if(best && bestDist < 50){
+          var target = (best && bestDist < 50) ? best : fallback;
+          if(target){
             if(isKill){
-              best._pveKillSynced = true;
-              best.health = 0;
-              // 显示队友击杀信息
-              var kn = (m.data && m.data.killerName) || '队友';
-              var wn = (m.data && m.data.weaponName) || '';
-              addNetKillFeed(kn + (wn?(' 用'+wn+''):''), best.isBoss?'BOSS':(best.enemyType||'敌人'));
-              killEnemy(best, false);
+              target._pveKillSynced = true;
+              target.health = 0;
+              addNetKillFeed(kn, target.isBoss ? 'BOSS' : '敌人', wn);
+              killEnemy(target, false);
             } else {
-              best.health = Math.max(0, best.health - dmg);
-              updateEnemyHealthBar(best);
-              if(best.health <= 0){ best._pveKillSynced = true; killEnemy(best, false); }
+              target.health = Math.max(0, target.health - dmg);
+              updateEnemyHealthBar(target);
+              if(target.health <= 0){ target._pveKillSynced = true; killEnemy(target, false); }
             }
+          } else if(isKill){
+            // 没有可匹配的敌人（已被本地清掉/波次不同），仅显示击杀提示
+            addNetKillFeed(kn, isBoss ? 'BOSS' : '敌人', wn);
           }
         },
         onPveWave: function(m){
@@ -30518,12 +30602,26 @@ break;
         onPveComplete: function(m){
           if(pveCoopActive) toast('关卡完成！得分: '+(m.score||0));
         },
-        // PVE 队友射击特效
+        // PVE 队友射击特效：在队友枪口位置播放粒子 + 弹道线
         onPveShoot: function(m){
           if(!pveCoopActive || !m.origin) return;
           try {
             var pos = new THREE.Vector3(m.origin.x||0, m.origin.y||0, m.origin.z||0);
+            // 优先用队友当前位置（避免网络延迟造成特效悬空）
+            var bot = bots.filter(function(b){ return b.isBot===false && b.userId===m.userId; })[0];
+            if(bot && bot.alive && bot.mesh){
+              pos.copy(bot.mesh.position).setY(1.4); // 枪口高度
+            }
             spawnExplosionEffect(pos);
+            // 弹道线（接收方向）
+            if(m.dir){
+              var dir = new THREE.Vector3(m.dir.x||0, m.dir.y||0, m.dir.z||0);
+              if(dir.lengthSq() > 0){
+                dir.normalize();
+                var end = pos.clone().add(dir.multiplyScalar(60));
+                spawnBulletTrail(pos, end);
+              }
+            }
           } catch(e){}
         }
     };
@@ -30556,12 +30654,19 @@ break;
         }
     }
 
-    // 联机击杀提示
-    function addNetKillFeed(killer, victim){
+    // 联机击杀提示（weapon 可选；提供时格式为 "XX 使用 XX 击杀了 XX"，否则 "XX ▸ XX"）
+    function addNetKillFeed(killer, victim, weapon){
         var kf = document.getElementById('net-killfeed');
         if(!kf){ kf = document.createElement('div'); kf.id='net-killfeed'; var hud=document.getElementById('hud'); if(hud) hud.appendChild(kf); }
         var item = document.createElement('div'); item.className='nkf-item';
-        item.innerHTML = escapeHtmlLocal(killer) + ' ▸ <span class="killed">' + escapeHtmlLocal(victim) + '</span>';
+        var html = escapeHtmlLocal(killer);
+        if(weapon){
+          html += ' 使用 <span class="weapon">' + escapeHtmlLocal(weapon) + '</span> 击杀了 ';
+        } else {
+          html += ' ▸ ';
+        }
+        html += '<span class="killed">' + escapeHtmlLocal(victim) + '</span>';
+        item.innerHTML = html;
         kf.appendChild(item);
         setTimeout(function(){ item.style.opacity='0'; setTimeout(function(){ if(item.parentNode) item.parentNode.removeChild(item); }, 300); }, 3500);
     }
