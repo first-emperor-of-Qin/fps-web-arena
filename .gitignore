@@ -1,5 +1,12 @@
 # macOS 系统文件
 .DS_Store
 
-# Node 依赖（本项目为纯静态站点，无需提交）
+# Node 依赖
 node_modules/
+
+# SQLite 数据库（运行时生成，不入库）
+*.sqlite
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+data/
