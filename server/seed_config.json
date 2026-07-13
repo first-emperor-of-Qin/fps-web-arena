@@ -1,0 +1,1484 @@
+{
+  "weapons": {
+    "thunder": {
+      "id": "thunder",
+      "display": {
+        "name": "雷霆之怒",
+        "icon": "🔫",
+        "quality": "heroic",
+        "qualityLabel": "英雄级",
+        "category": "突击步枪",
+        "baseDmg": "9/发",
+        "fireRate": "10发/秒",
+        "magazine": "150/1500",
+        "activeSkill": "无",
+        "passiveSkill": "爆头x2",
+        "slot": "1t",
+        "slotType": "primary"
+      },
+      "full": {
+        "tagline": "英雄级突击步枪 — 初始装备",
+        "typeLabel": "主武器（突击步枪）",
+        "bonus": "生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1",
+        "passives": [
+          "无"
+        ],
+        "actives": [
+          "无"
+        ],
+        "price": 0,
+        "isDefault": true
+      },
+      "tuning": {
+        "BULLET_BASE_DMG": "9",
+        "SECONDARY_FIRE_RATE": "0.08",
+        "SECONDARY_MAG_SIZE": "30",
+        "THUNDER_BEAM_BASE_DMG": "45"
+      }
+    },
+    "tumo": {
+      "id": "tumo",
+      "display": {
+        "name": "屠魔",
+        "icon": "🎯",
+        "quality": "divine",
+        "qualityLabel": "神级",
+        "category": "狙击枪",
+        "baseDmg": "104/发",
+        "fireRate": "4发/秒",
+        "magazine": "无限",
+        "activeSkill": "屠魔护体[E]",
+        "passiveSkill": "割裂箭头+巨力一击(100%穿透)",
+        "slot": "1m",
+        "slotType": "primary"
+      },
+      "full": {
+        "tagline": "神级狙击枪 — 屠魔弑神之枪",
+        "typeLabel": "主武器（狙击枪）",
+        "bonus": "生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3",
+        "passives": [
+          "割裂箭头：命中施加10秒割裂，移动时每帧受基础伤害100%",
+          "巨力一击：命中击退3米，子弹100%穿透前方所有敌人与建筑物"
+        ],
+        "actives": [
+          "屠魔护体[E]：开关型，无冷却，90%减伤，每秒消耗2%最大能量"
+        ],
+        "price": 10000,
+        "isDefault": false
+      },
+      "tuning": {
+        "TUMO_BASE_DMG": "104",
+        "TUMO_FIRE_RATE": "0.25",
+        "TUMO_MAG_SIZE": "Infinity"
+      }
+    },
+    "dragonlyknight": {
+      "id": "dragonlyknight",
+      "display": {
+        "name": "魔龙骑士",
+        "icon": "🐉",
+        "quality": "legendary",
+        "qualityLabel": "传说级",
+        "category": "AK47步枪",
+        "baseDmg": "17/发",
+        "fireRate": "12发/秒",
+        "magazine": "50/1000",
+        "activeSkill": "龙威[E]",
+        "passiveSkill": "血怒+龙鳞守护",
+        "slot": "1k",
+        "slotType": "primary"
+      },
+      "full": {
+        "tagline": "传说级AK47步枪 — 魔龙化身，战场主宰",
+        "typeLabel": "主武器（AK47步枪）",
+        "bonus": "生命+20000 | 护盾+20000 | 魂力+5000 | 移速+2 | 能量+40 | 暴击+3% | 每秒回复生命+500 | 每秒回复护盾+500 | 每秒回复能量+2",
+        "passives": [
+          "血怒：每损失1%生命值，伤害提升1%",
+          "龙鳞守护：受到致命伤害时触发，无敌3秒并恢复护盾至上限，冷却60秒"
+        ],
+        "actives": [
+          "龙威[E]：开关型，移速+50%，伤害+100%，开枪不消耗子弹，每秒消耗1%最大能量，能量低于10%自动关闭，无冷却"
+        ],
+        "price": 10000,
+        "isDefault": false
+      },
+      "tuning": {
+        "DRAGON_KNIGHT_BASE_DMG": "17",
+        "DRAGON_KNIGHT_FIRE_RATE": "0.0833",
+        "DRAGON_KNIGHT_MAG_SIZE": "50"
+      }
+    },
+    "dawnlight": {
+      "id": "dawnlight",
+      "display": {
+        "name": "黎明之光",
+        "icon": "☀",
+        "quality": "legendary",
+        "qualityLabel": "传说级",
+        "category": "激光枪",
+        "baseDmg": "26/次",
+        "fireRate": "10次/秒",
+        "magazine": "无限",
+        "activeSkill": "黎明解放[右键]",
+        "passiveSkill": "黎明之力+50%减速",
+        "slot": "1dl",
+        "slotType": "primary"
+      },
+      "full": {
+        "tagline": "传说级激光枪 — 破晓之光，净化黑暗",
+        "typeLabel": "主武器（激光枪）",
+        "bonus": "生命+20000 | 护盾+20000 | 魂力+5000 | 移速+2 | 能量+40 | 暴击+3% | 每秒回复生命+500 | 每秒回复护盾+500 | 每秒回复能量+2",
+        "passives": [
+          "黎明之力：持续射击时每秒+30%伤害，最高+300%，中断归零"
+        ],
+        "actives": [
+          "黎明解放[右键]：长按右键释放，松开右键关闭，每秒消耗1%能量上限，范围大幅扩大，伤害+100%，激光穿透障碍物"
+        ],
+        "price": 10000,
+        "isDefault": false
+      },
+      "tuning": {
+        "DAWNLIGHT_BASE_DMG": "26",
+        "DAWNLIGHT_FIRE_RATE": "0.1",
+        "DAWNLIGHT_MAG_SIZE": "Infinity"
+      }
+    },
+    "zeushand": {
+      "id": "zeushand",
+      "display": {
+        "name": "宙斯之手",
+        "icon": "⚡",
+        "quality": "divine",
+        "qualityLabel": "神级",
+        "category": "能量枪",
+        "baseDmg": "173/发",
+        "fireRate": "8发/秒",
+        "magazine": "无限",
+        "activeSkill": "宙斯降临[E]",
+        "passiveSkill": "雷霆能量+感电",
+        "slot": "1z",
+        "slotType": "primary"
+      },
+      "full": {
+        "tagline": "神级能量枪 — 雷霆万钧，宙斯降临",
+        "typeLabel": "主武器（能量枪）",
+        "bonus": "生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3",
+        "passives": [
+          "雷霆能量：雷球命中充能，充满后释放闪电链，跳跃10次，每次50%武器基础伤害",
+          "感电：闪电链击中目标施加15秒感电，受宙斯之手伤害+100%，击中感电目标回复1%能量"
+        ],
+        "actives": [
+          "宙斯降临[E]：在当前位置召唤宙斯幻影，自动攻击大范围敌人，继承本体普攻。最多5个幻影，每个消耗30能量，无冷却。幻影不会自动消失，无生命值，无持续时间限制"
+        ],
+        "price": 30000,
+        "isDefault": false
+      },
+      "tuning": {
+        "ZEUS_HAND_BASE_DMG": "173",
+        "ZEUS_HAND_FIRE_RATE": "0.125",
+        "ZEUS_HAND_MAG_SIZE": "Infinity"
+      }
+    },
+    "phasewalker": {
+      "id": "phasewalker",
+      "display": {
+        "name": "相位行者",
+        "icon": "✦",
+        "quality": "divine",
+        "qualityLabel": "神级",
+        "category": "相位步枪",
+        "baseDmg": "46/发",
+        "fireRate": "16发/秒",
+        "magazine": "无限",
+        "activeSkill": "相位制导[E]",
+        "passiveSkill": "相位打击+相位怒火",
+        "slot": "1pw",
+        "slotType": "primary"
+      },
+      "full": {
+        "tagline": "神级相位步枪 — 相位制导，精准追踪",
+        "typeLabel": "主武器（相位步枪）",
+        "bonus": "生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3",
+        "passives": [
+          "相位打击：敌方存在信标时，每发1%概率造成目标1%生命上限真实伤害",
+          "相位怒火：目标血量<75%/50%/25%时对该目标伤害+100%/+200%/+300%"
+        ],
+        "actives": [
+          "相位制导[E]：按E键开启/关闭，无冷却。每秒消耗1%能量上限，能量<10%无法开启。命中目标附加信标整体标记（不区分部位），标记目标受到的伤害必定为爆头伤害；未命中子弹自动追踪并命中标记目标头部；击杀标记目标触发300%武器伤害范围爆炸；距离标记目标越近伤害越高（上限+100%，超过100米无加成）；击杀后信标传染至附近血量最低目标（传染目标同样始终被爆头）；关闭技能后信标清除，重新开启可重新标记；信标3s/5s/10s易伤+100%/+200%/+300%；技能期间移速+30%"
+        ],
+        "price": 100000,
+        "isDefault": false
+      },
+      "tuning": {
+        "PHASE_WALKER_DAMAGE": "46",
+        "PHASE_WALKER_FIRE_RATE": "0.0625"
+      }
+    },
+    "parasite": {
+      "id": "parasite",
+      "display": {
+        "name": "寄生者",
+        "icon": "💀",
+        "quality": "divine",
+        "qualityLabel": "神级",
+        "category": "狙击枪",
+        "baseDmg": "208/发",
+        "fireRate": "4发/秒",
+        "magazine": "无限",
+        "activeSkill": "炮狙模式[右键]+内脏暴击",
+        "passiveSkill": "无",
+        "slot": "1p",
+        "slotType": "primary"
+      },
+      "full": {
+        "tagline": "神级狙击枪 — 寄生于死，噬魂而生",
+        "typeLabel": "主武器（狙击枪）",
+        "bonus": "生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3",
+        "passives": [
+          "内脏暴击：炮狙模式下命中目标施加递增层数标记（1层300%、2层600%、3层900%、4层1200%、5层1500%范围伤害），最高5层后50%维持/50%重置。范围伤害可同时为多目标叠加"
+        ],
+        "actives": [
+          "炮狙模式[右键]：需能量>10%，开关型。开启后左键发射巨炮冲击波，消耗1%能量，造成200%武器基础范围伤害，吸入附近目标。再次按右键关闭"
+        ],
+        "price": 20000,
+        "isDefault": false
+      },
+      "tuning": {
+        "PARASITE_BASE_DMG": "208",
+        "PARASITE_CANNON_BASE_DMG": "208",
+        "PARASITE_FIRE_RATE": "0.25",
+        "PARASITE_MAG_SIZE": "Infinity"
+      }
+    },
+    "shadow": {
+      "id": "shadow",
+      "display": {
+        "name": "幽影双枪",
+        "icon": "🔫",
+        "quality": "heroic",
+        "qualityLabel": "英雄级",
+        "category": "双持手枪",
+        "baseDmg": "8/发",
+        "fireRate": "12.5发/秒",
+        "magazine": "30/180",
+        "activeSkill": "扇火[右键]",
+        "passiveSkill": "无",
+        "slot": "2s",
+        "slotType": "secondary"
+      },
+      "full": {
+        "tagline": "英雄级双持手枪 — 初始装备",
+        "typeLabel": "副武器（双持手枪）",
+        "bonus": "生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1",
+        "passives": [
+          "无"
+        ],
+        "actives": [
+          "扇火[右键]：扇形快速连射6发，每发基础伤害8"
+        ],
+        "price": 0,
+        "isDefault": true
+      },
+      "tuning": {
+        "SECONDARY_BASE_DMG": "8",
+        "SECONDARY_FIRE_RATE": "0.08",
+        "SECONDARY_MAG_SIZE": "30"
+      }
+    },
+    "metalstorm": {
+      "id": "metalstorm",
+      "display": {
+        "name": "金属风暴",
+        "icon": "🔫",
+        "quality": "heroic",
+        "qualityLabel": "英雄级",
+        "category": "双持手枪",
+        "baseDmg": "5/发",
+        "fireRate": "13发/秒",
+        "magazine": "60/360",
+        "activeSkill": "锁敌风暴[E]",
+        "passiveSkill": "极速射速",
+        "slot": "2m",
+        "slotType": "secondary"
+      },
+      "full": {
+        "tagline": "英雄级双持手枪 — 毁灭性弹幕压制装置",
+        "typeLabel": "副武器（双持手枪）",
+        "bonus": "生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1",
+        "passives": [
+          "极速射速：双持高射速手枪"
+        ],
+        "actives": [
+          "锁敌风暴[E]：每秒消耗2能量，自动锁定范围内敌人射击，基础伤害50/发，不消耗弹药，无冷却，能量>20%可激活"
+        ],
+        "price": 5000,
+        "isDefault": false
+      },
+      "tuning": {
+        "METALSTORM_BASE_DMG": "5",
+        "METALSTORM_FIRE_RATE": "0.0769",
+        "METALSTORM_MAG_SIZE": "60",
+        "LOCK_STORM_BASE_DMG": "6"
+      }
+    },
+    "whitenight": {
+      "id": "whitenight",
+      "display": {
+        "name": "白夜铳刃",
+        "icon": "⚔",
+        "quality": "legendary",
+        "qualityLabel": "传说级",
+        "category": "铳刃手枪",
+        "baseDmg": "78/发",
+        "fireRate": "7发/秒",
+        "magazine": "25/500",
+        "activeSkill": "白夜领域[右键]",
+        "passiveSkill": "领域牵引",
+        "slot": "2w",
+        "slotType": "secondary"
+      },
+      "full": {
+        "tagline": "传说级铳刃手枪 — 白夜降临，万物肃杀",
+        "typeLabel": "副武器（铳刃手枪）",
+        "bonus": "生命+20000 | 护盾+20000 | 魂力+5000 | 移速+2 | 能量+40 | 暴击+3% | 每秒回复生命+500 | 每秒回复护盾+500 | 每秒回复能量+2",
+        "passives": [
+          "领域牵引：技能激活期间，左键命中敌人可将范围中心转移至该敌人并跟随移动"
+        ],
+        "actives": [
+          "白夜领域[右键]：对目标区域持续造成高频范围伤害，持续20秒，消耗10能量，冷却5秒"
+        ],
+        "price": 10000,
+        "isDefault": false
+      },
+      "tuning": {
+        "WHITENIGHT_BASE_DMG": "78",
+        "WHITENIGHT_FIRE_RATE": "0.1429",
+        "WHITENIGHT_MAG_SIZE": "25",
+        "WHITENIGHT_SKILL_BASE_DMG": "18"
+      }
+    },
+    "moonbow": {
+      "id": "moonbow",
+      "display": {
+        "name": "皓月神弓",
+        "icon": "🏹",
+        "quality": "divine",
+        "qualityLabel": "神级",
+        "category": "神弓",
+        "baseDmg": "92/发",
+        "fireRate": "8发/秒",
+        "magazine": "无限",
+        "activeSkill": "万箭齐发[E]",
+        "passiveSkill": "冰霜箭",
+        "slot": "2b",
+        "slotType": "secondary"
+      },
+      "full": {
+        "tagline": "神级副武器 — 皓月当空，冰霜降临",
+        "typeLabel": "副武器（神弓）",
+        "bonus": "生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3",
+        "passives": [
+          "冰霜箭：命中施加50%减速3秒 | 命中10%概率触发冰冻1秒（1秒内置冷却，不叠加）"
+        ],
+        "actives": [
+          "万箭齐发[E]：选定区域降下箭雨，每秒30次，每次300%基础伤害，持续30秒，消耗50能量，冷却5秒"
+        ],
+        "price": 30000,
+        "isDefault": false
+      },
+      "tuning": {
+        "MOONBOW_BASE_DMG": "92",
+        "MOONBOW_MIN_FIRE_RATE": "8",
+        "MOONBOW_MAX_FIRE_RATE": "8"
+      }
+    },
+    "thunderblade": {
+      "id": "thunderblade",
+      "display": {
+        "name": "雷霆战刃",
+        "icon": "⚔",
+        "quality": "heroic",
+        "qualityLabel": "英雄级",
+        "category": "近战",
+        "baseDmg": "轻击43 / 重击130",
+        "fireRate": "无",
+        "magazine": "无",
+        "activeSkill": "轻击[左键] / 重击[右键]",
+        "passiveSkill": "重击眩晕1.5s+电场",
+        "slot": "3t",
+        "slotType": "melee"
+      },
+      "full": {
+        "tagline": "英雄级近战武器 — 初始装备",
+        "typeLabel": "近战武器",
+        "bonus": "生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1",
+        "passives": [
+          "重击命中产生电场范围持续伤害"
+        ],
+        "actives": [
+          "轻击[左键]：快速近战",
+          "重击[右键]：蓄力重击+眩晕+电场"
+        ],
+        "price": 0,
+        "isDefault": true
+      },
+      "tuning": {
+        "MELEE_LIGHT_BASE_DMG": "43",
+        "MELEE_HEAVY_BASE_DMG": "130"
+      }
+    },
+    "hellscythe": {
+      "id": "hellscythe",
+      "display": {
+        "name": "地狱魔镰",
+        "icon": "🌀",
+        "quality": "heroic",
+        "qualityLabel": "英雄级",
+        "category": "近战",
+        "baseDmg": "轻风9/次 x10 | 地狱9/次 x10x3",
+        "fireRate": "无",
+        "magazine": "无",
+        "activeSkill": "地狱狂风[E]",
+        "passiveSkill": "狂风卷起敌人",
+        "slot": "3h",
+        "slotType": "melee"
+      },
+      "full": {
+        "tagline": "英雄级近战武器 — 地狱锻造的魔镰",
+        "typeLabel": "近战武器",
+        "bonus": "生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1",
+        "passives": [
+          "狂风投射物可卷起敌人击退"
+        ],
+        "actives": [
+          "普通狂风[右键]：1道x10次，基础伤害800/次，无冷却，1能量",
+          "地狱狂风[E]：3道x10次，基础伤害800/次，冷却15秒，30能量"
+        ],
+        "price": 5000,
+        "isDefault": false
+      },
+      "tuning": {
+        "HELLSCYTHE_WIND_BASE_DMG": "9",
+        "HELLSCYTHE_HELL_BASE_DMG": "9"
+      }
+    },
+    "thousandumbrella": {
+      "id": "thousandumbrella",
+      "display": {
+        "name": "千机伞",
+        "icon": "☂",
+        "quality": "divine",
+        "qualityLabel": "神级",
+        "category": "伞刃",
+        "baseDmg": "520/击",
+        "fireRate": "2.5击/秒",
+        "magazine": "无限",
+        "activeSkill": "天罗伞阵[E]+伞舞龙卷[右键]+千机百变[X]",
+        "passiveSkill": "三形态切换+0.5秒无敌+伤害加成",
+        "slot": "3u",
+        "slotType": "melee"
+      },
+      "full": {
+        "tagline": "神级近战武器 — 千机百变，三形态机关伞刃",
+        "typeLabel": "近战武器",
+        "bonus": "生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3",
+        "passives": [
+          "千机百变：刃形态扇形范围斩击200%伤害 | 盾形态减免90%伤害+反弹50%近战 | 羽形态飞行+移速+100%+3道风刃150%伤害",
+          "形态切换：切换瞬间0.5秒无敌，3秒内下次攻击伤害+100%"
+        ],
+        "actives": [
+          "天罗伞阵[E]：跃空投射巨型伞阵(直径20米)，持续10秒，每秒108道伞刃(300%伤害+0.5秒禁锢)，结束万伞归一爆炸(1200%伤害+5米击飞)，期间闪避+80%，消耗80能量冷却15秒",
+          "伞舞龙卷[右键]：解体360片飞刃形成龙卷(5米)，持续5秒，每秒400%伤害+吸附，重组冲击波800%伤害，飞行状态范围10米×2吸附，消耗35能量冷却8秒"
+        ],
+        "price": 30000,
+        "isDefault": false
+      },
+      "tuning": {
+        "THOUSAND_UMBRELLA_BASE_DMG": "520"
+      }
+    },
+    "normalgrenade": {
+      "id": "normalgrenade",
+      "display": {
+        "name": "爆炎手雷",
+        "icon": "💣",
+        "quality": "heroic",
+        "qualityLabel": "英雄级",
+        "category": "投掷武器",
+        "baseDmg": "240(爆炸)+DPS24(灼烧3s)",
+        "fireRate": "无",
+        "magazine": "x3",
+        "activeSkill": "投掷[左键] / 蓄力投[长按]",
+        "passiveSkill": "灼烧区域持续3秒",
+        "slot": "4n",
+        "slotType": "grenade"
+      },
+      "full": {
+        "tagline": "英雄级投掷武器 — 初始装备",
+        "typeLabel": "投掷武器",
+        "bonus": "生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1",
+        "passives": [
+          "灼烧区域持续3秒伤害"
+        ],
+        "actives": [
+          "投掷[左键/右键]",
+          "蓄力投[左键长按]"
+        ],
+        "price": 0,
+        "isDefault": true
+      },
+      "tuning": {
+        "GRENADE_BASE_DMG": "240",
+        "GRENADE_BURN_BASE_DPS": "24"
+      }
+    },
+    "deathlight": {
+      "id": "deathlight",
+      "display": {
+        "name": "死神之光",
+        "icon": "☢",
+        "quality": "heroic",
+        "qualityLabel": "英雄级",
+        "category": "投掷武器",
+        "baseDmg": "爆炸120 + 10x12火箭",
+        "fireRate": "无",
+        "magazine": "x5",
+        "activeSkill": "投掷[左键/右键]",
+        "passiveSkill": "25%概率返还+眩晕3s",
+        "slot": "4d",
+        "slotType": "grenade"
+      },
+      "full": {
+        "tagline": "英雄级投掷武器 — 毁灭性光能爆破装置",
+        "typeLabel": "投掷武器",
+        "bonus": "生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1",
+        "passives": [
+          "25%概率使用后返还一枚投掷武器"
+        ],
+        "actives": [
+          "投掷[左键/右键]"
+        ],
+        "price": 3000,
+        "isDefault": false
+      },
+      "tuning": {
+        "DEATHLIGHT_BASE_DMG": "120",
+        "DEATHLIGHT_BURN_BASE_DPS": "12",
+        "DEATHLIGHT_ROCKET_BASE_DMG": "12"
+      }
+    },
+    "froststar": {
+      "id": "froststar",
+      "display": {
+        "name": "急冻霜星",
+        "icon": "❄",
+        "quality": "heroic",
+        "qualityLabel": "英雄级",
+        "category": "投掷武器",
+        "baseDmg": "首爆120 + 二段120",
+        "fireRate": "无",
+        "magazine": "x3",
+        "activeSkill": "投掷[左键/右键]",
+        "passiveSkill": "冰冻3s+二段爆炸",
+        "slot": "4f",
+        "slotType": "grenade"
+      },
+      "full": {
+        "tagline": "英雄级投掷武器 — 二段式冰霜毁灭装置",
+        "typeLabel": "投掷武器",
+        "bonus": "生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1",
+        "passives": [
+          "二段爆炸：冰冻解除时自动触发二段冰霜爆炸"
+        ],
+        "actives": [
+          "投掷[左键/右键]"
+        ],
+        "price": 3000,
+        "isDefault": false
+      },
+      "tuning": {
+        "FROSTSTAR_FIRST_BASE_DMG": "120",
+        "FROSTSTAR_SECOND_BASE_DMG": "120"
+      }
+    },
+    "tanglotus": {
+      "id": "tanglotus",
+      "display": {
+        "name": "佛怒唐莲",
+        "icon": "🪷",
+        "quality": "divine",
+        "qualityLabel": "神级",
+        "category": "投掷武器",
+        "baseDmg": "800(爆炸)+1000x8(花瓣)",
+        "fireRate": "无",
+        "magazine": "x5",
+        "activeSkill": "投掷[左键/右键]",
+        "passiveSkill": "金红龙卷10秒+花瓣追踪+秒杀/真伤",
+        "slot": "4tl",
+        "slotType": "grenade"
+      },
+      "full": {
+        "tagline": "神级投掷武器 — 金红龙卷，万瓣追魂",
+        "typeLabel": "投掷武器",
+        "bonus": "生命+50000 | 护盾+50000 | 魂力+10000 | 移速+3 | 能量+50 | 暴击+4% | 每秒回复生命+1000 | 每秒回复护盾+1000 | 每秒回复能量+3",
+        "passives": [
+          "花瓣追踪：所有花瓣自动追踪地图范围内全部敌人，必定命中，不会落空",
+          "若仅剩一个敌人，该目标承受每秒100朵全部伤害",
+          "每朵花瓣独立判定：1%秒杀小怪，1%对BOSS造成1%最大生命真伤(秒杀对BOSS无效)"
+        ],
+        "actives": [
+          "投掷[左键/右键]：引爆后生成金红龙卷，持续释放追踪花瓣"
+        ],
+        "price": 200000,
+        "isDefault": false
+      },
+      "tuning": {
+        "TANGLOTUS_BASE_DMG": "800",
+        "TANGLOTUS_PETAL_DMG": "8",
+        "TANGLOTUS_TOTAL_PETALS": "1000"
+      }
+    },
+    "datacube": {
+      "id": "datacube",
+      "display": {
+        "name": "数据魔方",
+        "icon": "🧊",
+        "quality": "heroic",
+        "qualityLabel": "英雄级",
+        "category": "辅助增益",
+        "baseDmg": "无",
+        "fireRate": "无",
+        "magazine": "无(按键5切换)",
+        "activeSkill": "无",
+        "passiveSkill": "魔方增幅 每秒+1%伤害(100秒满100%,死亡重置)",
+        "slot": "5d",
+        "slotType": "tactical"
+      },
+      "full": {
+        "tagline": "英雄级战术武器 — 辅助增益型数据魔方装置",
+        "typeLabel": "战术武器",
+        "bonus": "生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1",
+        "passives": [
+          "魔方增幅：伤害加成初始为0%，每秒自动累加1%，100秒达到100%上限。死亡后伤害加成立即重置为0%，复活后重新从0%开始累加"
+        ],
+        "actives": [
+          "无主动技能（纯被动辅助增益武器）"
+        ],
+        "price": 8000,
+        "isDefault": false
+      },
+      "tuning": {}
+    },
+    "breacher": {
+      "id": "breacher",
+      "display": {
+        "name": "破门者",
+        "icon": "🔫",
+        "quality": "heroic",
+        "qualityLabel": "英雄级",
+        "category": "霰弹枪",
+        "baseDmg": "90/发(8弹丸)",
+        "fireRate": "1.5发/秒",
+        "magazine": "8/40",
+        "activeSkill": "压制射击[右键]",
+        "passiveSkill": "近距衰减+击退",
+        "slot": "1b",
+        "slotType": "primary"
+      },
+      "full": {
+        "tagline": "英雄级霰弹枪 — 近身破门利器",
+        "typeLabel": "主武器（霰弹枪）",
+        "bonus": "生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1",
+        "passives": [
+          "近距衰减：3米内每弹丸满伤，超出距离伤害递减",
+          "击退：命中目标击退2米"
+        ],
+        "actives": [
+          "压制射击[右键]：扇形喷射12弹丸，造成范围击退与短暂减速"
+        ],
+        "price": 6000,
+        "isDefault": false
+      },
+      "tuning": {
+        "BREACHER_BASE_DMG": "90",
+        "BREACHER_FIRE_RATE": "0.6667",
+        "BREACHER_MAG_SIZE": "8"
+      }
+    },
+    "annihilator": {
+      "id": "annihilator",
+      "display": {
+        "name": "湮灭者",
+        "icon": "🚀",
+        "quality": "legendary",
+        "qualityLabel": "传说级",
+        "category": "火箭筒",
+        "baseDmg": "600/发(爆炸)",
+        "fireRate": "1发/秒",
+        "magazine": "4/16",
+        "activeSkill": "锁定导弹[右键]",
+        "passiveSkill": "溅射范围+范围眩晕",
+        "slot": "1a",
+        "slotType": "primary"
+      },
+      "full": {
+        "tagline": "传说级火箭筒 — 范围毁灭打击",
+        "typeLabel": "主武器（火箭筒）",
+        "bonus": "生命+20000 | 护盾+20000 | 魂力+5000 | 移速+2 | 能量+40 | 暴击+3% | 每秒回复生命+500 | 每秒回复护盾+500 | 每秒回复能量+2",
+        "passives": [
+          "溅射：爆炸对5米内所有敌人造成50%范围伤害"
+        ],
+        "actives": [
+          "锁定导弹[右键]：锁定视野内目标，导弹自动追踪并造成范围爆炸"
+        ],
+        "price": 15000,
+        "isDefault": false
+      },
+      "tuning": {
+        "ANNIHILATOR_BASE_DMG": "600",
+        "ANNIHILATOR_FIRE_RATE": "1",
+        "ANNIHILATOR_MAG_SIZE": "4"
+      }
+    },
+    "venom": {
+      "id": "venom",
+      "display": {
+        "name": "剧毒蜂",
+        "icon": "🐝",
+        "quality": "heroic",
+        "qualityLabel": "英雄级",
+        "category": "冲锋枪",
+        "baseDmg": "11/发",
+        "fireRate": "18发/秒",
+        "magazine": "45/225",
+        "activeSkill": "蜂群扫射[E]",
+        "passiveSkill": "中毒 DOT",
+        "slot": "1v",
+        "slotType": "primary"
+      },
+      "full": {
+        "tagline": "英雄级冲锋枪 — 高射速压制",
+        "typeLabel": "主武器（冲锋枪）",
+        "bonus": "生命+10000 | 护盾+10000 | 魂力+3000 | 移速+1 | 能量+30 | 暴击+2% | 每秒回复生命+100 | 每秒回复护盾+100 | 每秒回复能量+1",
+        "passives": [
+          "中毒：命中施加3秒中毒，每秒造成基础伤害10% DOT"
+        ],
+        "actives": [
+          "蜂群扫射[E]：持续5秒，射速+30%，不消耗弹药，消耗20能量，冷却8秒"
+        ],
+        "price": 7000,
+        "isDefault": false
+      },
+      "tuning": {
+        "VENOM_BASE_DMG": "11",
+        "VENOM_FIRE_RATE": "0.0556",
+        "VENOM_MAG_SIZE": "45"
+      }
+    },
+    "inferno": {
+      "id": "inferno",
+      "display": {
+        "name": "地狱火",
+        "icon": "🔥",
+        "quality": "legendary",
+        "qualityLabel": "传说级",
+        "category": "火焰喷射器",
+        "baseDmg": "40/帧(持续)",
+        "fireRate": "持续喷射",
+        "magazine": "200/600",
+        "activeSkill": "烈焰风暴[右键]",
+        "passiveSkill": "灼烧 DOT+点燃",
+        "slot": "1i",
+        "slotType": "primary"
+      },
+      "full": {
+        "tagline": "传说级火焰喷射器 — 持续灼烧压制",
+        "typeLabel": "主武器（火焰喷射器）",
+        "bonus": "生命+20000 | 护盾+20000 | 魂力+5000 | 移速+2 | 能量+40 | 暴击+3% | 每秒回复生命+500 | 每秒回复护盾+500 | 每秒回复能量+2",
+        "passives": [
+          "灼烧：命中目标持续点燃，每秒造成基础伤害20% DOT，最多叠3层"
+        ],
+        "actives": [
+          "烈焰风暴[右键]：向正前方喷射扇形火焰，范围点燃并造成持续真伤"
+        ],
+        "price": 12000,
+        "isDefault": false
+      },
+      "tuning": {
+        "INFERNO_BASE_DMG": "40",
+        "INFERNO_FIRE_RATE": "0.05",
+        "INFERNO_MAG_SIZE": "200"
+      }
+    }
+  },
+  "characters": [
+    {
+      "id": "rookie",
+      "name": "新兵 · 阿尔法",
+      "en": "ROOKIE ALPHA",
+      "star": 1,
+      "pal": [
+        "#5b6b78",
+        "#8b9aa6",
+        "#aebccb"
+      ],
+      "bMul": 1,
+      "free": true
+    },
+    {
+      "id": "militia",
+      "name": "民兵 · 布拉沃",
+      "en": "MILITIA BRAVO",
+      "star": 1,
+      "pal": [
+        "#6b5b4a",
+        "#a08a6a",
+        "#c9b48a"
+      ],
+      "bMul": 1.05
+    },
+    {
+      "id": "scout",
+      "name": "侦察兵 · 夜隼",
+      "en": "SCOUT NIGHTHAWK",
+      "star": 2,
+      "pal": [
+        "#1f6b5a",
+        "#2fb99a",
+        "#7fe6cf"
+      ],
+      "bMul": 1
+    },
+    {
+      "id": "breaker",
+      "name": "爆破手 · 赤焰",
+      "en": "DEMO CRIMSON",
+      "star": 2,
+      "pal": [
+        "#7a2a1e",
+        "#e0503a",
+        "#ffa07a"
+      ],
+      "bMul": 1.05
+    },
+    {
+      "id": "captain",
+      "name": "突击队长 · 钢铁",
+      "en": "CAPT. STEEL",
+      "star": 3,
+      "pal": [
+        "#2a4a6b",
+        "#4f8fd6",
+        "#9cc9ff"
+      ],
+      "bMul": 1
+    },
+    {
+      "id": "medic",
+      "name": "医疗兵 · 白鸽",
+      "en": "MEDIC DOVE",
+      "star": 3,
+      "pal": [
+        "#4a6b4a",
+        "#6fd67f",
+        "#c9ffcf"
+      ],
+      "bMul": 1.05
+    },
+    {
+      "id": "sniper",
+      "name": "幽灵狙击 · 寒鸦",
+      "en": "GHOST RAVEN",
+      "star": 4,
+      "pal": [
+        "#3a2a5b",
+        "#7b4fd6",
+        "#c9a6ff"
+      ],
+      "bMul": 1
+    },
+    {
+      "id": "titan",
+      "name": "机甲战士 · 泰坦",
+      "en": "MECH TITAN",
+      "star": 4,
+      "pal": [
+        "#6b4a1e",
+        "#e0a03a",
+        "#ffd77a"
+      ],
+      "bMul": 1.08
+    },
+    {
+      "id": "phoenix",
+      "name": "王牌指挥官 · 凤凰",
+      "en": "ACE PHOENIX",
+      "star": 5,
+      "pal": [
+        "#7a1e1e",
+        "#ff5030",
+        "#ffb060"
+      ],
+      "bMul": 1
+    },
+    {
+      "id": "emperor",
+      "name": "暗影君主 · 帝王",
+      "en": "SHADOW EMPEROR",
+      "star": 5,
+      "pal": [
+        "#4a1e6b",
+        "#a03ae0",
+        "#e0a3ff"
+      ],
+      "bMul": 1.12
+    },
+    {
+      "id": "viper",
+      "name": "毒蛇 · 薇拉",
+      "en": "VIPER VERA",
+      "star": 1,
+      "pal": [
+        "#1e6b2a",
+        "#4fd66f",
+        "#a6ffc9"
+      ],
+      "bMul": 1.03,
+      "skills": [
+        { "name": "剧毒涂层", "type": "passive", "desc": "所有武器命中施加3秒中毒，每秒造成基础伤害8% DOT" }
+      ]
+    },
+    {
+      "id": "warden",
+      "name": "壁垒守卫 · 重岳",
+      "en": "WARDEN ZHONG",
+      "star": 3,
+      "pal": [
+        "#2a5b6b",
+        "#4fd6c6",
+        "#a6fff0"
+      ],
+      "bMul": 1.05,
+      "skills": [
+        { "name": "壁垒", "type": "passive", "desc": "受到伤害降低15%，护盾上限+20%" },
+        { "name": "集结号[E]", "type": "active", "desc": "向全队释放护盾波，3秒内为友军回复20%最大护盾，冷却25秒" }
+      ]
+    },
+    {
+      "id": "reaper",
+      "name": "亡灵收割者 · 修罗",
+      "en": "REAPER SHURA",
+      "star": 5,
+      "pal": [
+        "#6b1e3a",
+        "#e04f7f",
+        "#ffa6cf"
+      ],
+      "bMul": 1.1,
+      "skills": [
+        { "name": "死神收割", "type": "passive", "desc": "击杀敌人回复5%最大生命，并对周围造成10米范围真伤" },
+        { "name": "亡灵召唤[E]", "type": "active", "desc": "召唤2个骷髅战士协同作战，继承本体50%属性，持续20秒，冷却40秒" }
+      ]
+    }
+  ],
+  "levels": [
+    {
+      "level_no": 1,
+      "name": "熔岩炼狱",
+      "boss_name": "熔岩巨像",
+      "boss_hp": 100000000,
+      "hp_mult": 1,
+      "small_hp_ratio": 0.01,
+      "wave_count": 100,
+      "is_boss_only": 0,
+      "map_theme": ""
+    },
+    {
+      "level_no": 2,
+      "name": "深渊水域",
+      "boss_name": "水晶织网者",
+      "boss_hp": 150000000,
+      "hp_mult": 1,
+      "small_hp_ratio": 0.01,
+      "wave_count": 100,
+      "is_boss_only": 0,
+      "map_theme": ""
+    },
+    {
+      "level_no": 3,
+      "name": "时空裂隙",
+      "boss_name": "沙漠吞噬者",
+      "boss_hp": 225000000,
+      "hp_mult": 1,
+      "small_hp_ratio": 0.01,
+      "wave_count": 100,
+      "is_boss_only": 0,
+      "map_theme": ""
+    },
+    {
+      "level_no": 4,
+      "name": "机械坟场",
+      "boss_name": "极光守望者",
+      "boss_hp": 337500000,
+      "hp_mult": 1,
+      "small_hp_ratio": 0.01,
+      "wave_count": 100,
+      "is_boss_only": 0,
+      "map_theme": ""
+    },
+    {
+      "level_no": 5,
+      "name": "毒雾沼泽",
+      "boss_name": "机械暴君",
+      "boss_hp": 506250000,
+      "hp_mult": 1,
+      "small_hp_ratio": 0.01,
+      "wave_count": 100,
+      "is_boss_only": 0,
+      "map_theme": ""
+    },
+    {
+      "level_no": 6,
+      "name": "冰封王座",
+      "boss_name": "深海利维坦",
+      "boss_hp": 759375000,
+      "hp_mult": 1,
+      "small_hp_ratio": 0.01,
+      "wave_count": 100,
+      "is_boss_only": 0,
+      "map_theme": ""
+    },
+    {
+      "level_no": 7,
+      "name": "雷暴高原",
+      "boss_name": "时空编织者",
+      "boss_hp": 1139062500,
+      "hp_mult": 1,
+      "small_hp_ratio": 0.01,
+      "wave_count": 100,
+      "is_boss_only": 0,
+      "map_theme": ""
+    },
+    {
+      "level_no": 8,
+      "name": "亡灵墓园",
+      "boss_name": "腐尸领主",
+      "boss_hp": 1708593750,
+      "hp_mult": 1,
+      "small_hp_ratio": 0.01,
+      "wave_count": 100,
+      "is_boss_only": 0,
+      "map_theme": ""
+    },
+    {
+      "level_no": 9,
+      "name": "炼金工坊",
+      "boss_name": "虚空主宰",
+      "boss_hp": 2562890625,
+      "hp_mult": 1,
+      "small_hp_ratio": 0.01,
+      "wave_count": 100,
+      "is_boss_only": 0,
+      "map_theme": ""
+    },
+    {
+      "level_no": 10,
+      "name": "虚空终焉",
+      "boss_name": "混沌原核",
+      "boss_hp": 3844335938,
+      "hp_mult": 1,
+      "small_hp_ratio": 0.01,
+      "wave_count": 100,
+      "is_boss_only": 0,
+      "map_theme": ""
+    },
+    {
+      "level_no": 11,
+      "name": "星陨裂隙",
+      "boss_name": "星系吞噬者",
+      "boss_hp": 5766503907,
+      "hp_mult": 1,
+      "small_hp_ratio": 0.01,
+      "wave_count": 100,
+      "is_boss_only": 0,
+      "map_theme": ""
+    },
+    {
+      "level_no": 12,
+      "name": "焚天熔狱",
+      "boss_name": "炎魔领主",
+      "boss_hp": 8649755861,
+      "hp_mult": 1,
+      "small_hp_ratio": 0.01,
+      "wave_count": 100,
+      "is_boss_only": 0,
+      "map_theme": ""
+    },
+    {
+      "level_no": 13,
+      "name": "永冻深渊",
+      "boss_name": "冰封女皇",
+      "boss_hp": 12974633792,
+      "hp_mult": 1,
+      "small_hp_ratio": 0.01,
+      "wave_count": 100,
+      "is_boss_only": 0,
+      "map_theme": ""
+    },
+    {
+      "level_no": 14,
+      "name": "虚空王座",
+      "boss_name": "湮灭之眼",
+      "boss_hp": 19461950688,
+      "hp_mult": 1,
+      "small_hp_ratio": 0.01,
+      "wave_count": 100,
+      "is_boss_only": 0,
+      "map_theme": ""
+    },
+    {
+      "level_no": 15,
+      "name": "终焉纪元",
+      "boss_name": "创世残响",
+      "boss_hp": 29192926032,
+      "hp_mult": 1,
+      "small_hp_ratio": 0.01,
+      "wave_count": 100,
+      "is_boss_only": 0,
+      "map_theme": ""
+    }
+  ],
+  "tuning": {
+    "bossHpTable": [
+      0,
+      100000000,
+      150000000,
+      225000000,
+      337500000,
+      506250000,
+      759375000,
+      1139062500,
+      1708593750,
+      2562890625,
+      3844335938,
+      5766503907,
+      8649755861,
+      12974633792,
+      19461950688,
+      29192926032
+    ],
+    "levelWaveCounts": [
+      100,
+      100,
+      0
+    ],
+    "difficulty": {
+      "normal": {
+        "label": "普通",
+        "multiplier": 1,
+        "color": "#4caf50"
+      },
+      "hard": {
+        "label": "困难",
+        "multiplier": 2,
+        "color": "#ff9800"
+      },
+      "nightmare": {
+        "label": "噩梦",
+        "multiplier": 4,
+        "color": "#f44336"
+      },
+      "hell": {
+        "label": "地狱",
+        "multiplier": 8,
+        "color": "#9c27b0"
+      },
+      "expert": {
+        "label": "专家",
+        "multiplier": 16,
+        "color": "#e040fb"
+      },
+      "eternal": {
+        "label": "永恒",
+        "multiplier": 32,
+        "color": "#ffd740"
+      }
+    },
+    "maxLevel": 15,
+    "consts": {
+      "BULLET_DAMAGE": "100",
+      "MELEE_DAMAGE": "200",
+      "LOCK_STORM_DAMAGE": "500",
+      "METALSTORM_DAMAGE": "80",
+      "METALSTORM_FIRE_RATE": "0.0769",
+      "METALSTORM_MAG_SIZE": "60",
+      "WHITENIGHT_FIRE_RATE": "0.1429",
+      "WHITENIGHT_MAG_SIZE": "25",
+      "TUMO_DAMAGE": "100000000",
+      "TUMO_MAG_SIZE": "Infinity",
+      "TUMO_FIRE_RATE": "0.25",
+      "DRAGON_KNIGHT_MAG_SIZE": "50",
+      "DRAGON_KNIGHT_FIRE_RATE": "0.0833",
+      "DRAGON_KNIGHT_BASE_DMG": "17",
+      "DAWNLIGHT_BASE_DMG": "26",
+      "DAWNLIGHT_FIRE_RATE": "0.1",
+      "DAWNLIGHT_MAG_SIZE": "Infinity",
+      "PARASITE_BASE_DMG": "208",
+      "PARASITE_FIRE_RATE": "0.25",
+      "PARASITE_MAG_SIZE": "Infinity",
+      "ZEUS_HAND_BASE_DMG": "173",
+      "ZEUS_HAND_FIRE_RATE": "0.125",
+      "ZEUS_HAND_MAG_SIZE": "Infinity",
+      "PHASE_WALKER_DAMAGE": "46",
+      "PHASE_WALKER_FIRE_RATE": "0.0625",
+      "ZEUS_PHANTOM_FIRE_RATE": "1.0",
+      "MOONBOW_BASE_DMG": "92",
+      "MOONBOW_MIN_FIRE_RATE": "8",
+      "MOONBOW_MAX_FIRE_RATE": "8",
+      "SECONDARY_DAMAGE": "65",
+      "SECONDARY_FIRE_RATE": "0.08",
+      "SECONDARY_MAG_SIZE": "30",
+      "MELEE_LIGHT_DAMAGE": "400",
+      "MELEE_HEAVY_DAMAGE": "700",
+      "BULLET_BASE_DMG": "9",
+      "TUMO_BASE_DMG": "104",
+      "SECONDARY_BASE_DMG": "8",
+      "METALSTORM_BASE_DMG": "5",
+      "LOCK_STORM_BASE_DMG": "6",
+      "MELEE_LIGHT_BASE_DMG": "43",
+      "MELEE_HEAVY_BASE_DMG": "130",
+      "MELEE_GUNBUTT_BASE_DMG": "50",
+      "HELLSCYTHE_WIND_BASE_DMG": "9",
+      "HELLSCYTHE_HELL_BASE_DMG": "9",
+      "GRENADE_BASE_DMG": "240",
+      "GRENADE_BURN_BASE_DPS": "24",
+      "DEATHLIGHT_BASE_DMG": "120",
+      "DEATHLIGHT_ROCKET_BASE_DMG": "12",
+      "FROSTSTAR_FIRST_BASE_DMG": "120",
+      "FROSTSTAR_SECOND_BASE_DMG": "120",
+      "THUNDER_BEAM_BASE_DMG": "45",
+      "DEATHLIGHT_BURN_BASE_DPS": "12",
+      "WHITENIGHT_BASE_DMG": "78",
+      "WHITENIGHT_SKILL_BASE_DMG": "18",
+      "PARASITE_CANNON_BASE_DMG": "208",
+      "THOUSAND_UMBRELLA_BASE_DMG": "520",
+      "TANGLOTUS_BASE_DMG": "800",
+      "TANGLOTUS_PETAL_DMG": "8",
+      "TANGLOTUS_TOTAL_PETALS": "1000",
+      "BOSS_FLAME_DAMAGE": "200",
+      "FIST_BASE_DMG": "10",
+      "DEATHLIGHT_DAMAGE": "800",
+      "DEATHLIGHT_ROCKET_DAMAGE": "800",
+      "AMMO_MAG_SIZE": "150",
+      "SHOOT_INTERVAL": "0.10"
+    },
+    "starMeta": {
+      "1": {
+        "color": "#9aa6b2",
+        "synth": 20,
+        "price": 8000,
+        "bonus": {
+          "hpPct": 0.05,
+          "shieldPct": 0.05,
+          "soulPowerPct": 0.05,
+          "critAdd": 0.01,
+          "moveSpeedPct": 0.02
+        }
+      },
+      "2": {
+        "color": "#4fc3f7",
+        "synth": 40,
+        "price": 30000,
+        "bonus": {
+          "hpPct": 0.1,
+          "shieldPct": 0.1,
+          "soulPowerPct": 0.12,
+          "critAdd": 0.02,
+          "moveSpeedPct": 0.04
+        }
+      },
+      "3": {
+        "color": "#ab7bff",
+        "synth": 80,
+        "price": 120000,
+        "bonus": {
+          "hpPct": 0.18,
+          "shieldPct": 0.18,
+          "soulPowerPct": 0.22,
+          "critAdd": 0.04,
+          "moveSpeedPct": 0.06
+        }
+      },
+      "4": {
+        "color": "#ffb347",
+        "synth": 160,
+        "price": 500000,
+        "bonus": {
+          "hpPct": 0.3,
+          "shieldPct": 0.3,
+          "soulPowerPct": 0.38,
+          "critAdd": 0.06,
+          "moveSpeedPct": 0.1
+        }
+      },
+      "5": {
+        "color": "#ff5252",
+        "synth": 320,
+        "price": 2000000,
+        "bonus": {
+          "hpPct": 0.5,
+          "shieldPct": 0.5,
+          "soulPowerPct": 0.65,
+          "critAdd": 0.1,
+          "moveSpeedPct": 0.15
+        }
+      }
+    }
+  },
+  "shop": [
+    {
+      "item_type": "weapon",
+      "item_key": "tumo",
+      "price": 10000,
+      "is_active": 1
+    },
+    {
+      "item_type": "weapon",
+      "item_key": "dragonlyknight",
+      "price": 10000,
+      "is_active": 1
+    },
+    {
+      "item_type": "weapon",
+      "item_key": "dawnlight",
+      "price": 10000,
+      "is_active": 1
+    },
+    {
+      "item_type": "weapon",
+      "item_key": "zeushand",
+      "price": 30000,
+      "is_active": 1
+    },
+    {
+      "item_type": "weapon",
+      "item_key": "phasewalker",
+      "price": 100000,
+      "is_active": 1
+    },
+    {
+      "item_type": "weapon",
+      "item_key": "parasite",
+      "price": 20000,
+      "is_active": 1
+    },
+    {
+      "item_type": "weapon",
+      "item_key": "metalstorm",
+      "price": 5000,
+      "is_active": 1
+    },
+    {
+      "item_type": "weapon",
+      "item_key": "whitenight",
+      "price": 10000,
+      "is_active": 1
+    },
+    {
+      "item_type": "weapon",
+      "item_key": "moonbow",
+      "price": 30000,
+      "is_active": 1
+    },
+    {
+      "item_type": "weapon",
+      "item_key": "hellscythe",
+      "price": 5000,
+      "is_active": 1
+    },
+    {
+      "item_type": "weapon",
+      "item_key": "thousandumbrella",
+      "price": 30000,
+      "is_active": 1
+    },
+    {
+      "item_type": "weapon",
+      "item_key": "deathlight",
+      "price": 3000,
+      "is_active": 1
+    },
+    {
+      "item_type": "weapon",
+      "item_key": "froststar",
+      "price": 3000,
+      "is_active": 1
+    },
+    {
+      "item_type": "weapon",
+      "item_key": "tanglotus",
+      "price": 200000,
+      "is_active": 1
+    },
+    {
+      "item_type": "weapon",
+      "item_key": "datacube",
+      "price": 8000,
+      "is_active": 1
+    },
+    {
+      "item_type": "character",
+      "item_key": "militia",
+      "price": 8000,
+      "is_active": 1
+    },
+    {
+      "item_type": "character",
+      "item_key": "scout",
+      "price": 30000,
+      "is_active": 1
+    },
+    {
+      "item_type": "character",
+      "item_key": "breaker",
+      "price": 30000,
+      "is_active": 1
+    },
+    {
+      "item_type": "character",
+      "item_key": "captain",
+      "price": 120000,
+      "is_active": 1
+    },
+    {
+      "item_type": "character",
+      "item_key": "medic",
+      "price": 120000,
+      "is_active": 1
+    },
+    {
+      "item_type": "character",
+      "item_key": "sniper",
+      "price": 500000,
+      "is_active": 1
+    },
+    {
+      "item_type": "character",
+      "item_key": "titan",
+      "price": 500000,
+      "is_active": 1
+    },
+    {
+      "item_type": "character",
+      "item_key": "phoenix",
+      "price": 2000000,
+      "is_active": 1
+    },
+    {
+      "item_type": "character",
+      "item_key": "emperor",
+      "price": 2000000,
+      "is_active": 1
+    }
+  ]
+}

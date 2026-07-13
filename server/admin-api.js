@@ -11,7 +11,78 @@ const { requireAdmin, requireSuperAdmin, adminLogin, adminLogout, changePassword
 const { stmts, db } = require('./db');
 const realtime = require('./realtime');
 
+// ============================================================================
+// 武器 → 真实玩法常量 映射表（后台改武器数值 → 同步驱动战斗的 let 常量）
+// 常量名来自游戏 WEAPON_CATALOG 取值器与各类武器射击冷却赋值
+// ============================================================================
+const WEAPON_TUNING = {
+  thunder:        { base: 'BULLET_BASE_DMG', fireRate: 'SHOOT_INTERVAL', mag: 'AMMO_MAG_SIZE' },
+  tumo:           { base: 'TUMO_BASE_DMG',            fireRate: 'TUMO_FIRE_RATE',            mag: 'TUMO_MAG_SIZE' },
+  dragonlyknight: { base: 'DRAGON_KNIGHT_BASE_DMG',  fireRate: 'DRAGON_KNIGHT_FIRE_RATE',  mag: 'DRAGON_KNIGHT_MAG_SIZE' },
+  dawnlight:      { base: 'DAWNLIGHT_BASE_DMG',       fireRate: 'DAWNLIGHT_FIRE_RATE',       mag: 'DAWNLIGHT_MAG_SIZE' },
+  zeushand:       { base: 'ZEUS_HAND_BASE_DMG',       fireRate: 'ZEUS_HAND_FIRE_RATE',       mag: 'ZEUS_HAND_MAG_SIZE' },
+  phasewalker:    { base: 'PHASE_WALKER_DAMAGE',      fireRate: 'PHASE_WALKER_FIRE_RATE' },
+  parasite:       { base: 'PARASITE_BASE_DMG',        fireRate: 'PARASITE_FIRE_RATE',        mag: 'PARASITE_MAG_SIZE' },
+  shadow:         { base: 'SECONDARY_BASE_DMG',        fireRate: 'SECONDARY_FIRE_RATE',        mag: 'SECONDARY_MAG_SIZE' },
+  metalstorm:     { base: 'METALSTORM_BASE_DMG',      fireRate: 'METALSTORM_FIRE_RATE',      mag: 'METALSTORM_MAG_SIZE' },
+  whitenight:     { base: 'WHITENIGHT_BASE_DMG',      fireRate: 'WHITENIGHT_FIRE_RATE',      mag: 'WHITENIGHT_MAG_SIZE', skill: 'WHITENIGHT_SKILL_BASE_DMG' },
+  moonbow:        { base: 'MOONBOW_BASE_DMG',         fireRate: ['MOONBOW_MIN_FIRE_RATE', 'MOONBOW_MAX_FIRE_RATE'] },
+  thousandumbrella:{ base: 'THOUSAND_UMBRELLA_BASE_DMG' },
+  normalgrenade:  { base: 'GRENADE_BASE_DMG' },
+  deathlight:     { base: 'DEATHLIGHT_BASE_DMG' },
+  froststar:      { base: 'FROSTSTAR_FIRST_BASE_DMG' },
+  tanglotus:      { base: 'TANGLOTUS_BASE_DMG' },
+  hellscythe:     { base: 'HELLSCYTHE_WIND_BASE_DMG' },
+  thunderblade:   { base: 'MELEE_LIGHT_BASE_DMG' },
+};
+function _num(v) { if (v === 'Infinity' || v === Infinity) return Infinity; const n = Number(v); return isNaN(n) ? 0 : n; }
+function _replaceLeadingNumber(str, num) {
+  if (str == null) return String(num);
+  const s = String(str); const m = s.match(/^\s*[\d.]+/);
+  if (!m) return String(num) + s;
+  return String(num) + s.slice(m[0].length);
+}
+function _fmtFireRate(v) {
+  const n = _num(v);
+  if (!isFinite(n)) return '∞';
+  // 间隔(秒) < 5 视为射速间隔，换算为 发/秒；否则已是 发/秒（如皓月神弓=8）
+  const perSec = n < 5 ? Math.round(1 / n) : Math.round(n);
+  return perSec + '发/秒';
+}
+function _applyTuningMap(tuning, id, base, fr, mag, skill) {
+  const m = WEAPON_TUNING[id]; if (!m) return;
+  if (m.base && base != null) tuning[m.base] = String(_num(base));
+  if (m.fireRate && fr != null) {
+    const arr = Array.isArray(m.fireRate) ? m.fireRate : [m.fireRate];
+    const frNum = _num(fr);
+    arr.forEach(k => {
+      // 后台射速单位为 发/秒；多数武器射速常量=射击间隔(秒)=1/发每秒；
+      // 仅皓月神弓(MOONBOW_*)常量本身就是 发/秒，1:1 写入
+      const val = (k.indexOf('MOONBOW') === 0) ? frNum : (frNum > 0 ? 1 / frNum : 0);
+      tuning[k] = String(val);
+    });
+  }
+  if (m.mag && mag != null) tuning[m.mag] = (mag === 'Infinity' || mag === Infinity) ? 'Infinity' : String(_num(mag));
+  if (m.skill && skill != null) tuning[m.skill] = String(_num(skill));
+}
+// 将武器编辑同步进 game_tuning.weaponConsts（战斗真源），使后台改→前台实战同步
+function syncWeaponTuning(id, base, fr, mag, skill) {
+  try {
+    let wc = {};
+    const row = db.prepare("SELECT data FROM game_tuning WHERE key='weaponConsts'").get();
+    if (row && row.data) { try { wc = JSON.parse(row.data); } catch (e) { wc = {}; } }
+    _applyTuningMap(wc, id, base, fr, mag, skill);
+    db.prepare("INSERT OR REPLACE INTO game_tuning (key,data,updated_at) VALUES ('weaponConsts',?,?)").run(JSON.stringify(wc), Date.now());
+  } catch (e) { console.error('syncWeaponTuning', e); }
+}
+
 const router = express.Router();
+
+// 后台任意配置变更后，向所有已连接的游戏 WS 客户端推送 config_update
+// 游戏端收到后会重新拉取 /api/config/all 并热应用（实时同步）
+function pushConfigUpdate() {
+  try { realtime.broadcastAll({ type: 'config_update', ts: Date.now() }); } catch (e) {}
+}
 
 // ---- 鉴权 ----
 router.post('/login', adminLogin);
@@ -137,11 +208,32 @@ router.get('/weapons/:id', requireAdmin, (req, res) => {
   } catch(e) { res.status(500).json({ ok: false, error: e.message }); }
 });
 
+// 编辑武器时：1) 更新标量列；2) 同步 data_json（保留 bonus/技能，仅覆盖动态数值）；
+// 3) 同步 game_tuning.weaponConsts（战斗真源）→ 前台实战实时变化
+function _applyWeaponEdit(w) {
+  // 捕获旧 data_json（upsertWeapon 的 REPLACE 会清空它）
+  const old = adminStmts.getWeapon.get(w.id);
+  adminStmts.upsertWeapon.run(w.id, w.name||'', w.quality||'common', w.category||'primary', w.base_dmg||0, w.fire_rate||10, w.magazine||30, w.reserve||180, w.skill_dmg||0, w.price||0, w.id);
+  let dj = (old && old.data_json) ? _safeParse(old.data_json) : null;
+  if (!dj) dj = { id: w.id, display: { name: w.name||w.id, quality: w.quality||'common', category: w.category||'primary' }, full: { price: w.price||0 } };
+  dj.display = dj.display || {};
+  if (w.base_dmg != null) dj.display.baseDmg = _replaceLeadingNumber(dj.display.baseDmg, w.base_dmg);
+  if (w.fire_rate != null) dj.display.fireRate = _fmtFireRate(w.fire_rate);
+  if (w.magazine != null) dj.display.magazine = (w.magazine === 'Infinity' || w.magazine === Infinity) ? '无限' : _replaceLeadingNumber(dj.display.magazine, w.magazine);
+  dj.tuning = dj.tuning || {};
+  _applyTuningMap(dj.tuning, w.id, w.base_dmg, w.fire_rate, w.magazine, w.skill_dmg);
+  adminStmts.updateWeaponDataJson.run(JSON.stringify(dj), w.id);
+  // 战斗真源同步
+  syncWeaponTuning(w.id, w.base_dmg, w.fire_rate, w.magazine, w.skill_dmg);
+}
+function _safeParse(s){ try { return JSON.parse(s); } catch(e){ return null; } }
+
 router.put('/weapons/:id', requireAdmin, (req, res) => {
   try {
     const w = req.body;
-    adminStmts.upsertWeapon.run(w.id, w.name||'', w.quality||'common', w.category||'primary', w.base_dmg||0, w.fire_rate||10, w.magazine||30, w.reserve||180, w.skill_dmg||0, w.price||0, w.id);
+    _applyWeaponEdit(w);
     logAction(req.admin, 'edit_weapon', 'weapon:'+w.id, JSON.stringify(w), req.ip);
+    pushConfigUpdate();
     res.json({ ok: true });
   } catch(e) { res.status(500).json({ ok: false, error: e.message }); }
 });
@@ -150,8 +242,9 @@ router.post('/weapons', requireAdmin, (req, res) => {
   try {
     const w = req.body;
     if (!w.id) return res.status(400).json({ ok: false, error: '缺少武器 ID' });
-    adminStmts.upsertWeapon.run(w.id, w.name||w.id, w.quality||'common', w.category||'primary', w.base_dmg||0, w.fire_rate||10, w.magazine||30, w.reserve||180, w.skill_dmg||0, w.price||0, w.id);
+    _applyWeaponEdit(w);
     logAction(req.admin, 'create_weapon', 'weapon:'+w.id, '', req.ip);
+    pushConfigUpdate();
     res.json({ ok: true });
   } catch(e) { res.status(500).json({ ok: false, error: e.message }); }
 });
@@ -160,6 +253,7 @@ router.post('/weapons/:id/toggle', requireAdmin, (req, res) => {
   try {
     adminStmts.toggleWeapon.run(req.body.active ? 1 : 0, req.params.id);
     logAction(req.admin, req.body.active ? 'enable_weapon' : 'disable_weapon', 'weapon:'+req.params.id, '', req.ip);
+    pushConfigUpdate();
     res.json({ ok: true });
   } catch(e) { res.status(500).json({ ok: false, error: e.message }); }
 });
@@ -174,8 +268,12 @@ router.get('/characters', requireAdmin, (req, res) => {
 router.put('/characters/:id', requireAdmin, (req, res) => {
   try {
     const c = req.body;
+    const old = adminStmts.getCharacter.get(c.id);
     adminStmts.upsertCharacter.run(c.id, c.name||'', c.star||1, c.hp_bonus||0, c.shield_bonus||0, c.soul_bonus||0, c.crit_bonus||0, c.speed_bonus||0, c.price||0, c.is_active!=null?c.is_active:1);
+    // 保留 data_json（pal/en/bMul 等渲染与回退字段，不被 REPLACE 清掉）
+    if (old && old.data_json) adminStmts.updateCharacterDataJson.run(old.data_json, c.id);
     logAction(req.admin, 'edit_character', 'character:'+c.id, JSON.stringify(c), req.ip);
+    pushConfigUpdate();
     res.json({ ok: true });
   } catch(e) { res.status(500).json({ ok: false, error: e.message }); }
 });
@@ -190,10 +288,33 @@ router.get('/levels', requireAdmin, (req, res) => {
 router.put('/levels/:no', requireAdmin, (req, res) => {
   try {
     const l = req.body;
+    const old = adminStmts.getLevel.get(parseInt(req.params.no));
     adminStmts.upsertLevel.run(parseInt(req.params.no), l.name, l.boss_name, l.boss_hp, l.hp_mult, l.small_hp_ratio, l.wave_count, l.is_boss_only?1:0, l.map_theme);
+    // 保留 data_json（map_theme 等字段，不被 REPLACE 清掉）
+    if (old && old.data_json) adminStmts.updateLevelDataJson.run(old.data_json, parseInt(req.params.no));
     logAction(req.admin, 'edit_level', 'level:'+req.params.no, JSON.stringify(l), req.ip);
+    pushConfigUpdate();
     res.json({ ok: true });
   } catch(e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+// ======================== 全局调参（玩法常量真源） ========================
+router.get('/tuning', requireAdmin, (req, res) => {
+  try {
+    const rows = db.prepare('SELECT key,data FROM game_tuning').all();
+    const out = {}; rows.forEach(r => { try { out[r.key] = JSON.parse(r.data); } catch(e){} });
+    res.json({ ok: true, tuning: out });
+  } catch(e) { res.status(500).json({ ok:false, error:e.message }); }
+});
+router.put('/tuning/:key', requireAdmin, (req, res) => {
+  try {
+    const key = req.params.key;
+    const data = JSON.stringify(req.body.data !== undefined ? req.body.data : req.body);
+    db.prepare("INSERT OR REPLACE INTO game_tuning (key,data,updated_at) VALUES (?,?,strftime('%s','now'))").run(key, data);
+    logAction(req.admin, 'edit_tuning', 'tuning:'+key, JSON.stringify(req.body).slice(0,200), req.ip);
+    pushConfigUpdate();
+    res.json({ ok: true });
+  } catch(e) { res.status(500).json({ ok:false, error:e.message }); }
 });
 
 // ======================== 地图管理 ========================
@@ -223,6 +344,7 @@ router.post('/shop', requireAdmin, (req, res) => {
     const item = req.body;
     adminStmts.upsertShopItem.run(item.id||null, item.item_type, item.item_key, item.price, item.is_active!=null?item.is_active:1);
     logAction(req.admin, 'edit_shop', 'shop:'+(item.id||'new'), '', req.ip);
+    pushConfigUpdate();
     res.json({ ok: true });
   } catch(e) { res.status(500).json({ ok: false, error: e.message }); }
 });
@@ -231,6 +353,7 @@ router.delete('/shop/:id', requireAdmin, (req, res) => {
   try {
     adminStmts.deleteShopItem.run(parseInt(req.params.id));
     logAction(req.admin, 'delete_shop', 'shop:'+req.params.id, '', req.ip);
+    pushConfigUpdate();
     res.json({ ok: true });
   } catch(e) { res.status(500).json({ ok: false, error: e.message }); }
 });
@@ -331,6 +454,44 @@ function gameConfigRouter() {
   r.get('/shop', (req, res) => {
     const rows = adminStmts.getShopItems.all();
     res.json({ ok: true, items: rows.filter(s => s.is_active) });
+  });
+  // ===== 统一全量配置（游戏前端启动时一次拉取）=====
+  r.get('/all', (req, res) => {
+    try {
+      const weapons = {};
+      adminStmts.getWeapons.all().forEach(w => {
+        let d; try { d = w.data_json ? JSON.parse(w.data_json) : null; } catch(e){ d = null; }
+        if (!d) d = { id:w.id, display:{ name:w.name, quality:w.quality, category:w.category, baseDmg:String(w.base_dmg), fireRate:String(w.fire_rate), magazine:String(w.magazine) }, full:{ price:w.price } };
+        // 动态数值（基础伤害/射速/弹匣）始终以标量列为准，保证后台改→文字展示同步
+        if (d.display) {
+          if (w.base_dmg != null) d.display.baseDmg = _replaceLeadingNumber(d.display.baseDmg, w.base_dmg);
+          if (w.fire_rate != null) d.display.fireRate = _fmtFireRate(w.fire_rate);
+          if (w.magazine != null) d.display.magazine = (w.magazine === 'Infinity' || w.magazine === Infinity) ? '无限' : _replaceLeadingNumber(d.display.magazine, w.magazine);
+        }
+        weapons[w.id] = d;
+      });
+      const characters = {};
+      adminStmts.getCharacters.all().forEach(c => {
+        let d; try { d = c.data_json ? JSON.parse(c.data_json) : null; } catch(e){ d = null; }
+        if (!d) d = { id:c.id, name:c.name, star:c.star };
+        // 合并后台可调加成字段（驱动 charBonus 战斗加成；pal/en/bMul 仍取自 data_json）
+        d = Object.assign(d, { id:c.id, name:c.name, star:c.star,
+          hp_bonus:c.hp_bonus, shield_bonus:c.shield_bonus, soul_bonus:c.soul_bonus,
+          crit_bonus:c.crit_bonus, speed_bonus:c.speed_bonus });
+        characters[c.id] = d;
+      });
+      const levels = adminStmts.getLevels.all().map(l => {
+        let d; try { d = l.data_json ? JSON.parse(l.data_json) : null; } catch(e){ d = null; }
+        if (!d) d = { level_no:l.level_no, name:l.name, boss_name:l.boss_name, boss_hp:l.boss_hp, hp_mult:l.hp_mult, wave_count:l.wave_count };
+        // 合并后台可调战斗字段（boss_hp/wave_count 等以标量列为准，覆盖 data_json 中的旧值）
+        d = Object.assign(d, { level_no:l.level_no, name:l.name, boss_name:l.boss_name, boss_hp:l.boss_hp, hp_mult:l.hp_mult, small_hp_ratio:l.small_hp_ratio, wave_count:l.wave_count, is_boss_only:l.is_boss_only, map_theme:l.map_theme });
+        return d;
+      });
+      const tuning = {};
+      db.prepare('SELECT key,data FROM game_tuning').all().forEach(rw => { try { tuning[rw.key] = JSON.parse(rw.data); } catch(e){} });
+      const shop = adminStmts.getShopItems.all().filter(s => s.is_active).map(s => ({ item_type:s.item_type, item_key:s.item_key, price:s.price, is_active:s.is_active }));
+      res.json({ ok: true, weapons, characters, levels, tuning, shop });
+    } catch(e) { res.status(500).json({ ok:false, error:e.message }); }
   });
   return r;
 }

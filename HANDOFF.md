@@ -199,3 +199,35 @@ http://localhost:3000
 3. **联机功能**扩展应全部通过 `window.__netHooks` 或 `window.MP` 的事件处理完成
 4. **PVE联机测试**需要实际两个浏览器窗口同时操作
 5. 修改 `server/realtime.js` 后需重启 Node 服务才能生效
+
+---
+
+## 🔧 PVE 联机同步修复（2026-07-13）
+
+### 根因（上一份交接遗漏的核心）
+前端 `window.__netHooks` 里虽有 `onPveSync` / `onPveShoot` 的**接收**逻辑，但**整个项目没有任何地方发送** `pve_sync` / `pve_shoot` / `pve_wave` —— 只有房间/邀请等控制类消息被发送。
+且 `onPveSync` 旧实现靠「敌人位置 + 类型」匹配，而两端敌人是各自独立模拟的（位置/血量都不一致），位置匹配基本永远失败。
+结果：一方击杀怪物，另一端毫无显示；也看不到队友开火特效；右侧击杀列表不更新。
+
+### 修复要点（均尊重「游戏逻辑函数保持纯净」原则）
+- **稳定敌人 ID**：`finalizeEnemy` 中 `e._uid` 由 `enemies.length-1` 改为 `'L'+currentLevel+'W'+currentWave+'_'+waveEnemiesSpawned`，两端按「关卡+波次+波内序号」一致生成，跨客户端可对应。
+- **发送侧用「最小通用钩子」桥接**（不在 `killEnemy`/`handlePrimaryFire` 里写联机逻辑，只调一行 `window.__pveXxx` 委托）：
+  - `killEnemy` 开头调 `window.__pveOnEnemyKilled(enemy, slot, isMelee)`
+  - `handlePrimaryFire` 命中后调 `window.__pveOnEnemyDamaged(enemy, dmg)`；普通开火/雷霆万钧/近战均调 `window.__pveBroadcastShoot`
+  - `checkWaveComplete` 清完一波时发 `pve_wave`
+  - 这些钩子在非联机时为 `undefined`/受 `pveCoopActive` 守卫 → 单机零影响。
+- **`window.__netHooks` 内新增发送桥**（`getPveWeaponName` / `addPveKillFeed` / 三个 `__pve*` 函数）：本地击杀→广播 `pve_sync{killed,uid,weaponName,killerName}`；本地伤害→广播 `pve_sync{dmg,uid}`；本地开火→广播 `pve_shoot{userId,origin,dir,weapon,melee}`。
+- **接收侧重写**：`onPveSync` 改为按 `uid` 匹配（BOSS 退化为首个未同步 boss），应用扣血/击杀并写入右侧击杀列表；`onPveShoot` 按 `userId` 找到队友化身，在其枪口位置播枪口闪光 + 弹道轨迹，并触发后坐力/挥砍动画（`_shootAnim`/`_meleeAnim`，在新增的 `updatePveCoop`→`updateRemotePlayer` 每帧消费）。
+- **新增 `updatePveCoop(delta)`**：原 `updateRemotePlayer` 只在 `wzlbActive` 为真时调用，导致 PVE 联机中队友完全不更新。现于主循环 `animate()` 中（紧接 `updateWzlb` 之后）调用，队友才会移动 + 播放开火/挥砍动作。
+- **右侧击杀列表文案**：`addPveKillFeed` 写入既有 `#net-killfeed`（CSS 已固定在右上），格式为 `用户名 使用 武器名 击杀了 敌人`（`BOSS` 显示为 `击杀了 BOSS`），武器名高亮。
+- **后端 `server/realtime.js`**：`pve_shoot` 转发补 `melee` 字段；`pve_wave` 转发补 `done` 字段（旧实现把 `done` 丢了，导致波次同步失效）。
+
+### 验证
+- `node --check server/realtime.js` 通过；前端 5 段内联脚本 `vm.Script` 编译零语法错误。
+- 用系统 Node 26 启动 `node server/index.js` → `HTTP 200`，服务正常（注意：托管 Node 22 与预编译的 better-sqlite3 原生模块 ABI 不匹配会报 `NODE_MODULE_VERSION` 错误，属环境既有问题，用 Node 26 / 你自己的 `npm start` 即可）。
+
+### 双窗口联机自测步骤
+1. 终端 `npm start`，浏览器开两个窗口分别登录 `gemetest` / `tester2`。
+2. 窗口1 点「🤝 组队攻略」→ 复制房间码；窗口2 输入房间码加入；窗口1 选关 →「⚔️ 开始攻略」。
+3. 任一方击杀怪物：两端右上击杀列表应出现 `XX 使用 XX武器 击杀了敌人`；被击杀的怪物在两端同时消失。
+4. 开火时：队友化身处应出现枪口闪光 + 弹道，并有轻微后坐抖动。

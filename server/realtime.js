@@ -7,7 +7,11 @@
 
 const { WebSocketServer } = require('ws');
 const { verifySessionToken } = require('./auth');
-const { stmts, db } = require('./db');
+const { stmts, db, applyMatchResult, applyMatchXp } = require('./db');
+
+// 对局模式（A2）：tdm=团队竞技、dom=占点、defuse=爆破、pve=合作闯关
+const ALLOWED_MODES = ['tdm', 'dom', 'defuse', 'infection', 'pve'];
+function normMode(m) { return ALLOWED_MODES.indexOf(m) >= 0 ? m : 'tdm'; }
 
 // 连接表：userId -> Set<ws>（同一账号可多端登录）
 const connsByUser = new Map();
@@ -24,6 +28,14 @@ function onlineIds() {
   const s = new Set();
   for (const id of connsByUser.keys()) s.add(id);
   return s;
+}
+
+// 全局广播：向所有已连接的游戏 WS 客户端推送（用于后台配置热更新）
+let _wss = null;
+function broadcastAll(obj) {
+  if (!_wss) return;
+  const s = JSON.stringify(obj);
+  _wss.clients.forEach(c => { if (c.readyState === 1) { try { c.send(s); } catch(e){} } });
 }
 
 function send(ws, obj) {
@@ -55,10 +67,11 @@ function genRoomCode() {
   let c; do { c = Math.random().toString(36).slice(2, 7).toUpperCase(); } while (rooms.has(c));
   return c;
 }
-function createRoom(hostUser, mapKey, teamSize) {
+function createRoom(hostUser, mapKey, teamSize, mode) {
   const code = genRoomCode();
   const room = {
     code, hostId: hostUser.id, mapKey: mapKey || 'port', teamSize: teamSize || 3,
+    mode: normMode(mode), // 对局模式：tdm/dom/defuse/pve
     state: 'lobby', // lobby / loading / playing / ended
     players: new Map(), // userId -> { user, team, slot, ws, lastSnap, connected }
     createdAt: Date.now(),
@@ -95,11 +108,11 @@ function removePlayerFromRoom(room, userId, reason) {
       room.hostId = [...room.players.values()][0].user.id;
       broadcastRoom(room, { type: 'room_update', room: roomSummary(room) });
     }
-    broadcastRoom(room, { type: 'roster', players: roomPlayerList(room) });
+    broadcastRoom(room, { type: room.mode === 'pve' ? 'pve_roster' : 'roster', players: roomPlayerList(room) });
   }
 }
 function roomSummary(room) {
-  return { code: room.code, hostId: room.hostId, mapKey: room.mapKey, teamSize: room.teamSize, state: room.state };
+  return { code: room.code, hostId: room.hostId, mapKey: room.mapKey, teamSize: room.teamSize, mode: room.mode || 'tdm', state: room.state };
 }
 
 // ==================== 匹配 ====================
@@ -108,7 +121,7 @@ function tryMatchmake() {
   while (true) {
     const groups = {};
     for (const e of matchQueue) {
-      const k = e.teamSize + ':' + e.mapKey;
+      const k = e.teamSize + ':' + e.mapKey + ':' + (e.mode || 'tdm');
       (groups[k] = groups[k] || []).push(e);
     }
     let matched = null;
@@ -129,9 +142,9 @@ function tryMatchmake() {
       if (idx >= 0) matchQueue.splice(idx, 1);
     }
     // 建房开局
-    const { mapKey, teamSize } = matched[0];
+    const { mapKey, teamSize, mode } = matched[0];
     const fakeUser = matched[0].teamMembers.length ? { id: matched[0].leaderId, username: matched[0].leaderName, displayName: matched[0].leaderName } : matched[0].user;
-    const room = createRoom(fakeUser, mapKey, teamSize);
+    const room = createRoom(fakeUser, mapKey, teamSize, mode);
     room.state = 'playing';
     // 分队：偶数下标->team A(ally 视角的"我方"由各自客户端决定),这里统一分配 team 0/1
     matched.forEach((e, i) => {
@@ -147,15 +160,15 @@ function tryMatchmake() {
         const mp = room.players.get(m.userId);
         return { userId: m.userId, username: mp.user.username, displayName: mp.user.displayName, team: mp.team };
       });
-      send(e.ws, { type: 'match_found', roomCode: room.code, mapKey, teamSize, team: rp.team, players: mates });
+      send(e.ws, { type: 'match_found', roomCode: room.code, mapKey, teamSize, mode: room.mode || 'tdm', team: rp.team, players: mates });
     }
   }
 
   // 通知仍在队列中的玩家当前等待人数
   const counts = {};
-  for (const e of matchQueue) { const k = e.teamSize + ':' + e.mapKey; counts[k] = (counts[k]||0)+1; }
+  for (const e of matchQueue) { const k = e.teamSize + ':' + e.mapKey + ':' + (e.mode || 'tdm'); counts[k] = (counts[k]||0)+1; }
   for (const e of matchQueue) {
-    send(e.ws, { type: 'match_waiting', mapKey: e.mapKey, teamSize: e.teamSize, inQueue: counts[e.teamSize + ':' + e.mapKey] || 0, need: e.teamSize*2 });
+    send(e.ws, { type: 'match_waiting', mapKey: e.mapKey, teamSize: e.teamSize, mode: e.mode || 'tdm', inQueue: counts[e.teamSize + ':' + e.mapKey + ':' + (e.mode || 'tdm')] || 0, need: e.teamSize*2 });
   }
 }
 
@@ -184,6 +197,7 @@ function dissolveTeam(team, reason) {
 // ==================== ws 安装 ====================
 function attach(server, path = '/ws') {
   const wss = new WebSocketServer({ server, path });
+  _wss = wss;
   wss.on('connection', (ws, req) => {
     // 从 query 或 Cookie 取 token（浏览器 ws 握手会自动携带同源 cookie）
     const url = new URL(req.url, 'http://x');
@@ -271,7 +285,8 @@ function handleMessage(ws, user, buf) {
 
     // ---------- 房间：创建 ----------
     case 'room_create': {
-      const room = createRoom(user, msg.mapKey, msg.teamSize);
+      const mode = normMode(msg.mode);
+      const room = createRoom(user, msg.mapKey, msg.teamSize, mode);
       room.players.set(user.id, { user, team: 0, slot: 0, ws, lastSnap: null, connected: true });
       ws._roomCode = room.code;
       send(ws, { type: 'room_created', room: roomSummary(room), players: roomPlayerList(room) });
@@ -324,6 +339,7 @@ function handleMessage(ws, user, buf) {
     case 'match_queue': {
       const mapKey = msg.mapKey || 'port';
       const teamSize = Number(msg.teamSize) || 3;
+      const mapMode = normMode(msg.mode);
       // 若在组队中：队长带队匹配，所有在线队员一起入队
       let teamMembers = [];
       let leaderId = user.id, leaderName = user.username;
@@ -336,8 +352,8 @@ function handleMessage(ws, user, buf) {
       } else {
         teamMembers = [{ id: user.id, username: user.username, displayName: user.displayName }];
       }
-      matchQueue.push({ userId: user.id, user, ws, mapKey, teamSize, teamMembers, leaderId, leaderName });
-      send(ws, { type: 'match_queued', mapKey, teamSize });
+      matchQueue.push({ userId: user.id, user, ws, mapKey, teamSize, mode: mapMode, teamMembers, leaderId, leaderName });
+      send(ws, { type: 'match_queued', mapKey, teamSize, mode: mapMode });
       tryMatchmake();
       break;
     }
@@ -443,15 +459,16 @@ function handleMessage(ws, user, buf) {
       const snaps = [];
       for (const [uid, pp] of room.players) { if (uid !== user.id && pp.lastSnap) snaps.push({ userId: uid, data: pp.lastSnap, user: { id: pp.user.id, username: pp.user.username, displayName: pp.user.displayName, team: pp.team } }); }
       send(ws, { type: 'reconnect_ok', room: roomSummary(room), players: roomPlayerList(room), snaps });
-      broadcastRoom(room, { type: 'roster', players: roomPlayerList(room) }, user.id);
+      broadcastRoom(room, { type: room.mode === 'pve' ? 'pve_roster' : 'roster', players: roomPlayerList(room) }, user.id);
       break;
     }
 
     // ========== PVE 关卡联机组队 ==========
     case 'pve_create': {
-      const room = createRoom(user, msg.mapKey||'campaign', msg.teamSize||3);
-      room.mode = 'pve';
+      const room = createRoom(user, msg.mapKey||'campaign', msg.teamSize||3, 'pve');
       room.levelNo = msg.level || 1;
+      room.readyNext = new Set(); // [v7] 组队"进入下一关"就绪集合
+      room.invited = new Map(); // userId -> true（已发送邀请、未接受的队友）
       room.players.set(user.id, { user, team: 0, slot: 0, ws, lastSnap: null, connected: true });
       ws._roomCode = room.code;
       send(ws, { type: 'pve_created', room: roomSummary(room), level: room.levelNo, players: roomPlayerList(room) });
@@ -465,7 +482,7 @@ function handleMessage(ws, user, buf) {
       room.players.set(user.id, { user, team: 0, slot: room.players.size, ws, lastSnap: null, connected: true });
       ws._roomCode = room.code;
       send(ws, { type: 'pve_joined', room: roomSummary(room), level: room.levelNo, players: roomPlayerList(room) });
-      broadcastRoom(room, { type: 'roster', players: roomPlayerList(room) }, user.id);
+      broadcastRoom(room, { type: 'pve_roster', players: roomPlayerList(room) }, user.id);
       broadcastRoom(room, { type: 'chat', channel: 'room', scope: room.code, fromUser: 0, fromName: '系统', content: user.username + ' 加入了队伍', ts: Date.now() });
       break;
     }
@@ -473,7 +490,17 @@ function handleMessage(ws, user, buf) {
       const room = ws._roomCode ? rooms.get(ws._roomCode) : null;
       if(!room || room.mode !== 'pve' || room.hostId !== user.id) return;
       room.state = 'playing';
+      room.readyNext = new Set();
       broadcastRoom(room, { type: 'pve_start', level: room.levelNo||1, players: roomPlayerList(room) });
+      break;
+    }
+    // 队长切换攻略关卡 → 同步给房间内成员与待接受邀请者
+    case 'pve_set_level': {
+      const room = ws._roomCode ? rooms.get(ws._roomCode) : null;
+      if(!room || room.mode !== 'pve' || room.hostId !== user.id) return;
+      room.levelNo = parseInt(msg.level) || room.levelNo || 1;
+      broadcastRoom(room, { type: 'pve_level', level: room.levelNo });
+      if(room.invited) room.invited.forEach(function(_v, k){ sendToUser(k, { type: 'pve_level', level: room.levelNo }); });
       break;
     }
     // PVE 好友邀请
@@ -482,8 +509,11 @@ function handleMessage(ws, user, buf) {
       if(!room || room.mode !== 'pve' || room.hostId !== user.id) return send(ws, { type: 'pve_error', error: '只有队长可以邀请' });
       const toId = Number(msg.userId);
       if(!toId) return;
+      room.invited = room.invited || new Map();
+      room.invited.set(toId, true);
       sendToUser(toId, { type: 'pve_invite', roomCode: room.code, level: room.levelNo, fromUser: user.id, fromName: user.username });
       send(ws, { type: 'chat', channel: 'room', fromUser: 0, fromName: '系统', content: '已向好友发送邀请', ts: Date.now() });
+      broadcastRoom(room, { type: 'pve_invites', invites: Array.from(room.invited.keys()) });
       break;
     }
     case 'pve_accept_invite': {
@@ -493,8 +523,10 @@ function handleMessage(ws, user, buf) {
       if(room.players.has(user.id)) return send(ws, { type: 'pve_error', error: '已在房间中' });
       room.players.set(user.id, { user, team: 0, slot: room.players.size, ws, lastSnap: null, connected: true });
       ws._roomCode = room.code;
+      if(room.invited) room.invited.delete(user.id);
       send(ws, { type: 'pve_joined', room: roomSummary(room), level: room.levelNo, players: roomPlayerList(room) });
-      broadcastRoom(room, { type: 'roster', players: roomPlayerList(room) }, user.id);
+      broadcastRoom(room, { type: 'pve_roster', players: roomPlayerList(room) }, user.id);
+      broadcastRoom(room, { type: 'pve_invites', invites: room.invited ? Array.from(room.invited.keys()) : [] });
       broadcastRoom(room, { type: 'chat', channel: 'room', scope: code, fromUser: 0, fromName: '系统', content: user.username + ' 接受了邀请并加入队伍', ts: Date.now() });
       break;
     }
@@ -509,19 +541,63 @@ function handleMessage(ws, user, buf) {
     case 'pve_shoot': {
       const room = ws._roomCode ? rooms.get(ws._roomCode) : null;
       if(!room || room.mode !== 'pve') return;
-      broadcastRoom(room, { type: 'pve_shoot', userId: user.id, userName: user.username, origin: msg.origin, dir: msg.dir, weapon: msg.weapon }, user.id);
+      broadcastRoom(room, { type: 'pve_shoot', userId: user.id, userName: user.username, origin: msg.origin, dir: msg.dir, weapon: msg.weapon, melee: msg.melee }, user.id);
+      break;
+    }
+    // PVE 本局伤害排行同步（仅转发，权威由各客户端各自累计）
+    case 'pve_dmg': {
+      const room = ws._roomCode ? rooms.get(ws._roomCode) : null;
+      if(!room || room.mode !== 'pve') return;
+      broadcastRoom(room, { type: 'pve_dmg', userId: user.id, total: msg.total }, user.id);
       break;
     }
     case 'pve_wave': {
       const room = ws._roomCode ? rooms.get(ws._roomCode) : null;
       if(!room || room.mode !== 'pve') return;
-      broadcastRoom(room, { type: 'pve_wave', wave: msg.wave, total: msg.total });
+      broadcastRoom(room, { type: 'pve_wave', wave: msg.wave, done: msg.done, total: msg.total });
       break;
     }
     case 'pve_complete': {
       const room = ws._roomCode ? rooms.get(ws._roomCode) : null;
       if(!room || room.mode !== 'pve') return;
       broadcastRoom(room, { type: 'pve_complete', level: msg.level, score: msg.score });
+      break;
+    }
+    // [v7] 组队"进入下一关"：双方都点击后由服务器统一广播 pve_start，确保进入同一房间
+    case 'pve_ready_next': {
+      const room = ws._roomCode ? rooms.get(ws._roomCode) : null;
+      if(!room || room.mode !== 'pve') return;
+      room.readyNext = room.readyNext || new Set();
+      room.readyNext.add(user.id);
+      broadcastRoom(room, { type: 'pve_ready_state', ready: Array.from(room.readyNext), total: room.players.size });
+      if(room.readyNext.size >= room.players.size && room.players.size > 0){
+        room.readyNext = new Set();
+        room.levelNo = (room.levelNo||1) + 1;
+        room.state = 'playing';
+        broadcastRoom(room, { type: 'pve_start', level: room.levelNo, players: roomPlayerList(room) });
+      }
+      break;
+    }
+
+    // ========== 占点/爆破 目标状态（服务端纯转发，客户端权威） ==========
+    case 'obj_update': { // { data } — 目标/占点/炸弹状态增量
+      const room = ws._roomCode ? rooms.get(ws._roomCode) : null; if (!room) return;
+      broadcastRoom(room, { type: 'obj_update', userId: user.id, data: msg.data }, user.id);
+      break;
+    }
+    case 'obj_event': { // { event, payload } — 占点/安包/拆包/胜负等关键事件
+      const room = ws._roomCode ? rooms.get(ws._roomCode) : null; if (!room) return;
+      broadcastRoom(room, { type: 'obj_event', userId: user.id, event: msg.event, payload: msg.payload }, user.id);
+      break;
+    }
+    // 对局结算：客户端权威上报比分 → 服务端更新 ELO 并回执
+    case 'match_result': { // { winnerTeam, players:[{userId, team, kills, deaths, win:bool}] }
+      const players = Array.isArray(msg.players) ? msg.players : [];
+      try {
+        if (typeof applyMatchResult === 'function') applyMatchResult(players);
+        if (typeof applyMatchXp === 'function') applyMatchXp(players);
+      } catch (e) { console.error('[ws] match_result 更新失败:', e.message); }
+      send(ws, { type: 'match_result_ack', ok: true });
       break;
     }
 
@@ -581,7 +657,7 @@ function handleClose(ws, user) {
 }
 function connsClosed(userId) { return !connsByUser.has(userId); }
 
-module.exports = { attach, onlineIds, sendToUser, kickUser };
+module.exports = { attach, onlineIds, sendToUser, kickUser, broadcastAll };
 function kickUser(userId){
   const set = connsByUser.get(userId);
   if(!set) return;

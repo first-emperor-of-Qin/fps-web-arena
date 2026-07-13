@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS admin_sessions (
 );
 
 -- 武器配置表（覆盖/扩展游戏内 WEAPON_DISPLAY_DATA）
+-- data_json 存放与游戏内部完全同构的全量配置（展示+完整描述+真实玩法常量）
 CREATE TABLE IF NOT EXISTS weapon_config (
   id         TEXT PRIMARY KEY,          -- weapon key: 'thunder','tumo','dragonlyknight'...
   name       TEXT NOT NULL,
@@ -41,10 +42,12 @@ CREATE TABLE IF NOT EXISTS weapon_config (
   skill_dmg  REAL DEFAULT 0,
   price      INTEGER DEFAULT 0,
   is_active  INTEGER DEFAULT 1,
+  data_json  TEXT,                         -- 全量武器配置（展示/描述/真实常量）
   updated_at INTEGER DEFAULT (strftime('%s','now'))
 );
 
 -- 角色配置表
+-- data_json 存放角色完整定义（CHARACTERS 条目 + 星级倍率）
 CREATE TABLE IF NOT EXISTS character_config (
   id         TEXT PRIMARY KEY,          -- 'rookie','militia',...
   name       TEXT NOT NULL,
@@ -56,10 +59,12 @@ CREATE TABLE IF NOT EXISTS character_config (
   speed_bonus REAL DEFAULT 0,
   price      INTEGER DEFAULT 0,
   is_active  INTEGER DEFAULT 1,
+  data_json  TEXT,
   updated_at INTEGER DEFAULT (strftime('%s','now'))
 );
 
 -- 关卡配置表
+-- data_json 存放关卡全量配置（与游戏 LEVELS/BOSS 同步）
 CREATE TABLE IF NOT EXISTS level_config (
   level_no   INTEGER PRIMARY KEY,
   name       TEXT,
@@ -70,7 +75,21 @@ CREATE TABLE IF NOT EXISTS level_config (
   wave_count INTEGER DEFAULT 3,
   is_boss_only INTEGER DEFAULT 0,
   map_theme  TEXT,
+  data_json  TEXT,
   updated_at INTEGER DEFAULT (strftime('%s','now'))
+);
+
+-- 全局调参表（玩法常量真源：武器常量 / 星级倍率 / 难度 / Boss血量表 / 波次 / 上限）
+CREATE TABLE IF NOT EXISTS game_tuning (
+  key        TEXT PRIMARY KEY,
+  data       TEXT NOT NULL,
+  updated_at INTEGER DEFAULT (strftime('%s','now'))
+);
+
+-- 元数据（迁移/一次性 seed 标记）
+CREATE TABLE IF NOT EXISTS app_meta (
+  key   TEXT PRIMARY KEY,
+  value TEXT
 );
 
 -- 王者乱斗地图配置
@@ -153,6 +172,52 @@ const wzlbMaps = [
 const insertMap = db.prepare('INSERT OR IGNORE INTO wzlb_map_config (map_key, name) VALUES (?,?)');
 wzlbMaps.forEach(m => insertMap.run(m.key, m.name));
 
+// ----- 游戏配置初始 seed（幂等：INSERT OR IGNORE，不覆盖后台后续编辑） -----
+function parseBase(s){ if(!s) return 0; const m=String(s).match(/^([\d.]+)/); return m?parseFloat(m[1]):0; }
+function parseFire(s){ if(!s) return 10; const m=String(s).match(/([\d.]+)\s*发\/秒/); return m?parseFloat(m[1]):10; }
+function parseMag(s){ if(!s) return 0; const m=String(s).match(/^(\d+)/); return m?parseInt(m[1]):0; }
+// 兼容旧库：为已存在的表补列（重复列错误忽略）
+['weapon_config','character_config','level_config'].forEach(t => { try { db.exec('ALTER TABLE '+t+' ADD COLUMN data_json TEXT'); } catch(e){} });
+function seedGameConfig(){
+  try {
+    const SEED = require('./seed_config.json');
+    const already = db.prepare("SELECT value FROM app_meta WHERE key='config_seeded_v1'").get();
+    if (already) { console.log('[admin] 游戏配置已存在，跳过初始 seed（保留后台编辑）'); return; }
+    // 首次：清空配置表，以规范真源重建（避免旧 schema 残留脏数据）
+    db.exec('DELETE FROM weapon_config; DELETE FROM character_config; DELETE FROM level_config; DELETE FROM game_tuning; DELETE FROM shop_config;');
+    const insW = db.prepare('INSERT OR IGNORE INTO weapon_config (id,name,quality,category,base_dmg,fire_rate,magazine,skill_dmg,price,is_active,data_json) VALUES (?,?,?,?,?,?,?,?,?,?,?)');
+    const insC = db.prepare('INSERT OR IGNORE INTO character_config (id,name,star,hp_bonus,shield_bonus,soul_bonus,crit_bonus,speed_bonus,price,is_active,data_json) VALUES (?,?,?,?,?,?,?,?,?,?,?)');
+    const insL = db.prepare('INSERT OR IGNORE INTO level_config (level_no,name,boss_name,boss_hp,hp_mult,small_hp_ratio,wave_count,is_boss_only,map_theme,data_json) VALUES (?,?,?,?,?,?,?,?,?,?)');
+    const insT = db.prepare("INSERT OR IGNORE INTO game_tuning (key,data,updated_at) VALUES (?,?,strftime('%s','now'))");
+    const insS = db.prepare('INSERT OR IGNORE INTO shop_config (item_type,item_key,price,is_active) VALUES (?,?,?,?)');
+    const tx = db.transaction(() => {
+      for (const k in SEED.weapons) {
+        const w = SEED.weapons[k]; const d = w.display || {}; const f = w.full || {};
+        insW.run(w.id, d.name||k, d.quality||'common', d.category||'primary', parseBase(d.baseDmg), parseFire(d.fireRate), parseMag(d.magazine), 0, f.price||0, 1, JSON.stringify(w));
+      }
+      for (const c of SEED.characters) {
+        const sm = (SEED.tuning && SEED.tuning.starMeta && SEED.tuning.starMeta[c.star]) || {};
+        const b = sm.bonus || {};
+        insC.run(c.id, c.name||c.id, c.star||1, b.hpPct||0, b.shieldPct||0, b.soulPowerPct||0, b.critAdd||0, b.moveSpeedPct||0, sm.price||0, 1, JSON.stringify(c));
+      }
+      for (const l of SEED.levels) {
+        insL.run(l.level_no, l.name||'', l.boss_name||'', l.boss_hp||100000000, l.hp_mult||1, l.small_hp_ratio||0.01, l.wave_count||3, l.is_boss_only?1:0, l.map_theme||'', JSON.stringify(l));
+      }
+      insT.run('weaponConsts', JSON.stringify(SEED.tuning.consts));
+      insT.run('starMeta', JSON.stringify(SEED.tuning.starMeta));
+      insT.run('difficulty', JSON.stringify(SEED.tuning.difficulty));
+      insT.run('bossHpTable', JSON.stringify(SEED.tuning.bossHpTable));
+      insT.run('levelWaveCounts', JSON.stringify(SEED.tuning.levelWaveCounts));
+      insT.run('maxLevel', JSON.stringify(SEED.tuning.maxLevel));
+      for (const s of (SEED.shop||[])) insS.run(s.item_type, s.item_key, s.price||0, s.is_active!=null?s.is_active:1);
+    });
+    tx();
+    db.prepare("INSERT OR REPLACE INTO app_meta (key,value) VALUES ('config_seeded_v1','1')").run();
+    console.log('[admin] 游戏配置已 seed（武器'+Object.keys(SEED.weapons).length+' / 角色'+SEED.characters.length+' / 关卡'+SEED.levels.length+' / 全局调参 6 项）');
+  } catch(e) { console.error('[admin] seedGameConfig 失败:', e.message); }
+}
+seedGameConfig();
+
 // ----- 预编译管理查询 -----
 const adminStmts = {
   getAdminByName: db.prepare('SELECT * FROM admins WHERE username = ?'),
@@ -183,6 +248,8 @@ const adminStmts = {
   getWeapon:      db.prepare('SELECT * FROM weapon_config WHERE id = ?'),
   upsertWeapon:   db.prepare(`INSERT OR REPLACE INTO weapon_config (id,name,quality,category,base_dmg,fire_rate,magazine,reserve,skill_dmg,price,is_active,updated_at)
     VALUES (?,?,?,?,?,?,?,?,?,?,(SELECT is_active FROM weapon_config WHERE id=?),strftime('%s','now'))`),
+  // 仅更新 data_json（保留 bonus/技能描述等静态字段，不被 REPLACE 清掉）
+  updateWeaponDataJson: db.prepare('UPDATE weapon_config SET data_json = ? WHERE id = ?'),
   toggleWeapon:   db.prepare('UPDATE weapon_config SET is_active = ? WHERE id = ?'),
 
   // 角色
@@ -191,10 +258,15 @@ const adminStmts = {
   upsertCharacter: db.prepare(`INSERT OR REPLACE INTO character_config (id,name,star,hp_bonus,shield_bonus,soul_bonus,crit_bonus,speed_bonus,price,is_active,updated_at)
     VALUES (?,?,?,?,?,?,?,?,?,?,strftime('%s','now'))`),
 
+  updateCharacterDataJson: db.prepare('UPDATE character_config SET data_json = ? WHERE id = ?'),
+
   // 关卡
   getLevels:      db.prepare('SELECT * FROM level_config ORDER BY level_no'),
   upsertLevel:    db.prepare(`INSERT OR REPLACE INTO level_config (level_no,name,boss_name,boss_hp,hp_mult,small_hp_ratio,wave_count,is_boss_only,map_theme,updated_at)
     VALUES (?,?,?,?,?,?,?,?,?,strftime('%s','now'))`),
+
+  getLevel:       db.prepare('SELECT * FROM level_config WHERE level_no = ?'),
+  updateLevelDataJson: db.prepare('UPDATE level_config SET data_json = ? WHERE level_no = ?'),
 
   // 地图
   getWzlbMaps:    db.prepare('SELECT * FROM wzlb_map_config'),
