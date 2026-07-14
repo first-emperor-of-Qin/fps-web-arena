@@ -30,6 +30,19 @@ if ! docker compose version >/dev/null 2>&1; then
   apt-get update -qq && apt-get install -y -qq docker-compose-plugin || true
 fi
 
+# 配置 Docker 守护进程国内镜像加速（避免 Docker Hub 在大陆拉不动）
+if ! grep -q "registry-mirrors" /etc/docker/daemon.json 2>/dev/null; then
+  mkdir -p /etc/docker
+  cat > /etc/docker/daemon.json <<'EOF'
+{
+  "registry-mirrors": ["https://docker.m.daocloud.io"]
+}
+EOF
+  systemctl restart docker 2>/dev/null || true
+fi
+# npm 国内镜像
+npm config set registry https://registry.npmmirror.com 2>/dev/null || true
+
 echo "==> [2/5] 拉取代码（分支 $BRANCH）"
 if [ -d "$APP_DIR/.git" ]; then
   git -C "$APP_DIR" fetch --all && git -C "$APP_DIR" checkout "$BRANCH" && git -C "$APP_DIR" pull
