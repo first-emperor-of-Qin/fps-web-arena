@@ -7,7 +7,7 @@
 const express = require('express');
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
-const { stmts, db } = require('./db');
+const { stmts } = require('./db');
 
 const router = express.Router();
 const COOKIE_NAME = 'fps_sid';
@@ -86,10 +86,6 @@ router.post('/login', (req, res) => {
   if (!user) return res.status(401).json({ ok: false, error: '账号或密码错误' });
   if (!bcrypt.compareSync(password, user.password_hash)) return res.status(401).json({ ok: false, error: '账号或密码错误' });
 
-  // 封禁检查
-  const banned = db.prepare('SELECT * FROM user_bans WHERE user_id = ?').get(user.id);
-  if (banned) return res.status(403).json({ ok: false, error: '该账户已被封禁：' + (banned.reason || '违规行为') });
-
   issueSession(user.id, res);
   res.json({ ok: true, user: publicUser(user) });
 });
@@ -105,55 +101,6 @@ router.post('/logout', (req, res) => {
 router.get('/me', (req, res) => {
   if (!req.user) return res.json({ ok: false });
   res.json({ ok: true, user: req.user });
-});
-
-// ======================== 段位榜 / ELO（A3） ========================
-// ---------- GET /api/rank?limit=50 （公开排行榜，按 elo 降序） ----------
-router.get('/rank', (req, res) => {
-  try {
-    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 50));
-    const rows = db.prepare(`
-      SELECT r.user_id AS userId, u.username AS username, u.display_name AS displayName,
-             r.elo AS elo, r.wins AS wins, r.losses AS losses, r.tier AS tier
-      FROM user_rank r JOIN users u ON u.id = r.user_id
-      ORDER BY r.elo DESC LIMIT ?`).all(limit);
-    const list = rows.map((r, i) => ({
-      rank: i + 1,
-      userId: r.userId,
-      username: r.username,
-      displayName: r.displayName || r.username,
-      elo: r.elo,
-      wins: r.wins,
-      losses: r.losses,
-      tier: r.tier,
-    }));
-    res.json({ ok: true, list });
-  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
-});
-
-// ---------- GET /api/rank/me （需登录，返回本人 rank/elo/wins/losses/tier） ----------
-router.get('/rank/me', requireAuth, (req, res) => {
-  try {
-    const uid = req.user.id;
-    const row = db.prepare('SELECT elo, wins, losses, tier FROM user_rank WHERE user_id = ?').get(uid);
-    const elo = row ? row.elo : 1000;
-    const prog = db.prepare('SELECT xp, level FROM user_progression WHERE user_id = ?').get(uid);
-    const higher = db.prepare('SELECT COUNT(*) AS cnt FROM user_rank WHERE elo > ?').get(elo).cnt;
-    const level = prog ? prog.level : 1;
-    const xp = prog ? prog.xp : 0;
-    const xpNext = level * 100; // 本级满经验阈值
-    res.json({
-      ok: true,
-      rank: 1 + higher,
-      elo,
-      wins: row ? row.wins : 0,
-      losses: row ? row.losses : 0,
-      tier: row ? row.tier : '青铜',
-      level,
-      xp,
-      xpNext,
-    });
-  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
 });
 
 function issueSession(userId, res) {

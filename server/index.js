@@ -1,8 +1,7 @@
 // ============================================================================
 // server/index.js — 启动入口
-// Express 托管静态前端(index.html) + REST API + WebSocket + 后台管理系统
+// Express 托管静态前端(index.html) + REST API + WebSocket
 // 用法： npm install && npm start  →  http://localhost:3000
-//       后台管理：http://localhost:3000/admin
 // ============================================================================
 'use strict';
 
@@ -14,22 +13,11 @@ const { authMiddleware, router: authRouter } = require('./auth');
 const social = require('./social');
 const realtime = require('./realtime');
 
-// ---- 后台管理系统 ----
-const { adminAuth, requireAdmin } = require('./admin-auth');
-const adminApi = require('./admin-api');
-require('./admin-db'); // 初始化建表 + 超级管理员
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ----- 基础中间件 -----
 app.use(express.json());
-
-// ----- 后台管理系统路由（与游戏 auth 分开）-----
-app.use('/admin/api', adminAuth, adminApi.router);
-// 后台前端页面
-app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'admin.html')));
-app.get('/admin/*', (req, res) => res.redirect('/admin'));
 
 // ----- 游戏鉴权 -----
 app.use(authMiddleware);
@@ -38,16 +26,12 @@ app.use(authMiddleware);
 app.use('/api', authRouter);
 app.use('/api/friends', social.router);
 
-// 把在线人数注入 social 和 admin
+// 把在线人数注入 social
 social.setPresenceProvider(realtime.onlineIds);
 social.setPushNotice(realtime.sendToUser);
-adminApi.setOnlineProvider(() => realtime.onlineIds().size);
 
 // 健康检查
 app.get('/api/health', (req, res) => res.json({ ok: true, online: realtime.onlineIds().size }));
-
-// 公开配置 API（游戏前端动态加载，无需鉴权）
-app.use('/api/config', adminApi.gameConfigRouter());
 
 // ----- 静态前端（单体 index.html） -----
 const STATIC_DIR = path.join(__dirname, '..');
@@ -63,7 +47,6 @@ server.listen(PORT, () => {
   console.log('========================================================');
   console.log('  枪战突击 · COMBAT STRIKE — 联机服务已启动');
   console.log('  前端游戏:  http://localhost:' + PORT);
-  console.log('  后台管理:  http://localhost:' + PORT + '/admin');
   console.log('  WebSocket: ws://localhost:' + PORT + '/ws');
   console.log('  数据库:    server/data/app.sqlite');
   console.log('========================================================');

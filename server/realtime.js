@@ -7,10 +7,10 @@
 
 const { WebSocketServer } = require('ws');
 const { verifySessionToken } = require('./auth');
-const { stmts, db, applyMatchResult, applyMatchXp } = require('./db');
+const { stmts } = require('./db');
 
-// 对局模式（A2）：tdm=团队竞技、dom=占点、defuse=爆破、pve=合作闯关
-const ALLOWED_MODES = ['tdm', 'dom', 'defuse', 'infection', 'pve'];
+// 对局模式：tdm=团队竞技(1v1死斗)、pve=合作闯关
+const ALLOWED_MODES = ['tdm', 'pve'];
 function normMode(m) { return ALLOWED_MODES.indexOf(m) >= 0 ? m : 'tdm'; }
 
 // 连接表：userId -> Set<ws>（同一账号可多端登录）
@@ -208,9 +208,6 @@ function attach(server, path = '/ws') {
     }
     const user = verifySessionToken(token);
     if (!user) { send(ws, { type: 'auth_error', error: '会话无效，请重新登录' }); ws.close(); return; }
-    // 封禁检查
-    const banned = db.prepare('SELECT * FROM user_bans WHERE user_id = ?').get(user.id);
-    if (banned) { send(ws, { type: 'auth_error', error: '该账户已被封禁：' + (banned.reason || '违规行为') }); ws.close(); return; }
     ws._userId = user.id;
     ws._user = user;
     ws._roomCode = null;
@@ -579,24 +576,8 @@ function handleMessage(ws, user, buf) {
       break;
     }
 
-    // ========== 占点/爆破 目标状态（服务端纯转发，客户端权威） ==========
-    case 'obj_update': { // { data } — 目标/占点/炸弹状态增量
-      const room = ws._roomCode ? rooms.get(ws._roomCode) : null; if (!room) return;
-      broadcastRoom(room, { type: 'obj_update', userId: user.id, data: msg.data }, user.id);
-      break;
-    }
-    case 'obj_event': { // { event, payload } — 占点/安包/拆包/胜负等关键事件
-      const room = ws._roomCode ? rooms.get(ws._roomCode) : null; if (!room) return;
-      broadcastRoom(room, { type: 'obj_event', userId: user.id, event: msg.event, payload: msg.payload }, user.id);
-      break;
-    }
-    // 对局结算：客户端权威上报比分 → 服务端更新 ELO 并回执
-    case 'match_result': { // { winnerTeam, players:[{userId, team, kills, deaths, win:bool}] }
-      const players = Array.isArray(msg.players) ? msg.players : [];
-      try {
-        if (typeof applyMatchResult === 'function') applyMatchResult(players);
-        if (typeof applyMatchXp === 'function') applyMatchXp(players);
-      } catch (e) { console.error('[ws] match_result 更新失败:', e.message); }
+    // 对局结算回执（客户端权威，服务端无需持久化）
+    case 'match_result': {
       send(ws, { type: 'match_result_ack', ok: true });
       break;
     }

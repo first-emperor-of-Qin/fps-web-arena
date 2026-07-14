@@ -2483,11 +2483,6 @@
 .wzlb-map-sub { font-size:11px; color:rgba(170,190,205,0.6); }
 
 .wzlb-modes { display:flex; gap:14px; justify-content:center; }
-.wzlb-mode { font-family:'Orbitron',sans-serif; font-size:20px; letter-spacing:2px; padding:14px 34px; cursor:pointer; color:#cfe6f5;
-    background:rgba(10,16,22,0.7); border:1px solid rgba(0,200,255,0.25); border-radius:6px; transition:all 0.2s; }
-.wzlb-mode i { color:#ff6a4a; font-style:normal; margin:0 4px; }
-.wzlb-mode:hover { border-color:#00e5ff; transform:translateY(-2px); }
-.wzlb-mode.selected { border-color:#ff6a4a; color:#fff; background:linear-gradient(180deg, rgba(70,14,10,0.8), rgba(34,8,6,0.8)); box-shadow:0 0 20px rgba(255,80,40,0.35); }
 
 .wzlb-start { display:block; width:100%; margin-top:24px; padding:16px; cursor:pointer; font-family:'Orbitron',sans-serif;
     font-size:22px; letter-spacing:8px; color:#fff; border:1px solid rgba(255,90,50,0.6); border-radius:8px;
@@ -2654,10 +2649,6 @@ body{ font-family:'Rajdhani','Microsoft YaHei',Arial,sans-serif; }
 .wzlb-map-name{ position:absolute; left:10px; bottom:26px; font-family:'Orbitron'; font-weight:700; font-size:15px; color:var(--txt-bright); letter-spacing:1px; text-shadow:0 2px 6px #000; }
 .wzlb-map-sub{ position:absolute; left:10px; bottom:10px; font-size:11px; color:var(--amber); letter-spacing:1px; }
 .wzlb-modes{ display:flex; gap:14px; }
-.wzlb-mode{ flex:1; border:1px solid var(--line); border-radius:12px; padding:18px; text-align:center; cursor:pointer; transition:.2s; font-family:'Orbitron'; font-size:26px; color:var(--txt-bright); background:rgba(255,255,255,0.02); }
-.wzlb-mode:hover{ border-color:var(--line-strong); }
-.wzlb-mode.selected{ border-color:var(--amber); background:rgba(232,179,64,0.07); }
-.wzlb-mode i{ color:var(--amber); font-style:normal; }
 .wzlb-start{ margin-top:22px; width:100%; padding:15px; font-family:'Orbitron'; font-weight:700; letter-spacing:4px; font-size:17px; color:var(--amber); background:rgba(232,179,64,0.12); border:1px solid rgba(232,179,64,0.5); border-radius:10px; cursor:pointer; transition:.2s; }
 .wzlb-start:hover{ background:rgba(232,179,64,0.22); box-shadow:0 0 24px rgba(232,179,64,0.3); }
 .wzlb-result-title{ font-family:'Orbitron'; font-weight:900; font-size:54px; letter-spacing:6px; text-align:center; margin-top:10px; }
@@ -3226,19 +3217,21 @@ body{ font-family:'Rajdhani','Microsoft YaHei',Arial,sans-serif; }
 #pve-dmg-board .pdb-row.self .pdb-name { color:#ffd54f; font-weight:700; }
 #pve-dmg-board .pdb-dmg { color:#7ee0a0; font-weight:700; font-variant-numeric:tabular-nums; }
 
-/* ============ 个人面板 · 简洁大气改版 v2 ============ */
-/* 注：不覆盖 #player-panel 的 display（其显隐由内联 style 切换），仅重做外观。 */
+/* ============ 个人面板 · 简洁大气重构（滚动修复 + 视觉重做） ============ */
+/* 显隐由 .open 控制；本层只负责外观与滚动。关键：flex 链需 min-height:0 才能内部滚动。 */
 #player-panel { background: rgba(6,10,18,0.72) !important; backdrop-filter: blur(6px) !important; padding:32px !important; font-family:'Rajdhani','Segoe UI',sans-serif !important; }
-#panel-inner { width:min(1080px,94vw) !important; height:min(720px,90vh) !important; background:linear-gradient(160deg, rgba(17,23,36,0.97), rgba(10,14,22,0.98)) !important; border:1px solid rgba(255,255,255,0.08) !important; border-radius:18px !important; box-shadow:0 30px 80px rgba(0,0,0,0.55) !important; display:flex !important; flex-direction:column !important; overflow:hidden !important; color:#e6edf3 !important; }
-#panel-header { display:flex !important; align-items:center !important; justify-content:space-between !important; padding:18px 24px !important; border-bottom:1px solid rgba(255,255,255,0.06) !important; background:rgba(255,255,255,0.02) !important; }
+#player-panel.open { display:flex !important; align-items:flex-start !important; justify-content:center !important; overflow-y:auto !important; }
+#panel-inner { width:min(1120px,100%) !important; max-height:calc(100vh - 48px) !important; height:auto !important; background:linear-gradient(165deg, rgba(18,25,40,0.98), rgba(10,14,22,0.99)) !important; border:1px solid rgba(255,255,255,0.09) !important; border-radius:18px !important; box-shadow:0 30px 90px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.04) !important; display:flex !important; flex-direction:column !important; overflow:hidden !important; color:#e6edf3 !important; }
+#panel-header { display:flex !important; align-items:center !important; justify-content:space-between !important; flex-shrink:0 !important; padding:20px 28px !important; border-bottom:1px solid rgba(255,255,255,0.06) !important; background:linear-gradient(90deg, rgba(92,200,255,0.06), transparent 60%) !important; }
 #panel-header h2 { font-size:20px !important; font-weight:700 !important; letter-spacing:2px !important; margin:0 !important; color:#f0f6fc !important; }
 #open-shop-btn { background:rgba(255,213,79,0.12) !important; color:#ffd54f !important; border:1px solid rgba(255,213,79,0.35) !important; border-radius:8px !important; padding:7px 16px !important; font:600 13px/1 'Rajdhani',sans-serif !important; letter-spacing:1px !important; cursor:pointer !important; transition:.18s !important; }
 #open-shop-btn:hover { background:rgba(255,213,79,0.2) !important; }
 #panel-close { background:transparent !important; border:none !important; color:#8b949e !important; font-size:26px !important; line-height:1 !important; cursor:pointer !important; transition:.18s !important; }
 #panel-close:hover { color:#fff !important; }
-#panel-body { flex:1 !important; display:flex !important; gap:22px !important; padding:22px 24px !important; overflow:hidden !important; }
-#panel-left { width:300px !important; flex-shrink:0 !important; display:flex !important; flex-direction:column !important; gap:16px !important; overflow:auto !important; }
-#panel-right { flex:1 !important; display:flex !important; flex-direction:column !important; gap:14px !important; overflow:hidden !important; }
+#panel-body { flex:1 1 auto !important; min-height:0 !important; display:flex !important; gap:24px !important; padding:24px 28px !important; overflow:hidden !important; }
+#panel-left { width:300px !important; flex-shrink:0 !important; min-height:0 !important; display:flex !important; flex-direction:column !important; gap:16px !important; overflow-y:auto !important; padding-right:6px !important; }
+#panel-right { flex:1 1 auto !important; min-height:0 !important; display:flex !important; flex-direction:column !important; gap:14px !important; overflow-y:auto !important; padding-right:6px !important; }
+#tab-weapon-content { display:flex !important; flex-direction:column !important; gap:14px !important; }
 .rd-profile-card { display:flex !important; align-items:center !important; gap:14px !important; padding:16px !important; background:rgba(255,255,255,0.03) !important; border:1px solid rgba(255,255,255,0.06) !important; border-radius:12px !important; }
 .rd-profile-avatar { width:54px !important; height:54px !important; border-radius:12px !important; background:linear-gradient(135deg,#1b2740,#0f1626) !important; border:1px solid rgba(120,170,255,0.25) !important; display:flex !important; align-items:center !important; justify-content:center !important; font-size:26px !important; }
 .rd-profile-name { font-size:17px !important; font-weight:700 !important; color:#f0f6fc !important; }
@@ -3275,34 +3268,15 @@ body{ font-family:'Rajdhani','Microsoft YaHei',Arial,sans-serif; }
 .weapon-filter-btn { background:rgba(255,255,255,0.03) !important; border:1px solid rgba(255,255,255,0.07) !important; color:#9aa7b8 !important; border-radius:7px !important; padding:6px 12px !important; font:600 12px/1 'Rajdhani',sans-serif !important; cursor:pointer !important; transition:.18s !important; }
 .weapon-filter-btn:hover { color:#e6edf3 !important; }
 .weapon-filter-btn.active { background:rgba(120,170,255,0.14) !important; border-color:rgba(120,170,255,0.4) !important; color:#dbe7ff !important; }
-#tab-warehouse { flex:1 !important; overflow:auto !important; }
+#tab-warehouse { overflow:visible !important; }
 .weapon-grid { display:grid !important; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)) !important; gap:12px !important; padding:4px !important; }
-#panel-left::-webkit-scrollbar, #tab-warehouse::-webkit-scrollbar { width:8px; }
-#panel-left::-webkit-scrollbar-thumb, #tab-warehouse::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.12); border-radius:4px; }
-/* [A3] 排行榜 */
-#tab-rank-content { flex:1 !important; overflow:auto !important; padding:4px 2px !important; }
-.rk-head, .rk-row { display:grid !important; grid-template-columns:38px 1fr 76px 64px 92px !important; align-items:center !important; gap:8px !important; padding:9px 10px !important; font-size:13px !important; }
-.rk-head { color:#9fb3c8 !important; font-weight:600 !important; letter-spacing:1px !important; border-bottom:1px solid rgba(255,255,255,0.07) !important; position:sticky !important; top:0 !important; background:rgba(10,14,22,0.96) !important; z-index:2 !important; }
-.rk-row { border-bottom:1px solid rgba(255,255,255,0.04) !important; color:#c9d1d9 !important; }
-.rk-row:hover { background:rgba(255,255,255,0.03) !important; }
-.rk-row.self { background:rgba(120,170,255,0.1) !important; color:#dbe7ff !important; }
-.rk-rank { font-weight:800 !important; color:#ffd54f !important; text-align:center !important; }
-.rk-name { overflow:hidden !important; text-overflow:ellipsis !important; white-space:nowrap !important; font-weight:600 !important; }
-.rk-tier { color:#7fd7a0 !important; }
-.rk-elo { text-align:right !important; font-variant-numeric:tabular-nums !important; color:#e6edf3 !important; }
-.rk-wl { text-align:right !important; color:#9aa7b8 !important; font-variant-numeric:tabular-nums !important; }
-.rk-loading { color:#8b949e !important; padding:20px !important; text-align:center !important; font-size:13px !important; }
+#panel-left::-webkit-scrollbar, #panel-right::-webkit-scrollbar { width:8px; }
+#panel-left::-webkit-scrollbar-thumb, #panel-right::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.14); border-radius:4px; }
+#panel-left::-webkit-scrollbar-track, #panel-right::-webkit-scrollbar-track { background:transparent; }
 /* [A2] 模式选择器按钮 */
 .wzlb-mmode { flex:1 !important; padding:12px 10px !important; border-radius:10px !important; border:1px solid rgba(255,255,255,0.12) !important; background:rgba(255,255,255,0.04) !important; color:#c9d1d9 !important; font:700 14px/1 'Rajdhani',sans-serif !important; letter-spacing:1px !important; cursor:pointer !important; transition:.18s !important; }
 .wzlb-mmode:hover { border-color:rgba(0,229,255,0.35) !important; color:#e6edf3 !important; }
 .wzlb-mmode.selected { border-color:rgba(0,229,255,0.6) !important; background:rgba(0,229,255,0.12) !important; color:#fff !important; box-shadow:0 0 14px rgba(0,229,255,0.2) !important; }
-/* 成长线 / Meta（C）：个人面板等级 + 经验条 */
-.rd-profile-meta { display:flex !important; align-items:center !important; gap:8px !important; margin-top:6px !important; }
-.rd-level-badge { font:800 12px/1 'Rajdhani',sans-serif !important; letter-spacing:1px !important; color:#00e5ff !important; background:rgba(0,229,255,0.1) !important; border:1px solid rgba(0,229,255,0.3) !important; border-radius:6px !important; padding:3px 7px !important; white-space:nowrap !important; }
-.rd-level-badge b { color:#fff !important; font-size:13px !important; }
-.rd-xp-bar { position:relative !important; flex:1 !important; height:14px !important; border-radius:7px !important; background:rgba(255,255,255,0.08) !important; border:1px solid rgba(255,255,255,0.12) !important; overflow:hidden !important; min-width:80px !important; }
-.rd-xp-fill { position:absolute !important; left:0 !important; top:0 !important; bottom:0 !important; width:0% !important; background:linear-gradient(90deg,#00e5ff,#7c4dff) !important; transition:width .5s ease !important; }
-.rd-xp-text { position:absolute !important; left:0 !important; right:0 !important; top:0 !important; bottom:0 !important; display:flex !important; align-items:center !important; justify-content:center !important; font:700 10px/1 'Rajdhani',sans-serif !important; color:#dfe9f3 !important; letter-spacing:1px !important; }
 </style>
 </head>
 <body>
@@ -3628,7 +3602,7 @@ body{ font-family:'Rajdhani','Microsoft YaHei',Arial,sans-serif; }
     <div class="modal-box wzlb-box">
         <button class="modal-close" data-close="wzlb-modal">&times;</button>
         <h3 class="wzlb-h3">王者乱斗 · <span class="wzlb-en">KING'S BRAWL</span></h3>
-        <p class="wzlb-sub">联机团队竞技对决 · 与真实玩家一决高下（支持 1v1 / 3v3 / 5v5）</p>
+        <p class="wzlb-sub">联机团队竞技对决 · 1v1 死斗，与真实玩家一决高下</p>
         <div class="wzlb-section-title"><span>01</span> 选择地图</div>
         <div class="wzlb-maps">
             <button class="wzlb-map selected" data-map="port"><span class="wzlb-map-thumb" style="background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyODAiIGhlaWdodD0iMTU2IiB2aWV3Qm94PSIwIDAgMjgwIDE1NiI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9InNreSIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjExMi4zMiI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzIyMzA0MCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzFhMjgzOCIvPjwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9Imdyb3VuZCIgeDE9IjAiIHkxPSI5NyIgeDI9IjAiIHkyPSIxNTYiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMzYTNmNDQiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMzNDM5M2UiLz48L2xpbmVhckdyYWRpZW50PgogICAgPHJhZGlhbEdyYWRpZW50IGlkPSJsaWdodCIgY3g9IjIxMCIgY3k9IjQ2LjgiIHI9IjIxMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0icmdiYSgyNTUsMjE3LDE2MCwwLjEyKSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0idHJhbnNwYXJlbnQiLz48L3JhZGlhbEdyYWRpZW50PgogICAgPHJhZGlhbEdyYWRpZW50IGlkPSJ2aWciIGN4PSIxNDAiIGN5PSI3MC4yIiByPSIyMTguNCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0idHJhbnNwYXJlbnQiLz48c3RvcCBvZmZzZXQ9IjcwJSIgc3RvcC1jb2xvcj0icmdiYSgwLDAsMCwwLjI1KSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0icmdiYSgwLDAsMCwwLjU4KSIvPjwvcmFkaWFsR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSIyODAiIGhlaWdodD0iMTU2IiBmaWxsPSJ1cmwoI3NreSkiLz4KICA8cG9seWdvbiBwb2ludHM9IjIyLjQwMDAwMDAwMDAwMDAwMiw5NyAyNTcuNiw5NyAyODAsMTU2IDAsMTU2IiBmaWxsPSJ1cmwoI2dyb3VuZCkiLz4KICA8cmVjdCB4PSIwIiB5PSI3NyIgd2lkdGg9IjI4MCIgaGVpZ2h0PSIzMiIgZmlsbD0icmdiYSg0Miw1OCw3NCwwLjM1KSIgb3BhY2l0eT0iMC41Ii8+PHJlY3QgeD0iNTAuNCIgeT0iNzkiIHdpZHRoPSIyOCIgaGVpZ2h0PSIxNCIgZmlsbD0iIzNhM2Y0NCIgc3Ryb2tlPSJyZ2JhKDEwMiwyMDQsMjU1LDAuNCkiIHN0cm9rZS13aWR0aD0iMSIvPjxyZWN0IHg9Ijg5LjYwMDAwMDAwMDAwMDAxIiB5PSI3NyIgd2lkdGg9IjI4IiBoZWlnaHQ9IjI0IiBmaWxsPSIjMmMzMzNhIiBzdHJva2U9InJnYmEoMTAyLDIwNCwyNTUsMC40KSIgc3Ryb2tlLXdpZHRoPSIxIi8+PHJlY3QgeD0iMTI4LjgiIHk9Ijc5IiB3aWR0aD0iMjgiIGhlaWdodD0iMTQiIGZpbGw9IiMzYTNmNDQiIHN0cm9rZT0icmdiYSgxMDIsMjA0LDI1NSwwLjQpIiBzdHJva2Utd2lkdGg9IjEiLz48cmVjdCB4PSIxNjguMDAwMDAwMDAwMDAwMDMiIHk9Ijc3IiB3aWR0aD0iMjgiIGhlaWdodD0iMjQiIGZpbGw9IiMyYzMzM2EiIHN0cm9rZT0icmdiYSgxMDIsMjA0LDI1NSwwLjQpIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNMTczLjYsOTkgUTIwMS42LDc1IDI0Ni40LDEwMSBMMjQ2LjQsMTE1IFEyMDEuNiwxMDUgMTczLjYsOTkgWiIgZmlsbD0icmdiYSg0NCw1MSw1OCwwLjcpIi8+CiAgPHJlY3Qgd2lkdGg9IjI4MCIgaGVpZ2h0PSIxNTYiIGZpbGw9InVybCgjbGlnaHQpIi8+CiAgPHJlY3Qgd2lkdGg9IjI4MCIgaGVpZ2h0PSIxNTYiIGZpbGw9InVybCgjdmlnKSIvPgo8L3N2Zz4=');background-size:cover;background-position:center;background-repeat:no-repeat;"></span><span class="wzlb-map-name">废弃港口</span><span class="wzlb-map-sub">集装箱 · 巨轮</span></button>
@@ -3637,18 +3611,9 @@ body{ font-family:'Rajdhani','Microsoft YaHei',Arial,sans-serif; }
             <button class="wzlb-map" data-map="radar"><span class="wzlb-map-thumb" style="background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyODAiIGhlaWdodD0iMTU2IiB2aWV3Qm94PSIwIDAgMjgwIDE1NiI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9InNreSIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjExMi4zMiI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzNhNDY1NCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzMyM2U0YyIvPjwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9Imdyb3VuZCIgeDE9IjAiIHkxPSI5NyIgeDI9IjAiIHkyPSIxNTYiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiM2YTcyODAiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM2NDZjN2EiLz48L2xpbmVhckdyYWRpZW50PgogICAgPHJhZGlhbEdyYWRpZW50IGlkPSJsaWdodCIgY3g9IjE3NSIgY3k9IjQ5LjkyIiByPSIyMTAiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9InJnYmEoMjM0LDI0MiwyNTUsMC4xMikiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9InRyYW5zcGFyZW50Ii8+PC9yYWRpYWxHcmFkaWVudD4KICAgIDxyYWRpYWxHcmFkaWVudCBpZD0idmlnIiBjeD0iMTQwIiBjeT0iNzAuMiIgcj0iMjE4LjQiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9InRyYW5zcGFyZW50Ii8+PHN0b3Agb2Zmc2V0PSI3MCUiIHN0b3AtY29sb3I9InJnYmEoMCwwLDAsMC4yNSkiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9InJnYmEoMCwwLDAsMC41OCkiLz48L3JhZGlhbEdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB3aWR0aD0iMjgwIiBoZWlnaHQ9IjE1NiIgZmlsbD0idXJsKCNza3kpIi8+CiAgPHBvbHlnb24gcG9pbnRzPSIyMi40MDAwMDAwMDAwMDAwMDIsOTcgMjU3LjYsOTcgMjgwLDE1NiAwLDE1NiIgZmlsbD0idXJsKCNncm91bmQpIi8+CiAgPHJlY3QgeD0iMCIgeT0iNzciIHdpZHRoPSIyODAiIGhlaWdodD0iMzIiIGZpbGw9InJnYmEoNzAsODMsOTUsMC4zNSkiIG9wYWNpdHk9IjAuNSIvPjxwYXRoIGQ9Ik0xMDYsNjEgQTM0LDM0IDAgMCwxIDE3NCw2MSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDg4LDEwMCwxMTQsMC42KSIgc3Ryb2tlLXdpZHRoPSI2OCIvPgogICAgICAgICAgICAgIDxlbGxpcHNlIGN4PSIxNDAiIGN5PSI2MSIgcng9IjM0IiByeT0iMzQiIGZpbGw9InJnYmEoODgsMTAwLDExNCwwLjQpIiBzdHJva2U9InJnYmEoMTUzLDIyMSwyNTUsMC41KSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgICAgICAgICAgICA8cmVjdCB4PSIxMzcuMiIgeT0iNjEiIHdpZHRoPSIxMCIgaGVpZ2h0PSIzOCIgZmlsbD0iIzU4NjQ3MiIvPgogICAgICAgICAgICAgIDxsaW5lIHgxPSIxNDAiIHkxPSI2MSIgeDI9IjE2NS43ODk3MDc4MzIwODA3OCIgeTI9IjcxLjkwMzcxMzU4NDY0MjIyIiBzdHJva2U9IiM5OWRkZmYiIHN0cm9rZS13aWR0aD0iMiIvPgogIDxyZWN0IHdpZHRoPSIyODAiIGhlaWdodD0iMTU2IiBmaWxsPSJ1cmwoI2xpZ2h0KSIvPgogIDxyZWN0IHdpZHRoPSIyODAiIGhlaWdodD0iMTU2IiBmaWxsPSJ1cmwoI3ZpZykiLz4KPC9zdmc+');background-size:cover;background-position:center;background-repeat:no-repeat;"></span><span class="wzlb-map-name">山地雷达站</span><span class="wzlb-map-sub">雷达穹顶 · 风雪</span></button>
             <button class="wzlb-map" data-map="ruins"><span class="wzlb-map-thumb" style="background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyODAiIGhlaWdodD0iMTU2IiB2aWV3Qm94PSIwIDAgMjgwIDE1NiI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9InNreSIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjExMi4zMiI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzFjMTQxMCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzE0MGMwOCIvPjwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9Imdyb3VuZCIgeDE9IjAiIHkxPSI5NyIgeDI9IjAiIHkyPSIxNTYiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMyZTI2MjAiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMyODIwMWEiLz48L2xpbmVhckdyYWRpZW50PgogICAgPHJhZGlhbEdyYWRpZW50IGlkPSJsaWdodCIgY3g9IjEwNSIgY3k9IjQzLjY4MDAwMDAwMDAwMDAxIiByPSIyMTAiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9InJnYmEoMjU1LDE3NiwxMTIsMC4xMikiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9InRyYW5zcGFyZW50Ii8+PC9yYWRpYWxHcmFkaWVudD4KICAgIDxyYWRpYWxHcmFkaWVudCBpZD0idmlnIiBjeD0iMTQwIiBjeT0iNzAuMiIgcj0iMjE4LjQiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9InRyYW5zcGFyZW50Ii8+PHN0b3Agb2Zmc2V0PSI3MCUiIHN0b3AtY29sb3I9InJnYmEoMCwwLDAsMC4yNSkiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9InJnYmEoMCwwLDAsMC41OCkiLz48L3JhZGlhbEdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB3aWR0aD0iMjgwIiBoZWlnaHQ9IjE1NiIgZmlsbD0idXJsKCNza3kpIi8+CiAgPHBvbHlnb24gcG9pbnRzPSIyMi40MDAwMDAwMDAwMDAwMDIsOTcgMjU3LjYsOTcgMjgwLDE1NiAwLDE1NiIgZmlsbD0idXJsKCNncm91bmQpIi8+CiAgPHJlY3QgeD0iMCIgeT0iNzciIHdpZHRoPSIyODAiIGhlaWdodD0iMzIiIGZpbGw9InJnYmEoMzYsMjYsMjAsMC4zNSkiIG9wYWNpdHk9IjAuNSIvPjxyZWN0IHg9IjIyLjQwMDAwMDAwMDAwMDAwMiIgeT0iNDEiIHdpZHRoPSIyNCIgaGVpZ2h0PSI1NiIgZmlsbD0icmdiYSgzNiwyOCwyMiwwLjY1KSIvPgogICAgICAgICAgICAgIDxyZWN0IHg9IjE2LjgiIHk9IjI1IiB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIGZpbGw9InJnYmEoMzYsMjgsMjIsMC42NSkiLz4KICAgICAgICAgICAgICA8cmVjdCB4PSIyMDcuMiIgeT0iNDkiIHdpZHRoPSIyMiIgaGVpZ2h0PSI0OCIgZmlsbD0icmdiYSgzNiwyOCwyMiwwLjU1KSIgdHJhbnNmb3JtPSJyb3RhdGUoLTMgMjE4LjQgOTcpIi8+CiAgICAgICAgICAgICAgPHJlY3QgeD0iMjEyLjgiIHk9IjMzIiB3aWR0aD0iMTYiIGhlaWdodD0iMTgiIGZpbGw9InJnYmEoMzYsMjgsMjIsMC41NSkiIHRyYW5zZm9ybT0icm90YXRlKC0zIDIxOC40IDk3KSIvPgogIDxyZWN0IHdpZHRoPSIyODAiIGhlaWdodD0iMTU2IiBmaWxsPSJ1cmwoI2xpZ2h0KSIvPgogIDxyZWN0IHdpZHRoPSIyODAiIGhlaWdodD0iMTU2IiBmaWxsPSJ1cmwoI3ZpZykiLz4KPC9zdmc+');background-size:cover;background-position:center;background-repeat:no-repeat;"></span><span class="wzlb-map-name">城市废墟</span><span class="wzlb-map-sub">坍塌高楼 · 街垒</span></button>
         </div>
-        <div class="wzlb-section-title"><span>02</span> 选择规模</div>
+        <div class="wzlb-section-title"><span>02</span> 选择模式</div>
         <div class="wzlb-modes">
-            <button class="wzlb-mode selected" data-size="1">1<i>v</i>1</button>
-            <button class="wzlb-mode" data-size="3">3<i>v</i>3</button>
-            <button class="wzlb-mode" data-size="5">5<i>v</i>5</button>
-        </div>
-        <div class="wzlb-section-title"><span>02.5</span> 选择模式</div>
-        <div class="wzlb-modes">
-            <button class="wzlb-mmode selected" data-mode="tdm">团队死斗</button>
-            <button class="wzlb-mmode" data-mode="dom">占点</button>
-            <button class="wzlb-mmode" data-mode="defuse">爆破</button>
-            <button class="wzlb-mmode" data-mode="infection">生化</button>
+            <button class="wzlb-mmode selected" data-mode="tdm">团队死斗（1v1）</button>
         </div>
         <div class="wzlb-section-title"><span>03</span> 进入战场</div>
         <div style="display:flex; gap:10px; margin-top:4px;">
@@ -4203,10 +4168,6 @@ body{ font-family:'Rajdhani','Microsoft YaHei',Arial,sans-serif; }
                     <div class="rd-profile-avatar">⚔</div>
                     <div class="rd-profile-name">突击者</div>
                     <div class="rd-profile-rank">COMBAT OPERATIVE</div>
-                    <div class="rd-profile-meta">
-                        <span class="rd-level-badge">Lv.<b id="rd-level">1</b></span>
-                        <div class="rd-xp-bar"><div class="rd-xp-fill" id="rd-xp-fill"></div><span class="rd-xp-text" id="rd-xp-text">0 / 100 XP</span></div>
-                    </div>
                 </div>
                 <div class="rd-wallet">
                     <div class="rd-w-gold"><div class="rd-w-label">金币</div><div class="rd-w-val" id="panel-gold">0</div></div>
@@ -4244,7 +4205,6 @@ body{ font-family:'Rajdhani','Microsoft YaHei',Arial,sans-serif; }
                     <button class="warehouse-tab-btn" data-tab="talent">天赋</button>
                     <button class="warehouse-tab-btn" data-tab="achievement">成就</button>
                     <button class="warehouse-tab-btn" data-tab="stats">统计</button>
-                    <button class="warehouse-tab-btn" data-tab="rank">排行榜</button>
                 </div>
                 <!-- 武器仓库内容 -->
                 <div id="tab-weapon-content">
@@ -4273,8 +4233,6 @@ body{ font-family:'Rajdhani','Microsoft YaHei',Arial,sans-serif; }
                 <div id="tab-achievement-content" style="display:none;"></div>
                 <!-- [P3·Task21] 统计内容 -->
                 <div id="tab-stats-content" style="display:none;"></div>
-                <!-- [A3] 排行榜内容 -->
-                <div id="tab-rank-content" style="display:none;"></div>
             </div>
         </div>
     </div>
@@ -4568,9 +4526,6 @@ var Net = {
     var t=m.type;
     switch(t){
       case 'hello': MP.user = Object.assign(MP.user || {}, m.user); break;
-         case 'config_update':
-           try{ if(window.__loadGameConfig){ window.__loadGameConfig().then(function(){ if(window.__rerenderPanels) window.__rerenderPanels(); }); } }catch(e){}
-           break;
 
       case 'pong': this.lastPong=Date.now(); break;
 
@@ -4599,8 +4554,6 @@ var Net = {
         var ss=$('mm-status'); if(ss) ss.textContent='当前队列 '+m.inQueue+' / '+m.need+' 人';
         break;
       case 'match_found': MP.onMatchFound(m); break;
-      case 'obj_update': if(MP.onObjUpdate) MP.onObjUpdate(m); break;
-      case 'obj_event': if(MP.onObjEvent) MP.onObjEvent(m); break;
       case 'match_cancelled': closeMatchmaking(); break;
       case 'match_error': toast(m.error||'匹配失败'); closeMatchmaking(); break;
 
@@ -4831,8 +4784,7 @@ function teamLeave(){ Net.send({type:'team_leave'}); MP.team=null; renderTeamPan
 function teamQueue(){
   if(!MP.team){ toast('请先创建或加入队伍'); return; }
   var map=$('wzlb-modal') && document.querySelector('.wzlb-map.selected');
-  var size=document.querySelector('#team-panel .wzlb-mode.selected');
-  Net.send({type:'match_queue', mapKey:(map?map.dataset.map:'port'), teamSize: Number((size?size.dataset.size:'3'))});
+  Net.send({type:'match_queue', mapKey:(map?map.dataset.map:'port'), teamSize:1, mode:'tdm'});
   showMatchmaking();
 }
 MP.onTeamUpdate = function(team){
@@ -5102,7 +5054,6 @@ function startOnlineMatch(mapKey, teamSize, myTeam, remoteList, mode){
       MP.match.remotePlayers[p.userId]={ profile:p, team:p.team, snaps:[], dead:false };
     }
   });
-  setTimeout(function(){ try { setupOnlineObjective(); } catch(e){} }, 600);
   if(typeof window.__startOnlineMatch === 'function'){
     window.__startOnlineMatch(mapKey, teamSize, myTeam, remoteList);
   } else {
@@ -5111,191 +5062,6 @@ function startOnlineMatch(mapKey, teamSize, myTeam, remoteList, mode){
   }
 }
 
-// ==================== [A2] 占点/爆破 目标系统（客户端） ====================
-// host（team 0）权威模拟占领进度，通过 obj_update 中继给房间其他人；胜负由 host 广播 obj_event + 上报 match_result（服务端算 ELO）。
-function setupOnlineObjective(){
-  try {
-    var mode = (MP.match && MP.match.mode) || 'tdm';
-    if (mode === 'infection') { setupInfection(); return; }
-    if (mode !== 'dom' && mode !== 'defuse') { MP._obj = null; return; }
-    if (MP._obj) return;
-    var isDefuse = (mode === 'defuse');
-    var pts = isDefuse
-      ? [ {id:0,x:0,z:0} ]
-      : [ {id:0,x:-22,z:-22}, {id:1,x:22,z:-22}, {id:2,x:0,z:24} ];
-    pts.forEach(function(p){ p.cap = 0; p.owner = -1; });
-    MP._obj = { mode:mode, isDefuse:isDefuse, points:pts, isHost:(MP.match.team===0), holdTimer:0, ended:false, lastUpdate:0, matchTime:0, limit: isDefuse ? 120 : 0 };
-    var hud = document.getElementById('obj-hud');
-    if (!hud) { hud = document.createElement('div'); hud.id='obj-hud'; hud.style.cssText='position:absolute;left:50%;top:64px;transform:translateX(-50%);z-index:55;display:flex;gap:10px;pointer-events:none;font-family:Rajdhani,sans-serif;'; document.body.appendChild(hud); }
-    MP._objHud = hud;
-    try {
-      if (typeof scene !== 'undefined' && scene && typeof THREE !== 'undefined') {
-        pts.forEach(function(p){
-          var ring = new THREE.Mesh(new THREE.TorusGeometry(isDefuse?3.2:2.2,0.18,8,24), new THREE.MeshBasicMaterial({color:0x888888,transparent:true,opacity:0.85}));
-          ring.rotation.x = Math.PI/2; ring.position.set(p.x,0.2,p.z); scene.add(ring); p._ring = ring;
-        });
-      }
-    } catch(e){}
-    renderObjectiveHud();
-  } catch(e){ console.warn('[A2] setupObjective err', e); }
-}
-function _objDist2(ax,az,bx,bz){ var dx=ax-bx, dz=az-bz; return dx*dx+dz*dz; }
-function tickObjective(delta){
-  var O = MP._obj; if (!O || O.ended) return;
-  if (O.mode === 'infection') { tickInfection(delta); return; }
-  if (O.isHost) {
-    var R = O.isDefuse ? 30 : 36, rate = (O.isDefuse ? 0.28 : 0.6) * delta;
-    O.points.forEach(function(p){
-      var t0=0,t1=0;
-      if (typeof camera!=='undefined'&&camera&&camera.position){ var d=_objDist2(camera.position.x,camera.position.z,p.x,p.z); if(d<R){ if(MP.match.team===0)t0++; else t1++; } }
-      for (var id in MP.remotePlayers){ var rp=MP.remotePlayers[id]; if(!rp||rp.dead) continue; var s=rp.snaps&&rp.snaps.length?rp.snaps[rp.snaps.length-1]:null; if(!s||!s.pos) continue; var pp=s.pos; var d=_objDist2(pp.x!=null?pp.x:pp[0], pp.z!=null?pp.z:pp[2], p.x,p.z); if(d<R){ if(rp.team===0)t0++; else t1++; } }
-      if (t0>0&&t1===0) p.cap=Math.min(1,p.cap+rate);
-      else if (t1>0&&t0===0) p.cap=Math.max(-1,p.cap-rate);
-      else p.cap += (0-p.cap)*Math.min(1,delta*0.5);
-      p.owner = p.cap>=1?0:(p.cap<=-1?1:-1);
-    });
-    if (O.isDefuse) {
-      O.matchTime += delta;
-      if (O.points[0].cap >= 1) _objEnd(0);
-      else if (O.matchTime >= O.limit) _objEnd(1);
-    } else {
-      var owned0=O.points.filter(function(p){return p.owner===0;}).length;
-      var owned1=O.points.filter(function(p){return p.owner===1;}).length;
-      var lead = owned0>owned1?0:(owned1>owned0?1:-1);
-      if (lead>=0 && (owned0>=2||owned1>=2)) O.holdTimer += delta; else O.holdTimer=Math.max(0,O.holdTimer-delta*2);
-      if (O.holdTimer>=8) _objEnd(lead);
-    }
-    O.lastUpdate += delta;
-    if (O.lastUpdate>=0.15){ O.lastUpdate=0; Net.send({type:'obj_update', data:O.points.map(function(p){return {id:p.id,cap:p.cap,owner:p.owner};})}); }
-  }
-  renderObjectiveHud();
-}
-function renderObjectiveHud(){
-  var O=MP._obj; if(!O||!MP._objHud) return;
-  var head = O.mode==='defuse' ? '爆破 · 进攻方安包 / 防守方拆包'
-            : O.mode==='infection' ? '生化 · 幸存者躲避感染者'
-            : '占点 · 占领多数点(≥2) 持续 8s 获胜';
-  var html='<div style="background:rgba(8,12,20,.7);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 12px;color:#e6edf3;font-size:13px;letter-spacing:1px;">'+head+'</div>';
-  if (O.mode==='infection') {
-    var inf=0,hum=0; for(var k in O.roles){ if(O.roles[k]==='infected') inf++; else hum++; }
-    html+='<div style="background:rgba(8,12,20,.7);border:1px solid #ff6b6b;border-radius:10px;padding:6px 12px;min-width:84px;text-align:center;"><div style="font-size:11px;color:#ff6b6b;font-weight:700;">感染者</div><div style="font-size:18px;font-weight:800;color:#fff;">'+inf+'</div></div>';
-    html+='<div style="background:rgba(8,12,20,.7);border:1px solid #4ea1ff;border-radius:10px;padding:6px 12px;min-width:84px;text-align:center;"><div style="font-size:11px;color:#4ea1ff;font-weight:700;">幸存者</div><div style="font-size:18px;font-weight:800;color:#fff;">'+hum+'</div></div>';
-    var left=Math.max(0,Math.ceil(O.limit-O.matchTime));
-    html+='<div style="background:rgba(8,12,20,.7);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:6px 12px;min-width:70px;text-align:center;"><div style="font-size:11px;color:#9aa7b8;font-weight:700;">剩余</div><div style="font-size:18px;font-weight:800;color:#fff;">'+left+'s</div></div>';
-  } else {
-    O.points.forEach(function(p){
-      var col=p.owner===0?'#4ea1ff':p.owner===1?'#ff6b6b':'#9aa7b8'; var pct=Math.round(Math.abs(p.cap)*100);
-      html+='<div style="background:rgba(8,12,20,.7);border:1px solid '+col+';border-radius:10px;padding:6px 12px;min-width:96px;text-align:center;">'
-        +'<div style="font-size:11px;color:'+col+';font-weight:700;">'+(O.mode==='defuse'?'爆破点':'据点'+(p.id+1))+'</div>'
-        +'<div style="font-size:18px;font-weight:800;color:#fff;">'+pct+'%</div></div>';
-    });
-  }
-  MP._objHud.innerHTML=html;
-}
-function _objEnd(winner){
-  var O=MP._obj; if(!O||O.ended) return; O.ended=true;
-  try {
-    var players=[];
-    if (O.mode==='infection') {
-      for (var k in O.roles){ var isHuman=(O.roles[k]==='human'); var uid=Number(k); players.push({userId:uid, team:isHuman?0:1, kills:0, deaths:0, win:(isHuman?(winner===0):(winner===1))}); }
-    } else {
-      players.push({userId:MP.user.id,team:MP.match.team,kills:0,deaths:0,win:(MP.match.team===winner)});
-      for (var id in MP.remotePlayers){ var rp=MP.remotePlayers[id]; if(rp&&rp.profile) players.push({userId:rp.profile.userId,team:rp.team,kills:0,deaths:0,win:(rp.team===winner)}); }
-    }
-    Net.send({type:'match_result', winnerTeam:winner, players:players});
-  } catch(e){}
-  if (MP.onObjEvent) MP.onObjEvent({event:'match_end', payload:{winner:winner, mode:O.mode}}); else _showObjBanner(winner, O.mode);
-}
-function _showObjBanner(winner, mode){
-  mode = mode || (MP._obj&&MP._obj.mode) || 'tdm';
-  var win=(MP.match&&MP.match.team===winner);
-  if (mode==='infection' && MP._obj && MP._obj.roles){ var sr=MP._obj.roles[String(MP.user.id)]; win = (sr===(winner===0?'human':'infected')); }
-  var b=document.getElementById('obj-banner');
-  if(!b){ b=document.createElement('div'); b.id='obj-banner'; b.style.cssText='position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);z-index:80;padding:18px 36px;border-radius:14px;font-family:Rajdhani,sans-serif;font-size:28px;font-weight:800;letter-spacing:3px;pointer-events:none;text-align:center;'; document.body.appendChild(b); }
-  b.style.background=win?'rgba(20,60,120,.85)':'rgba(120,20,30,.85)'; b.style.color='#fff';
-  var label;
-  if (mode==='infection') label = (winner===0?'幸存者胜利！':'感染者胜利！');
-  else if (mode==='defuse') label = (winner===0?'进攻方安包成功！':'防守方守包成功！');
-  else label = (win?'胜利！':'失败…')+' · '+(winner===0?'蓝队':'红队')+'占领多数据点';
-  b.textContent=label;
-  if (window.refreshProfileMeta) window.refreshProfileMeta();
-  setTimeout(function(){ if(b&&b.parentNode) b.parentNode.removeChild(b); }, 4000);
-}
-MP.onObjUpdate=function(m){ try{
-  if(!MP._obj) return;
-  if (MP._obj.mode==='infection'){ if(m&&m.data){ MP._obj.matchTime=m.data.t||0; } renderObjectiveHud(); return; }
-  (m.data||[]).forEach(function(pd){ var p=MP._obj.points[pd.id]; if(p){ p.cap=pd.cap; p.owner=pd.owner; if(p._ring) p._ring.material.color.setHex(pd.owner===0?0x4ea1ff:pd.owner===1?0xff6b6b:0x888888); } });
-}catch(e){} };
-MP.onObjEvent=function(m){
-  if(!m) return;
-  if (m.event==='match_end'){ _showObjBanner(m.payload?m.payload.winner:-1, (m.payload&&m.payload.mode)||(MP._obj&&MP._obj.mode)); if(MP._obj) MP._obj.ended=true; return; }
-  if (MP._obj && MP._obj.mode==='infection') {
-    if (m.event==='inf_roles'){ MP._obj.roles = (m.payload&&m.payload.roles)||MP._obj.roles; _applyInfectionSelf(); renderObjectiveHud(); }
-    else if (m.event==='inf_infect'){ if(m.payload&&m.payload.userId){ MP._obj.roles[String(m.payload.userId)]='infected'; if(MP.user&&Number(m.payload.userId)===MP.user.id){ _infBanner('你被感染了！'); } else if(MP.user&&m.payload.by&&Number(m.payload.by)===MP.user.id){ _infBanner('你感染了一名幸存者'); } renderObjectiveHud(); } }
-  }
-};
-
-// ---- 生化 / 感染模式（D） ----
-function setupInfection(){
-  try {
-    if (MP._obj) return;
-    var ids=[]; ids.push(String(MP.user.id));
-    for (var id in MP.remotePlayers){ ids.push(String(id)); }
-    var total=ids.length;
-    var infCount = total>=6 ? 2 : 1;
-    var pool=ids.slice(); for(var i=pool.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=pool[i];pool[i]=pool[j];pool[j]=t; }
-    var roles={}; ids.forEach(function(k){ roles[k]='human'; });
-    for(var n=0;n<infCount && n<pool.length;n++){ roles[pool[n]]='infected'; }
-    MP._obj={ mode:'infection', isHost:(MP.match.team===0), ended:false, matchTime:0, limit:100, roles:roles };
-    if (MP._obj.isHost){ Net.send({type:'obj_event', event:'inf_roles', payload:{roles:roles}}); }
-    _applyInfectionSelf();
-    var hud=document.getElementById('obj-hud');
-    if(!hud){ hud=document.createElement('div'); hud.id='obj-hud'; hud.style.cssText='position:absolute;left:50%;top:64px;transform:translateX(-50%);z-index:55;display:flex;gap:10px;pointer-events:none;font-family:Rajdhani,sans-serif;'; document.body.appendChild(hud); }
-    MP._objHud=hud;
-    renderObjectiveHud();
-  } catch(e){ console.warn('[D] setupInfection err', e); }
-}
-function _applyInfectionSelf(){
-  if(!MP._obj||MP._obj.mode!=='infection'||!MP.user) return;
-  if (MP._obj.roles[String(MP.user.id)]==='infected'){ _infBanner('你已成为感染者'); }
-}
-function _infBanner(text){
-  var b=document.getElementById('inf-banner');
-  if(!b){ b=document.createElement('div'); b.id='inf-banner'; b.style.cssText='position:absolute;left:50%;top:30%;transform:translate(-50%,-50%);z-index:80;padding:12px 26px;border-radius:12px;background:rgba(120,20,30,.85);color:#fff;font-family:Rajdhani,sans-serif;font-size:22px;font-weight:800;letter-spacing:2px;pointer-events:none;'; document.body.appendChild(b); }
-  b.textContent=text;
-  clearTimeout(b._t); b._t=setTimeout(function(){ if(b&&b.parentNode) b.parentNode.removeChild(b); }, 2500);
-}
-function _infPosOf(id){
-  if (MP.user && String(MP.user.id)===String(id)){ if(typeof camera!=='undefined'&&camera&&camera.position) return {x:camera.position.x,z:camera.position.z}; return null; }
-  var rp=MP.remotePlayers[id]; if(!rp) return null; var s=rp.snaps&&rp.snaps.length?rp.snaps[rp.snaps.length-1]:null; if(!s||!s.pos) return null; var pp=s.pos; return {x:pp.x!=null?pp.x:pp[0], z:pp.z!=null?pp.z:pp[2]};
-}
-function tickInfection(delta){
-  var O=MP._obj; if(!O||O.ended) return;
-  O.matchTime += delta;
-  if (O.isHost){
-    var R=3.6;
-    var ids=Object.keys(O.roles);
-    var infPts=ids.filter(function(k){return O.roles[k]==='infected';}).map(_infPosOf).filter(Boolean);
-    for (var i=0;i<ids.length;i++){
-      var k=ids[i]; if(O.roles[k]==='infected') continue;
-      var p=_infPosOf(k); if(!p) continue;
-      for (var j=0;j<infPts.length;j++){
-        var ip=infPts[j]; var dx=p.x-ip.x, dz=p.z-ip.z;
-        if (dx*dx+dz*dz <= R*R){
-          O.roles[k]='infected';
-          Net.send({type:'obj_event', event:'inf_infect', payload:{userId:k, by:(MP.user?String(MP.user.id):'')}});
-          break;
-        }
-      }
-    }
-    O.lastUpdate=(O.lastUpdate||0)+delta;
-    if (O.lastUpdate>=0.5){ O.lastUpdate=0; Net.send({type:'obj_update', data:{t:O.matchTime}}); }
-    var hum=ids.filter(function(k){return O.roles[k]==='human';}).length;
-    if (hum===0) _objEnd(1);
-    else if (O.matchTime>=O.limit) _objEnd(0);
-  }
-  renderObjectiveHud();
-}
 
 // 服务端发来的快照
 MP.onSnap = function(m){
@@ -5373,7 +5139,7 @@ function bindSocialUI(){
   $('rl-start').onclick=function(){ Net.send({type:'room_start'}); };
   // 王者乱斗联机入口
   var onlineBtn=$('wzlb-online-match-btn');
-  if(onlineBtn) onlineBtn.onclick=function(){ closeModal('wzlb-modal'); var map=document.querySelector('.wzlb-map.selected'); var _sz=document.querySelector('#wzlb-modal .wzlb-mode.selected'); var _md=document.querySelector('#wzlb-modal .wzlb-mmode.selected'); Net.send({type:'match_queue', mapKey:(map?map.dataset.map:'port'), teamSize:_sz?Number(_sz.dataset.size):1, mode:(_md?_md.dataset.mode:'tdm')}); showMatchmaking(); };
+  if(onlineBtn) onlineBtn.onclick=function(){ closeModal('wzlb-modal'); var map=document.querySelector('.wzlb-map.selected'); Net.send({type:'match_queue', mapKey:(map?map.dataset.map:'port'), teamSize:1, mode:'tdm'}); showMatchmaking(); };
   var roomBtn=$('wzlb-online-room-btn');
   if(roomBtn) roomBtn.onclick=function(){
     closeModal('wzlb-modal');
@@ -5382,7 +5148,7 @@ function bindSocialUI(){
     if(code===null) return;
     code=code.trim().toUpperCase();
     if(code){ Net.send({type:'room_join', roomCode:code}); }
-    else { var _sz=document.querySelector('#wzlb-modal .wzlb-mode.selected'); var _md=document.querySelector('#wzlb-modal .wzlb-mmode.selected'); Net.send({type:'room_create', mapKey:(map?map.dataset.map:'port'), teamSize:_sz?Number(_sz.dataset.size):1, mode:(_md?_md.dataset.mode:'tdm')}); }
+    else { Net.send({type:'room_create', mapKey:(map?map.dataset.map:'port'), teamSize:1, mode:'tdm'}); }
   };
   // PVE 组队入口
   var pveBtn=$('pve-coop-btn');
@@ -5794,7 +5560,6 @@ function registerStartScreenButtons() {
     // ==================== [王者乱斗] 入口与选择界面 ====================
     // 默认选中项与 HTML 中 .selected 一致
     var _wzlbSelMap = 'port';
-    var _wzlbSelSize = 1; // 默认1v1（保留兼容；实际规模以弹窗 .wzlb-mode.selected 为准）
     var wzlbEntryBtn = document.getElementById('wzlb-entry-btn');
     if (wzlbEntryBtn) wzlbEntryBtn.addEventListener('click', function(){
         var m = document.getElementById('wzlb-modal'); if (m){ m.classList.add('show'); if(typeof applyWzlbThumbnails === 'function') applyWzlbThumbnails(); }
@@ -5804,13 +5569,6 @@ function registerStartScreenButtons() {
         btn.addEventListener('click', function(){
             _wzlbMapBtns.forEach(function(b){ b.classList.remove('selected'); });
             btn.classList.add('selected'); _wzlbSelMap = btn.getAttribute('data-map');
-        });
-    });
-    var _wzlbMsizeBtns = document.querySelectorAll('#wzlb-modal .wzlb-mode');
-    _wzlbMsizeBtns.forEach(function(btn){
-        btn.addEventListener('click', function(){
-            _wzlbMsizeBtns.forEach(function(b){ b.classList.remove('selected'); });
-            btn.classList.add('selected');
         });
     });
     var _wzlbMmodeBtns = document.querySelectorAll('#wzlb-modal .wzlb-mmode');
@@ -6745,143 +6503,6 @@ function initAll() {
     window.WEAPON_DISPLAY_DATA = WEAPON_DISPLAY_DATA;
     window.WEAPON_FULL_DESC = WEAPON_FULL_DESC;
     window.getWeaponBaseDmg = getWeaponBaseDmg;
-// ====== 动态配置加载（后台实时同步：游戏数值不再硬编码，全部来自网络）======
-function _cfgNum(v){ if(v===null||v===undefined) return 0; if(v==='Infinity') return Infinity; if(v==='-Infinity') return -Infinity; var n=Number(v); return isNaN(n)?0:n; }
-function _parseBonus(s){
-  var o={hp:0,shield:0,soulPower:0,moveSpeed:0,energy:0,critRate:0,hpRegen:0,shieldRegen:0,energyRegen:0};
-  if(!s||typeof s!=='string') return o;
-  s.split('|').forEach(function(tok){
-    var t=tok.trim(), m;
-    if((m=t.match(/每秒回复生命\+(\d+)/))) o.hpRegen=+m[1];
-    else if((m=t.match(/生命\+(\d+)/))) o.hp=+m[1];
-    else if((m=t.match(/每秒回复护盾\+(\d+)/))) o.shieldRegen=+m[1];
-    else if((m=t.match(/护盾\+(\d+)/))) o.shield=+m[1];
-    else if((m=t.match(/魂力\+(\d+)/))) o.soulPower=+m[1];
-    else if((m=t.match(/移速\+(\d+)/))) o.moveSpeed=+m[1];
-    else if((m=t.match(/每秒回复能量\+(\d+)/))) o.energyRegen=+m[1];
-    else if((m=t.match(/能量\+(\d+)/))) o.energy=+m[1];
-    else if((m=t.match(/暴击\+(\d+)%/))) o.critRate=+m[1];
-  });
-  return o;
-}
-function applyConfig(cfg){
-  if(!cfg||typeof cfg!=='object') return;
-  try{
-    // —— 武器展示 / 完整数据（原地合并，保持 window 引用有效）——
-    for(var wid in WEAPON_DISPLAY_DATA){ var wd=cfg.weapons&&cfg.weapons[wid]; if(wd&&wd.display) Object.assign(WEAPON_DISPLAY_DATA[wid], wd.display); }
-    for(var wid2 in WEAPON_FULL_DESC){ var wf=cfg.weapons&&cfg.weapons[wid2]; if(wf&&wf.full) Object.assign(WEAPON_FULL_DESC[wid2], wf.full); }
-    // —— 武器装备加成（从 bonus 字符串解析为数值，真正驱动 recalcWeaponBonuses）——
-    for(var k in WEAPON_STATS) delete WEAPON_STATS[k];
-    for(var wid3 in WEAPON_FULL_DESC){ var full=cfg.weapons&&cfg.weapons[wid3]&&cfg.weapons[wid3].full; if(!full) full=WEAPON_FULL_DESC[wid3]; var st=_parseBonus(full&&full.bonus); st.label=(full&&full.typeLabel)||wid3; st.type=(full&&full.category)||''; WEAPON_STATS[wid3]=st; }
-    // —— 63 个玩法常量（基础伤害 / 射速 / 弹匣 / 技能伤害 / 灼烧DPS 等）——
-    var WC=cfg.tuning&&cfg.tuning.weaponConsts;
-    if(WC){
-      if ('BULLET_DAMAGE' in WC) BULLET_DAMAGE = _cfgNum(WC['BULLET_DAMAGE']);
-      if ('MELEE_DAMAGE' in WC) MELEE_DAMAGE = _cfgNum(WC['MELEE_DAMAGE']);
-      if ('LOCK_STORM_DAMAGE' in WC) LOCK_STORM_DAMAGE = _cfgNum(WC['LOCK_STORM_DAMAGE']);
-      if ('METALSTORM_DAMAGE' in WC) METALSTORM_DAMAGE = _cfgNum(WC['METALSTORM_DAMAGE']);
-      if ('METALSTORM_FIRE_RATE' in WC) METALSTORM_FIRE_RATE = _cfgNum(WC['METALSTORM_FIRE_RATE']);
-      if ('METALSTORM_MAG_SIZE' in WC) METALSTORM_MAG_SIZE = _cfgNum(WC['METALSTORM_MAG_SIZE']);
-      if ('WHITENIGHT_FIRE_RATE' in WC) WHITENIGHT_FIRE_RATE = _cfgNum(WC['WHITENIGHT_FIRE_RATE']);
-      if ('WHITENIGHT_MAG_SIZE' in WC) WHITENIGHT_MAG_SIZE = _cfgNum(WC['WHITENIGHT_MAG_SIZE']);
-      if ('TUMO_DAMAGE' in WC) TUMO_DAMAGE = _cfgNum(WC['TUMO_DAMAGE']);
-      if ('TUMO_MAG_SIZE' in WC) TUMO_MAG_SIZE = _cfgNum(WC['TUMO_MAG_SIZE']);
-      if ('TUMO_FIRE_RATE' in WC) TUMO_FIRE_RATE = _cfgNum(WC['TUMO_FIRE_RATE']);
-      if ('DRAGON_KNIGHT_MAG_SIZE' in WC) DRAGON_KNIGHT_MAG_SIZE = _cfgNum(WC['DRAGON_KNIGHT_MAG_SIZE']);
-      if ('DRAGON_KNIGHT_FIRE_RATE' in WC) DRAGON_KNIGHT_FIRE_RATE = _cfgNum(WC['DRAGON_KNIGHT_FIRE_RATE']);
-      if ('DRAGON_KNIGHT_BASE_DMG' in WC) DRAGON_KNIGHT_BASE_DMG = _cfgNum(WC['DRAGON_KNIGHT_BASE_DMG']);
-      if ('DAWNLIGHT_BASE_DMG' in WC) DAWNLIGHT_BASE_DMG = _cfgNum(WC['DAWNLIGHT_BASE_DMG']);
-      if ('DAWNLIGHT_FIRE_RATE' in WC) DAWNLIGHT_FIRE_RATE = _cfgNum(WC['DAWNLIGHT_FIRE_RATE']);
-      if ('DAWNLIGHT_MAG_SIZE' in WC) DAWNLIGHT_MAG_SIZE = _cfgNum(WC['DAWNLIGHT_MAG_SIZE']);
-      if ('PARASITE_BASE_DMG' in WC) PARASITE_BASE_DMG = _cfgNum(WC['PARASITE_BASE_DMG']);
-      if ('PARASITE_FIRE_RATE' in WC) PARASITE_FIRE_RATE = _cfgNum(WC['PARASITE_FIRE_RATE']);
-      if ('PARASITE_MAG_SIZE' in WC) PARASITE_MAG_SIZE = _cfgNum(WC['PARASITE_MAG_SIZE']);
-      if ('ZEUS_HAND_BASE_DMG' in WC) ZEUS_HAND_BASE_DMG = _cfgNum(WC['ZEUS_HAND_BASE_DMG']);
-      if ('ZEUS_HAND_FIRE_RATE' in WC) ZEUS_HAND_FIRE_RATE = _cfgNum(WC['ZEUS_HAND_FIRE_RATE']);
-      if ('ZEUS_HAND_MAG_SIZE' in WC) ZEUS_HAND_MAG_SIZE = _cfgNum(WC['ZEUS_HAND_MAG_SIZE']);
-      if ('PHASE_WALKER_DAMAGE' in WC) PHASE_WALKER_DAMAGE = _cfgNum(WC['PHASE_WALKER_DAMAGE']);
-      if ('PHASE_WALKER_FIRE_RATE' in WC) PHASE_WALKER_FIRE_RATE = _cfgNum(WC['PHASE_WALKER_FIRE_RATE']);
-      if ('ZEUS_PHANTOM_FIRE_RATE' in WC) ZEUS_PHANTOM_FIRE_RATE = _cfgNum(WC['ZEUS_PHANTOM_FIRE_RATE']);
-      if ('MOONBOW_BASE_DMG' in WC) MOONBOW_BASE_DMG = _cfgNum(WC['MOONBOW_BASE_DMG']);
-      if ('MOONBOW_MIN_FIRE_RATE' in WC) MOONBOW_MIN_FIRE_RATE = _cfgNum(WC['MOONBOW_MIN_FIRE_RATE']);
-      if ('MOONBOW_MAX_FIRE_RATE' in WC) MOONBOW_MAX_FIRE_RATE = _cfgNum(WC['MOONBOW_MAX_FIRE_RATE']);
-      if ('SECONDARY_DAMAGE' in WC) SECONDARY_DAMAGE = _cfgNum(WC['SECONDARY_DAMAGE']);
-      if ('SECONDARY_FIRE_RATE' in WC) SECONDARY_FIRE_RATE = _cfgNum(WC['SECONDARY_FIRE_RATE']);
-      if ('SECONDARY_MAG_SIZE' in WC) SECONDARY_MAG_SIZE = _cfgNum(WC['SECONDARY_MAG_SIZE']);
-      if ('MELEE_LIGHT_DAMAGE' in WC) MELEE_LIGHT_DAMAGE = _cfgNum(WC['MELEE_LIGHT_DAMAGE']);
-      if ('MELEE_HEAVY_DAMAGE' in WC) MELEE_HEAVY_DAMAGE = _cfgNum(WC['MELEE_HEAVY_DAMAGE']);
-      if ('BULLET_BASE_DMG' in WC) BULLET_BASE_DMG = _cfgNum(WC['BULLET_BASE_DMG']);
-      if ('AMMO_MAG_SIZE' in WC) AMMO_MAG_SIZE = _cfgNum(WC['AMMO_MAG_SIZE']);
-      if ('SHOOT_INTERVAL' in WC) SHOOT_INTERVAL = _cfgNum(WC['SHOOT_INTERVAL']);
-      if ('TUMO_BASE_DMG' in WC) TUMO_BASE_DMG = _cfgNum(WC['TUMO_BASE_DMG']);
-      if ('SECONDARY_BASE_DMG' in WC) SECONDARY_BASE_DMG = _cfgNum(WC['SECONDARY_BASE_DMG']);
-      if ('METALSTORM_BASE_DMG' in WC) METALSTORM_BASE_DMG = _cfgNum(WC['METALSTORM_BASE_DMG']);
-      if ('LOCK_STORM_BASE_DMG' in WC) LOCK_STORM_BASE_DMG = _cfgNum(WC['LOCK_STORM_BASE_DMG']);
-      if ('MELEE_LIGHT_BASE_DMG' in WC) MELEE_LIGHT_BASE_DMG = _cfgNum(WC['MELEE_LIGHT_BASE_DMG']);
-      if ('MELEE_HEAVY_BASE_DMG' in WC) MELEE_HEAVY_BASE_DMG = _cfgNum(WC['MELEE_HEAVY_BASE_DMG']);
-      if ('MELEE_GUNBUTT_BASE_DMG' in WC) MELEE_GUNBUTT_BASE_DMG = _cfgNum(WC['MELEE_GUNBUTT_BASE_DMG']);
-      if ('HELLSCYTHE_WIND_BASE_DMG' in WC) HELLSCYTHE_WIND_BASE_DMG = _cfgNum(WC['HELLSCYTHE_WIND_BASE_DMG']);
-      if ('HELLSCYTHE_HELL_BASE_DMG' in WC) HELLSCYTHE_HELL_BASE_DMG = _cfgNum(WC['HELLSCYTHE_HELL_BASE_DMG']);
-      if ('GRENADE_BASE_DMG' in WC) GRENADE_BASE_DMG = _cfgNum(WC['GRENADE_BASE_DMG']);
-      if ('GRENADE_BURN_BASE_DPS' in WC) GRENADE_BURN_BASE_DPS = _cfgNum(WC['GRENADE_BURN_BASE_DPS']);
-      if ('DEATHLIGHT_BASE_DMG' in WC) DEATHLIGHT_BASE_DMG = _cfgNum(WC['DEATHLIGHT_BASE_DMG']);
-      if ('DEATHLIGHT_ROCKET_BASE_DMG' in WC) DEATHLIGHT_ROCKET_BASE_DMG = _cfgNum(WC['DEATHLIGHT_ROCKET_BASE_DMG']);
-      if ('FROSTSTAR_FIRST_BASE_DMG' in WC) FROSTSTAR_FIRST_BASE_DMG = _cfgNum(WC['FROSTSTAR_FIRST_BASE_DMG']);
-      if ('FROSTSTAR_SECOND_BASE_DMG' in WC) FROSTSTAR_SECOND_BASE_DMG = _cfgNum(WC['FROSTSTAR_SECOND_BASE_DMG']);
-      if ('THUNDER_BEAM_BASE_DMG' in WC) THUNDER_BEAM_BASE_DMG = _cfgNum(WC['THUNDER_BEAM_BASE_DMG']);
-      if ('DEATHLIGHT_BURN_BASE_DPS' in WC) DEATHLIGHT_BURN_BASE_DPS = _cfgNum(WC['DEATHLIGHT_BURN_BASE_DPS']);
-      if ('WHITENIGHT_BASE_DMG' in WC) WHITENIGHT_BASE_DMG = _cfgNum(WC['WHITENIGHT_BASE_DMG']);
-      if ('WHITENIGHT_SKILL_BASE_DMG' in WC) WHITENIGHT_SKILL_BASE_DMG = _cfgNum(WC['WHITENIGHT_SKILL_BASE_DMG']);
-      if ('PARASITE_CANNON_BASE_DMG' in WC) PARASITE_CANNON_BASE_DMG = _cfgNum(WC['PARASITE_CANNON_BASE_DMG']);
-      if ('THOUSAND_UMBRELLA_BASE_DMG' in WC) THOUSAND_UMBRELLA_BASE_DMG = _cfgNum(WC['THOUSAND_UMBRELLA_BASE_DMG']);
-      if ('TANGLOTUS_BASE_DMG' in WC) TANGLOTUS_BASE_DMG = _cfgNum(WC['TANGLOTUS_BASE_DMG']);
-      if ('TANGLOTUS_PETAL_DMG' in WC) TANGLOTUS_PETAL_DMG = _cfgNum(WC['TANGLOTUS_PETAL_DMG']);
-      if ('TANGLOTUS_TOTAL_PETALS' in WC) TANGLOTUS_TOTAL_PETALS = _cfgNum(WC['TANGLOTUS_TOTAL_PETALS']);
-      if ('BOSS_FLAME_DAMAGE' in WC) BOSS_FLAME_DAMAGE = _cfgNum(WC['BOSS_FLAME_DAMAGE']);
-      if ('FIST_BASE_DMG' in WC) FIST_BASE_DMG = _cfgNum(WC['FIST_BASE_DMG']);
-      if ('DEATHLIGHT_DAMAGE' in WC) DEATHLIGHT_DAMAGE = _cfgNum(WC['DEATHLIGHT_DAMAGE']);
-      if ('DEATHLIGHT_ROCKET_DAMAGE' in WC) DEATHLIGHT_ROCKET_DAMAGE = _cfgNum(WC['DEATHLIGHT_ROCKET_DAMAGE']);
-    }
-    // —— 角色 / 星级（跨 IIFE，通过 window 钩子热更新）——
-    if(window.__setCharacterConfig) window.__setCharacterConfig(Object.values(cfg.characters||{}), (cfg.tuning&&cfg.tuning.starMeta)||{});
-    if(window.__applyCharacterStats) window.__applyCharacterStats();
-    // —— 关卡 / BOSS / 难度 / 关卡上限 ——
-    var tune=cfg.tuning||{};
-    if(tune.bossHpTable&&Array.isArray(tune.bossHpTable)){ BOSS_HP_TABLE=[]; BOSS_HP_TABLE[0]=0; tune.bossHpTable.forEach(function(v,i){ BOSS_HP_TABLE[i]=_cfgNum(v); }); window.__BOSS_HP_TABLE__=BOSS_HP_TABLE; }
-    else if(Array.isArray(cfg.levels)){ BOSS_HP_TABLE=[]; BOSS_HP_TABLE[0]=0; cfg.levels.forEach(function(L){ BOSS_HP_TABLE[L.level_no]=_cfgNum(L.boss_hp); }); window.__BOSS_HP_TABLE__=BOSS_HP_TABLE; }
-    var lwc=tune.levelWaveCounts||[100,100,0]; for(var i=1;i<=10;i++) LEVEL_WAVE_COUNTS[i]=lwc;
-    if(tune.difficulty) DIFFICULTY_CONFIG=tune.difficulty;
-    if(tune.maxLevel!=null) MAX_LEVEL=_cfgNum(tune.maxLevel);
-    (cfg.levels||[]).forEach(function(L){
-      var no=L.level_no;
-      if(BOSS_BLUEPRINTS[no]&&L.boss_name) BOSS_BLUEPRINTS[no].name=L.boss_name;
-      if(LEVELS[no]){ if(L.name) LEVELS[no].name=L.name; if(LEVELS[no].boss&&L.boss_name) LEVELS[no].boss.name=L.boss_name; }
-      // 关卡级 BOSS 血（后台改 level.boss_hp → 战斗真源 BOSS_HP_TABLE）
-      if(L.boss_hp!=null) BOSS_HP_TABLE[no]=_cfgNum(L.boss_hp);
-      // 波数：wave_count 视为每波小怪数，末波恒为 BOSS 战
-      if(L.wave_count!=null){
-        var w=_cfgNum(L.wave_count);
-        var tmpl=(tune.levelWaveCounts&&tune.levelWaveCounts.length)?tune.levelWaveCounts:[100,100,0];
-        var ec=Math.max(1, tmpl.length-1);
-        var arr=[]; for(var k=0;k<ec;k++) arr.push(w); arr.push(0);
-        LEVEL_WAVE_COUNTS[no]=arr;
-      }
-    });
-    window.__BOSS_HP_TABLE__ = BOSS_HP_TABLE;
-    if(window.__rerenderPanels) window.__rerenderPanels();
-  }catch(e){ console.error('applyConfig error', e); }
-}
-function _rerenderPanels(){
-  try{ if(window.__buildShop) window.__buildShop(); }catch(e){}
-  try{ if(window.__buildEquipCodex) window.__buildEquipCodex(); }catch(e){}
-  try{ if(window.__renderShop) window.__renderShop(); }catch(e){}
-}
-function loadGameConfig(){
-  return fetch('/api/config/all',{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(d){ if(d&&d.ok) applyConfig(d); }).catch(function(e){ console.warn('加载游戏配置失败（使用内置默认值）', e); });
-}
-window.__loadGameConfig=loadGameConfig;
-window.__rerenderPanels=_rerenderPanels;
-loadGameConfig();
 
     // 当前装备的武器属性加成
     let equippedWeaponBonuses = { hp:0, shield:0, soulPower:0, moveSpeed:0, energy:0, critRate:0, hpRegen:0, shieldRegen:0, energyRegen:0 };
@@ -26726,6 +26347,7 @@ break;
     window._openHomepagePanel = function() {
         isPanelOpen = true;
         _isHomepagePanel = true;
+        try { document.exitPointerLock(); } catch(e) {}
         playerPanel.classList.add('open');
         try { updatePanelStats(); } catch(e) { console.warn('homepagePanel: updatePanelStats error:', e); }
         try { buildWeaponGrid(); } catch(e) { console.warn('homepagePanel: buildWeaponGrid error:', e); }
@@ -28154,14 +27776,11 @@ break;
             const talentContent = document.getElementById('tab-talent-content');
             const achievementContent = document.getElementById('tab-achievement-content');
             const statsContent = document.getElementById('tab-stats-content');
-            const rankContent = document.getElementById('tab-rank-content');
             if (weaponContent) weaponContent.style.display = (tab === 'weapon') ? '' : 'none';
             if (materialContent) materialContent.style.display = (tab === 'material') ? '' : 'none';
             if (talentContent) talentContent.style.display = (tab === 'talent') ? '' : 'none';
             if (achievementContent) achievementContent.style.display = (tab === 'achievement') ? '' : 'none';
             if (statsContent) statsContent.style.display = (tab === 'stats') ? '' : 'none';
-            if (rankContent) rankContent.style.display = (tab === 'rank') ? '' : 'none';
-            if (tab === 'rank' && typeof renderRankList === 'function') renderRankList();
             // [P2] 切换到天赋/成就标签时刷新内容
             if (tab === 'talent' && typeof buildTalentPanel === 'function') buildTalentPanel();
             if (tab === 'achievement' && typeof buildAchievementPanel === 'function') buildAchievementPanel();
@@ -28169,45 +27788,6 @@ break;
             if (tab === 'stats' && typeof buildStatsPanel === 'function') buildStatsPanel();
         });
     });
-    // [A3] 排行榜渲染（拉取 /api/rank，顺带刷新个人段位）
-    function _rkEscape(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
-    function renderRankList(){
-        var box = document.getElementById('tab-rank-content');
-        if(!box) return;
-        box.innerHTML = '<div class="rk-loading">加载排行榜中…</div>';
-        fetch('/api/rank?limit=50').then(function(r){return r.json();}).then(function(d){
-            if(!d || !d.ok || !Array.isArray(d.list)){ box.innerHTML = '<div class="rk-loading">排行榜暂不可用</div>'; return; }
-            var medal = ['🥇','🥈','🥉'];
-            var rows = d.list.map(function(p,i){
-                var top = i<3 ? medal[i] : (i+1);
-                var me = (window.__me && p.userId === window.__me.userId);
-                return '<div class="rk-row'+(me?' self':'')+'"><span class="rk-rank">'+top+'</span>'
-                    +'<span class="rk-name" title="'+_rkEscape(p.username)+'">'+_rkEscape(p.displayName||p.username)+'</span>'
-                    +'<span class="rk-tier">'+_rkEscape(p.tier)+'</span>'
-                    +'<span class="rk-elo">'+p.elo+'</span>'
-                    +'<span class="rk-wl">'+p.wins+'W / '+p.losses+'L</span></div>';
-            }).join('');
-            box.innerHTML = '<div class="rk-head"><span class="rk-rank">#</span><span class="rk-name">玩家</span><span class="rk-tier">段位</span><span class="rk-elo">ELO</span><span class="rk-wl">战绩</span></div>' + rows;
-        }).catch(function(){ box.innerHTML = '<div class="rk-loading">排行请求失败</div>'; });
-        // 顺带刷新个人段位 / 等级 / 经验（C 成长线）
-        try { refreshProfileMeta(); } catch(e){}
-    }
-    // 成长线 / Meta（C）：刷新个人面板 段位 + 等级 + 经验条
-    function refreshProfileMeta(){
-      try {
-        fetch('/api/rank/me', {credentials:'same-origin'}).then(function(r){return r.json();}).then(function(m){
-          if(!m || !m.ok) return;
-          var rankEl = document.querySelector('#player-panel .rd-profile-rank');
-          if(rankEl) rankEl.textContent = '段位：'+m.tier+' · ELO '+m.elo+'（#'+m.rank+'）';
-          var lvEl = document.getElementById('rd-level'); if(lvEl) lvEl.textContent = m.level || 1;
-          var fill = document.getElementById('rd-xp-fill');
-          if(fill){ var pct = m.xpNext ? Math.min(100, Math.round((m.xp||0)/m.xpNext*100)) : 0; fill.style.width = pct+'%'; }
-          var txt = document.getElementById('rd-xp-text'); if(txt) txt.textContent = (m.xp||0)+' / '+(m.xpNext||100)+' XP';
-        }).catch(function(){});
-      } catch(e){}
-    }
-    window.refreshProfileMeta = refreshProfileMeta;
-    refreshProfileMeta();
     // 武器仓库筛选按钮事件
     document.querySelectorAll('#weapon-filter-bar .weapon-filter-btn').forEach(btn => {
         btn.addEventListener('click', () => { applyWeaponFilter(btn.dataset.filter); });
@@ -29264,7 +28844,6 @@ break;
         _dmgNumThisFrame = 0; // 每帧重置伤害数字计数器
         if(gameStarted&&!isDead&&!levelComplete&&(!isPanelOpen||__pveCoopActive())&&(!isPaused||__pveCoopActive())) {
             gameTime += delta;
-            if (MP._obj && !MP._obj.ended) { try { tickObjective(delta); } catch(e){} }
             // [P3·Task21] 累计游戏时长（仅在局内活跃时累加；不在每帧存盘，由死亡/通关/退出事件落盘）
             try { stats.totalPlayTime = (stats.totalPlayTime || 0) + delta; } catch(e) {}
             // 数据魔方：动态累加增幅，每秒+1%，100秒达到上限100%
@@ -30240,7 +29819,7 @@ break;
     function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
     function sub(a,b){ return new THREE.Vector3(a.x-b.x, 0, a.z-b.z); }
     const _wzlbRay = new THREE.Raycaster();
-    let _wzlbSelMap = 'port', _wzlbSelSize = 3;
+    let _wzlbSelMap = 'port', _wzlbSelSize = 1;
     let _wzlbShakeTO = null;
     let _wzlbHudTick = 0;
     let _wzlbSkillThrows = 0; // 仅供自动化验证计数
