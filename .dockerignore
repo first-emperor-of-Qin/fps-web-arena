@@ -1,0 +1,14 @@
+node_modules
+npm-debug.log
+.git
+.gitignore
+.workbuddy
+data
+server/data
+*.sqlite
+*.sqlite-*
+.DS_Store
+overview.md
+CONVERSATION_LOG.md
+AUDIO_CHANGES.md
+wrangler.jsonc

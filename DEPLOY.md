@@ -45,7 +45,7 @@ npm start
    - **Environment Variable**: `PORT` 自动注入（无需手动设置）
 4. 点击 **Deploy**。部署完成后的 URL 形如 `https://xxxx.onrender.com`。
 
-> ⚠️ 免费实例 15 分钟无请求会休眠，再次访问需约 30 秒冷启动。
+> ⚠️ 免费实例 15 分钟无请求会休眠，再次访问需约 30 秒冷启动。**节点在美国，国内访问偏慢**——若面向大陆玩家，优先看下方「免费 + 国内流畅访问」的 Fly.io（香港）/ Oracle（东京）方案。
 
 ### 方案二：Railway
 
@@ -89,6 +89,56 @@ server {
     }
 }
 ```
+
+---
+
+## 免费 + 国内流畅访问（重点）
+
+> 现实（2026）：腾讯云 / 阿里云 / 华为云 只有 **1–3 个月新用户试用**、需实名，**不叫真免费**；
+> 真正「永久免费 + 离大陆最近 + 完整支持 Node/WebSocket/SQLite 持久盘」的是下面两者。
+
+### 方案四：Fly.io 香港节点（★ 推荐：免费 + 延迟最低）
+
+[Fly.io](https://fly.io) 有 **香港（hkg）** 节点，离大陆最近 → 国内延迟最低、最流畅。
+免费档为 `shared-cpu-1x / 256MB`，够跑这个轻量后端；支持 Docker / WebSocket / 持久卷（SQLite）。
+
+1. 本地安装 `flyctl`（需用自己的信用卡验证，但免费档 **0 费用**）：
+   ```bash
+   # macOS
+   brew install flyctl
+   # 其它系统见 https://fly.io/docs/hands-on/installing/
+   ```
+2. 登录并部署（仓库根已有 `fly.toml`，已锁定 hkg 区域）：
+   ```bash
+   flyctl auth login
+   flyctl launch --no-deploy     # 首次：生成 app 并绑定配置
+   flyctl deploy                  # 构建镜像并上线
+   ```
+3. 部署完成后得到 `https://<app>.fly.dev`，**WebSocket 自动走 wss://，国内可直接流畅访问**。
+4. 之后改了代码：`git push` 后跑一次 `flyctl deploy` 即可。
+
+> ⚠️ 免费档在无流量时会自动停机（省钱），**首次访问有数秒冷启动**；256MB 内存偏紧，
+> 若玩家多/OOM，升级付费档或改用方案五。
+
+### 方案五：Oracle Cloud 永久免费（东京，更充裕）
+
+[Oracle Cloud Always Free](https://www.oracle.com/cloud/free/) 在 **东京（ap-tokyo-1）/ 首尔** 提供
+**永久免费** ARM 实例（4 OCPU / 24GB）或 2 台 AMD 实例，**永不休眠**、资源充裕，
+东京到大陆延迟约 40–70ms（够流畅）。需信用卡验证（不扣费），部分地区注册有名额限制可换区域重试。
+
+1. 注册 Oracle Cloud，创建 **Always Free** 实例（系统选 Ubuntu 22.04，区域选东京/首尔）。
+2. 安全列表入站放行 **TCP 3000**（或 80/443 若配 Nginx）。
+3. SSH 进实例，直接复用本仓库的 VPS 方式：
+   ```bash
+   curl -fsSL https://raw.githubusercontent.com/first-emperor-of-Qin/fps-web-arena/zcode/deploy.sh | bash
+   # 或手动：git clone -b zcode … && docker compose up -d --build
+   ```
+4. 访问 `http://<实例公网IP>:3000/`。
+
+### 国内「真·永久免费」小厂（不推荐游戏后端）
+
+阿贝云 / 丰云等自称永久免费（1核1G），但条款**禁止对外提供公共服务（API/代理等）**，
+游戏后端属于公开服务、可能被回收；且每 5 天需手动续期、配置极低。仅适合练手，**不建议用于本游戏**。
 
 ---
 
