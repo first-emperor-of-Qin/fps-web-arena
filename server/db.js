@@ -9,9 +9,11 @@ const fs = require('fs');
 const Database = require('better-sqlite3');
 
 const DATA_DIR = path.join(__dirname, 'data');
-if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+// 部署时可通过环境变量 DB_PATH 指向挂载的持久盘（如 /data/app.sqlite），避免免费实例重启丢库
+const DB_PATH = process.env.DB_PATH || path.join(DATA_DIR, 'app.sqlite');
+const _dbDir = path.dirname(DB_PATH);
+if (!fs.existsSync(_dbDir)) fs.mkdirSync(_dbDir, { recursive: true });
 
-const DB_PATH = path.join(DATA_DIR, 'app.sqlite');
 const db = new Database(DB_PATH);
 db.pragma('journal_mode = WAL'); // 并发读写更稳
 

@@ -5,7 +5,7 @@
 ## 本地开发 / 运行
 
 ### 前置条件
-- **Node.js >= 18**（推荐 v20+）
+- **Node.js 22.x**（已在 `package.json` 锁定 `engines.node`）
 - npm（随 Node.js 附带）
 
 ### 启动
@@ -23,7 +23,8 @@ npm start
 启动后访问 **[http://localhost:3000](http://localhost:3000)**。
 
 ### 说明
-- 首次启动自动创建 `server/data/app.sqlite` 数据库，无需任何额外配置。
+- 首次启动自动创建数据库，默认位于 `server/data/app.sqlite`。
+- 如需将数据库放到挂载的持久盘（避免免费实例重启丢库），可设置环境变量 `DB_PATH` 指向持久盘路径，例如 `DB_PATH=/var/data/app.sqlite`。
 - 前后端在**同一端口**提供（Express 静态托管 + WebSocket），**无 CORS 问题**。
 - 停止：终端按 `Ctrl+C`。
 

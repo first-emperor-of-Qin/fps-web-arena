@@ -1,11 +1,11 @@
-# 交接文档 · HANDOFF v3 (最终版)
+# 交接文档 · HANDOFF（当前真实状态）
 
-**项目**：枪战突击 · COMBAT STRIKE — 单机FPS → 联机FPS 改造
-**日期**：2026-07-13
-**版本**：v6.0 联机版
+**项目**：枪战突击 · COMBAT STRIKE — 单机 FPS → 联机 FPS 改造
+**日期**：2026-07-14
+**版本**：v6.0 联机版（已回退扩展）
 **分支**：`zcode`
-**前端**：`index.html` (31,153 行 / 2.0MB)
-**后端**：7个 JS 文件 + 1个 HTML 文件 — `server/` 目录
+**前端**：`index.html`（31,898 行 / 2.0MB，全部内联：CSS + HTML + JS）
+**后端**：5 个 JS 文件 — `server/` 目录
 
 ---
 
@@ -19,8 +19,7 @@ npm start          # → http://localhost:3000
 
 | 入口 | 地址 | 账户 | 密码 |
 |------|------|------|------|
-| 游戏 | `http://localhost:3000` | `gemetest` | `66668888xxx` |
-| 后台 | `http://localhost:3000/admin` | `admin` | `admin123456` |
+| 游戏 | `http://localhost:3000` | `gametest` | `66668888xxx` |
 
 > ⚠️ 必须通过 `http://localhost:3000` 访问。`file://` 协议和 GitHub Pages 均不可用（联机需 Node 后端）。
 
@@ -30,23 +29,20 @@ npm start          # → http://localhost:3000
 
 ```
 fps-web-arena/
-├── index.html                  # 前端单体 (31,153行) — 全部内联：CSS + HTML + JS
+├── index.html                  # 前端单体 (31,898行) — 全部内联：CSS + HTML + JS
 ├── package.json                # Node.js: express/ws/better-sqlite3/bcryptjs
 ├── server/
 │   ├── index.js                # 启动入口 — Express路由 + ws挂载 + 静态托管
-│   ├── db.js                   # SQLite — 用户/会话/好友/消息/房间表 + 预编译查询
+│   ├── db.js                   # SQLite — 用户/会话/好友/消息/房间表 + DB_PATH 可配置
 │   ├── auth.js                 # 游戏认证 — 注册/登录/登出 + 轻量cookie解析 + 封禁检查
 │   ├── social.js               # 好友REST — 搜索/申请/接受/删除/在线状态
-│   ├── realtime.js             # ⭐ WebSocket核心 — 27种消息类型(聊天/匹配/组队/对局同步/PVE)
-│   ├── admin-db.js             # 后台DB — 10张管理表 + 预设admin账户 + 种子数据
-│   ├── admin-auth.js           # 后台认证 — 独立session + 改密 + 日志记录
-│   ├── admin-api.js            # 后台API — 11组端点 + 公开配置API(/api/config/*)
-│   ├── admin.html              # 后台前端 — 31KB单页(10个功能页)
-│   └── data/app.sqlite         # 运行时数据库 (.gitignore)
+│   └── realtime.js             # ⚡ WebSocket核心 — 聊天/匹配/组队/对局同步/PV
 ├── README.md / DEPLOY.md       # 项目说明 + 部署指南
-├── HANDOFF.md                  # ⬅ 你正在读的文件
-└── CONVERSATION_LOG.md         # 完整对话日志 + 操作记录
+├── HANDOFF.md                # ⬅ 你正在读的文件
+└── CONVERSATION_LOG.md       # 完整对话日志 + 操作记录
 ```
+
+> 已删除（用户要求回退）：`server/admin-*`、`server/admin.html`、`server/seed_config.json`、`/api/config/*`、`/admin` 后台系统，以及 A1(3v3/5v5规模)/A2(占点·爆破)/A3(段位榜)/C(成长线)/D(生化 infection) 全部扩展代码与 UI。内容回退到 `index.html` 内联内置常量（19 武器 / 10 角色 / 10 关卡）。
 
 ---
 
@@ -54,13 +50,9 @@ fps-web-arena/
 
 ```
 浏览器 ── HTTP ──→ Express (server/index.js)
-  │                    ├─ /api/*          → 游戏 REST API
-  │                    ├─ /admin          → 后台管理
-  │                    ├─ /admin/api/*    → 后台 REST API
-  │                    ├─ /api/config/*   → 公开配置 (武器/角色/关卡)
+  │                    ├─ /api/*          → 游戏 REST API（注册/登录/好友）
   │                    ├─ /ws             → WebSocket 实时层
   │                    └─ 静态文件        → index.html
-  │
   └── WebSocket ──────→ realtime.js
                           ├─ 聊天 (私聊/房间/队伍频道)
                           ├─ 匹配 (1v1 队列撮合)
@@ -71,12 +63,11 @@ fps-web-arena/
 ```
 
 ### 登录守卫 (`window.__fpsGate`)
-
 三个游戏入口在登录前被锁定：
 ```
-registerStartScreenButtons()  ─┐
-initAll() (Three.js引擎)      ─┼─→ window.__fpsGate(fn) ─→ unlockBoot() 排空
-角色系统 init()               ─┘                                ↑ 登录成功触发
+registerStartScreenButtons()  ┐
+initAll() (Three.js引擎)      ┼─→ window.__fpsGate(fn) ─→ unlockBoot() 排空
+角色系统 init()               ┘                                ↑ 登录成功触发
 ```
 
 ---
@@ -84,37 +75,36 @@ initAll() (Three.js引擎)      ─┼─→ window.__fpsGate(fn) ─→ unlockB
 ## 🎮 前端关键代码位置 (index.html)
 
 ### CSS 注入点
-- **联机样式** (~3000行)：`#auth-screen`/`.mp-panel`/`#chat-panel`/`#matchmaking-overlay`/`#room-lobby`/`#pve-lobby`/`#net-toast`/`.ban-banner`
+- **联机样式**（~3000行）：`#auth-screen`/`.mp-panel`/`#chat-panel`/`#matchmaking-overlay`/`#room-lobby`/`#pve-lobby`/`#net-toast`/`.ban-banner`
+- **个人面板**（最后获胜的 `!important` 层「个人面板 · 简洁大气重构」）：`#player-panel`/`#panel-inner`/`#panel-body`/`#panel-left`/`#panel-right` — 已修复 flex `min-height:0` 滚动被裁切问题
 
 ### HTML 注入点
 - **登录界面** `#auth-screen` — 含封禁横幅 `#ban-banner`
-- **好友面板** `#friends-panel` — 搜索/申请列表/好友列表
-- **聊天面板** `#chat-panel` — 频道切换/消息列表/输入框
-- **组队面板** `#team-panel` — 创建/加入/邀请
-- **PVE大厅** `#pve-lobby` — 房间码/关卡选择/好友邀请
+- **好友面板** `#friends-panel` / **聊天面板** `#chat-panel` / **组队面板** `#team-panel`
+- **PV大厅** `#pve-lobby` — 房间码/关卡选择/好友邀请
 - **匹配遮罩** `#matchmaking-overlay` / **房间大厅** `#room-lobby`
-- **底部Dock** 新增：👥好友 / 💬聊天 / ⚔️组队联机
-- **开始屏幕** 新增：🤝组队攻略卡片
-- **WZLB弹窗** 简化：仅1v1联机(移除AI/3v3/5v5)
+- **底部Dock**：👥好友 / 💬聊天 / ⚔️组队联机
+- **开始屏幕**：🤝组队攻略卡片
+- **WZLB弹窗** 简化：仅 1v1 联机（移除 AI/3v3/5v5）
 
 ### JS 注入点
-- **登录守卫 + MP客户端** (~900行) — `window.__fpsGate` + `window.MP` + `window.net`
-- **引擎桥接** (initAll 末尾) — `window.__startOnlineMatch` / `window.__startPveCoop` / `window.__netHooks`
-- **变量声明** (initAll 开头) — `let pveCoopActive = false`
+- **登录守卫 + MP客户端**（~900行）— `window.__fpsGate` + `window.MP` + `window.net`
+- **引擎桥接**（initAll 末尾）— `window.__startOnlineMatch` / `window.__startPveCoop` / `window.__netHooks`
+- **变量声明**（initAll 开头）— `let pveCoopActive = false`
 
 ### ⚠️ 关键设计原则
-**单机游戏逻辑函数中没有任何 PVE 联机代码**。以下函数已被完全还原到原始状态：
-- `handlePrimaryFire` — 无 PVE 代码
-- `checkWaveComplete` — 无 PVE 代码
-- `startNextWave` — 无 PVE 代码
-- `killEnemy` — 无 PVE 代码
-- 主命中伤害应用 — 无 PVE 代码
+**单机游戏逻辑函数中没有任何 PVE/联机代码**。以下函数已被完全还原到原始状态：
+- `handlePrimaryFire` — 无联机代码
+- `checkWaveComplete` — 无联机代码
+- `startNextWave` — 无联机代码
+- `killEnemy` — 无联机代码
+- 主命中伤害应用 — 无联机代码
 
-PVE 联机功能全部封装在 `window.__netHooks` 中，仅在 `pveCoopActive === true` 时由 WebSocket 消息触发。
+PV联机功能全部封装在 `window.__netHooks` 中，仅在 `pveCoopActive === true` 时由 WebSocket 消息触发。
 
 ---
 
-## 🔌 WebSocket 消息类型表
+## 🔌 WebSocket 消息类型表（当前保留）
 
 | type | 方向 | 用途 |
 |------|------|------|
@@ -135,23 +125,11 @@ PVE 联机功能全部封装在 `window.__netHooks` 中，仅在 `pveCoopActive 
 | `pve_invite/accept_invite` | 双向 | PVE 好友邀请 |
 | `reconnect` | C→S | 断线重连 |
 
----
-
-## 🔧 已修复的 BUG 清单
-
-| # | 现象 | 根因 | 修复 |
-|---|------|------|------|
-| 1 | 登录后闪现首页又跳回 | ws鉴权只读URL token | 服务端支持Cookie header |
-| 2 | 1v1匹配不成功 | 匹配队列缺`user`对象 | 补`user`字段+防御性兜底 |
-| 3 | 组队一方直接胜利 | 队伍映射逻辑错(team=1反转) | `p.team===myTeam?'ally':'enemy'` |
-| 4 | 聊天消息重复 | 服务端relay+客户端回显 | 排除发送者 |
-| 5 | 怪物0血不死 | `window.MP.send`不存在 | 添加`MP.send`方法 |
-| 6 | PVE击杀广播死循环 | `killEnemy`收到sync又广播 | `_pveKillSynced`标记 |
-| 7 | **单机无怪物** | PVE代码嵌入游戏逻辑函数 | **全部移除，仅保留独立包装** |
+> 注意：`realtime.js` 的 `ALLOWED_MODES = ['tdm','pve']`（仅保留基础 1v1 死斗 + PVE 合作）。`match_result` 现在只回 `match_result_ack`（不再落库）。
 
 ---
 
-## 📋 当前状态矩阵
+## 🧪 当前状态矩阵
 
 | 模块 | 状态 | 备注 |
 |------|------|------|
@@ -160,74 +138,47 @@ PVE 联机功能全部封装在 `window.__netHooks` 中，仅在 `pveCoopActive 
 | 聊天系统 | ✅ | 私聊/房间/队伍频道 |
 | WZLB 1v1联机 | ✅ | 仅1v1，30Hz帧同步 |
 | 组队系统 | ✅ | 创建/邀请/带队匹配 |
-| 后台管理系统 | ✅ | 10模块，数据已填充 |
 | 封禁系统 | ✅ | 实时生效+红色横幅 |
-| 配置API | ✅ | /api/config/* 就绪 |
-| 单机关卡PVE (20关) | ✅ | 完全正常 |
+| 单机关卡PVE (10关) | ✅ | 完全正常 |
 | 单机王者乱斗 | ✅ | AI bot正常 |
-| PVE联机同步基础 | ✅ | 架构就绪(需测试) |
-| 前端动态配置接入 | ⬜ | API就绪，引擎未接入 |
-| 特殊武器PVE伤害广播 | ⬜ | 仅主子弹路径覆盖 |
+| PVE联机同步 | ✅ | 架构就绪，已多轮修复验证 |
+| 个人面板 | ✅ | 滚动已修复 + 简洁大气重做 |
 
 ---
 
-## 🧪 双窗口联机测试
+## 🖥️ 双窗口联机测试
 
 ```bash
 # 终端：启动服务
 npm start
 
-# 浏览器窗口1：登录 gemetest / 66668888xxx
+# 浏览器窗口1：登录 gametest / 66668888xxx
 http://localhost:3000
 
 # 浏览器窗口2：登录 tester2 / pass123
 http://localhost:3000
 ```
 
-**WZLB 1v1**：两个窗口都点"王者乱斗" → 选地图 → "⚡ 快速匹配1v1"
+**WZLB 1v1**：两个窗口都点"王者乱斗" → 选地图 → "⚔️ 快速匹配1v1"
 
 **PVE 组队**：窗口1点"🤝 组队攻略" → 取消(创建房间) → 复制房间码 → 窗口2点"组队攻略" → 输入房间码加入 → 队长选关卡 → "⚔️ 开始攻略"
 
-**后台测试**：`http://localhost:3000/admin` → admin/admin123456 → 封禁 gemetest → 游戏窗口立即跳转红色横幅
-
 ---
 
-## 📞 给新 AI 的建议
-
+## 📋 给新 AI 的建议
 1. **先跑通** `npm start` → `http://localhost:3000` → 登录 → 进单机关卡确认怪物正常
 2. **不要**在 `handlePrimaryFire`/`checkWaveComplete`/`startNextWave`/`killEnemy` 等游戏逻辑函数中添加代码——它们必须保持原始状态
 3. **联机功能**扩展应全部通过 `window.__netHooks` 或 `window.MP` 的事件处理完成
-4. **PVE联机测试**需要实际两个浏览器窗口同时操作
+4. **PV联机测试**需要实际两个浏览器窗口同时操作
 5. 修改 `server/realtime.js` 后需重启 Node 服务才能生效
+6. **本地起服**：用 Node 26（`/opt/homebrew/bin/node`），因为预编译 better-sqlite3 原生模块 ABI 与 Node 26 匹配；托管 Node 22 会 ABI 不匹配。但部署时已将 `package.json` 的 `engines.node` 锁为 `22.x`，托管平台（Render/Railway）用 Node 22 时 better-sqlite3 有对应预编译，无需现场编译。
+7. **数据库持久化**：`server/db.js` 的 `DB_PATH` 支持 `process.env.DB_PATH` 环境变量。免费实例磁盘临时，重启会清库；部署时挂一个持久盘并设 `DB_PATH` 指向挂载点即可。
 
 ---
 
-## 🔧 PVE 联机同步修复（2026-07-13）
-
-### 根因（上一份交接遗漏的核心）
-前端 `window.__netHooks` 里虽有 `onPveSync` / `onPveShoot` 的**接收**逻辑，但**整个项目没有任何地方发送** `pve_sync` / `pve_shoot` / `pve_wave` —— 只有房间/邀请等控制类消息被发送。
-且 `onPveSync` 旧实现靠「敌人位置 + 类型」匹配，而两端敌人是各自独立模拟的（位置/血量都不一致），位置匹配基本永远失败。
-结果：一方击杀怪物，另一端毫无显示；也看不到队友开火特效；右侧击杀列表不更新。
-
-### 修复要点（均尊重「游戏逻辑函数保持纯净」原则）
-- **稳定敌人 ID**：`finalizeEnemy` 中 `e._uid` 由 `enemies.length-1` 改为 `'L'+currentLevel+'W'+currentWave+'_'+waveEnemiesSpawned`，两端按「关卡+波次+波内序号」一致生成，跨客户端可对应。
-- **发送侧用「最小通用钩子」桥接**（不在 `killEnemy`/`handlePrimaryFire` 里写联机逻辑，只调一行 `window.__pveXxx` 委托）：
-  - `killEnemy` 开头调 `window.__pveOnEnemyKilled(enemy, slot, isMelee)`
-  - `handlePrimaryFire` 命中后调 `window.__pveOnEnemyDamaged(enemy, dmg)`；普通开火/雷霆万钧/近战均调 `window.__pveBroadcastShoot`
-  - `checkWaveComplete` 清完一波时发 `pve_wave`
-  - 这些钩子在非联机时为 `undefined`/受 `pveCoopActive` 守卫 → 单机零影响。
-- **`window.__netHooks` 内新增发送桥**（`getPveWeaponName` / `addPveKillFeed` / 三个 `__pve*` 函数）：本地击杀→广播 `pve_sync{killed,uid,weaponName,killerName}`；本地伤害→广播 `pve_sync{dmg,uid}`；本地开火→广播 `pve_shoot{userId,origin,dir,weapon,melee}`。
-- **接收侧重写**：`onPveSync` 改为按 `uid` 匹配（BOSS 退化为首个未同步 boss），应用扣血/击杀并写入右侧击杀列表；`onPveShoot` 按 `userId` 找到队友化身，在其枪口位置播枪口闪光 + 弹道轨迹，并触发后坐力/挥砍动画（`_shootAnim`/`_meleeAnim`，在新增的 `updatePveCoop`→`updateRemotePlayer` 每帧消费）。
-- **新增 `updatePveCoop(delta)`**：原 `updateRemotePlayer` 只在 `wzlbActive` 为真时调用，导致 PVE 联机中队友完全不更新。现于主循环 `animate()` 中（紧接 `updateWzlb` 之后）调用，队友才会移动 + 播放开火/挥砍动作。
-- **右侧击杀列表文案**：`addPveKillFeed` 写入既有 `#net-killfeed`（CSS 已固定在右上），格式为 `用户名 使用 武器名 击杀了 敌人`（`BOSS` 显示为 `击杀了 BOSS`），武器名高亮。
-- **后端 `server/realtime.js`**：`pve_shoot` 转发补 `melee` 字段；`pve_wave` 转发补 `done` 字段（旧实现把 `done` 丢了，导致波次同步失效）。
-
-### 验证
-- `node --check server/realtime.js` 通过；前端 5 段内联脚本 `vm.Script` 编译零语法错误。
-- 用系统 Node 26 启动 `node server/index.js` → `HTTP 200`，服务正常（注意：托管 Node 22 与预编译的 better-sqlite3 原生模块 ABI 不匹配会报 `NODE_MODULE_VERSION` 错误，属环境既有问题，用 Node 26 / 你自己的 `npm start` 即可）。
-
-### 双窗口联机自测步骤
-1. 终端 `npm start`，浏览器开两个窗口分别登录 `gemetest` / `tester2`。
-2. 窗口1 点「🤝 组队攻略」→ 复制房间码；窗口2 输入房间码加入；窗口1 选关 →「⚔️ 开始攻略」。
-3. 任一方击杀怪物：两端右上击杀列表应出现 `XX 使用 XX武器 击杀了敌人`；被击杀的怪物在两端同时消失。
-4. 开火时：队友化身处应出现枪口闪光 + 弹道，并有轻微后坐抖动。
+## 🚀 部署要点（详见 DEPLOY.md）
+- GitHub Pages **不能**托管（需 Node 后端）。用 Render / Railway / VPS。
+- `zcode` 分支需推到 `origin` 后，平台才能拉取。
+- `package.json` 已锁 `engines.node: 22.x`；平台 Build `npm install`、Start `node server/index.js`。
+- `server/index.js` 已读 `process.env.PORT || 3000`，平台注入 PORT 即可。
+- 前端 WS 用 `location.host + '/ws'`（同源，HTTPS 下自动 `wss://`），无写死域名，任意部署域名直接可用。
